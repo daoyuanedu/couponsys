@@ -1,0 +1,234 @@
+#%RAML 0.8
+title: CouponCode
+version: v1
+baseUri: http://server/api/{version}
+mediaType: application/json
+schemas:
+  - couponOrder: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type" : "object",
+        "description" : "An order with coupon applied.",
+        "properties": {
+          "couponCode": {
+              "type": "string"
+          },
+          "orderId": {
+            "type" : "string"
+          },
+          "rebated": {
+            "type" : "boolean"
+          },
+          "rebateValue": {
+            "type" : "integer"
+          }
+        },
+        "required": ["couponCode", "orderId", "rebated"] 
+      }
+  - coupon: |
+      {
+         "$schema": "http://json-schema.org/draft-04/schema#",
+         "type": "object",
+         "properties": {
+            "couponCode" : {
+              "type" : "string"
+            },
+            "username" : {
+              "type": "string"
+            },
+            "couponRule" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string",
+                  "enum": ["perc", "cash"]
+                },
+                "value": {
+                  "type" : "integer",
+                  "minimum": 0,
+                  "description" : "must be less than 100 when type is perc."
+                }
+              },
+              "required" : ["type", "value"]
+            },
+            "rebateRule" : {
+              "type" : "object",
+              "properties" : {
+                "type" : {
+                  "type" : "string",
+                  "enum": ["perc", "cash"]
+                },
+                "value": {
+                  "type" : "integer",
+                  "minimum": 0,
+                  "description" : "must be less than 100 when type is perc."
+                }
+              },
+              "required" : ["type", "value"]
+            }
+         },
+         "required": ["couponCode", "username", "couponRule", "rebateRule"]  
+      }
+/coupons:
+  displayName: coupons
+  get:    
+    description: list all the coupons
+  post:
+    description: create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
+    body:
+      application/json:
+        schema : coupon without coupon code
+        example: |
+          {
+            "username": "test1",
+            "couponRule" : {
+              "type" : "perc",
+              "value" : 10
+            },
+            "rebateRule": {
+              "type": "cash",
+              "value": 100
+            },
+            "signedToken" : "dfsdoiuwqe"
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            schema: coupon
+            example: |
+              {
+                "couponCode" : "test1perc10",
+                "username": "test1",
+                "couponRule": {
+                  "type" : "perc",
+                  "value" : 10
+                },
+                "rebateRule": {
+                  "type": "cash",
+                  "value": 100
+                }
+              }
+    
+      
+  /defaultRules:
+    displayName: defaultRules
+    get:
+      description: get default rules.
+      responses:
+        200:
+          body:
+            application/json:
+              schema: see coupon schema rules section
+              example: | 
+                {
+                  "couponRule": {
+                    "type" : "perc",
+                    "value" : 10
+                  },
+                  "rebateRule": {
+                    "type": "cash",
+                    "value": 100
+                  }
+                }  
+    put:
+      description: update default rules, must pass in signed token.
+      queryParameters:   
+        rebateType:
+          required: false
+          type: string
+          enum: ["perc", "cash"]
+        rebateValue:
+          required: false
+          type: integer
+        couponType:
+          required: false
+        couponValue:
+          required: false
+        signedToken:
+          required: true
+          type: string
+  /{couponCode}:
+    displayName: couponCode
+    get:
+      description: get the details of a coupon
+    delete:
+      description: delete a coupon, require an admin signed token.
+    put:
+      description: update a coupon, require an admin signed token.
+    /orders:
+      displayName: orders
+      get:
+        description: list all the orders linked to this coupon
+      post:
+        description: link an order with this coupon, and return the discounted order for verification
+        body:
+          application/json:
+            example: |
+              {
+                "orderId" : "guid...",
+                "orderName" : "physics01",
+                "orderValue" : {
+                  "original" : 1000,
+                  "final" : 800
+                },
+              }
+        responses:
+          201:
+            body:
+              application/json:
+                schema: couponOrder
+                example: |
+                  {
+                    "orderId" : "guid....",
+                    "couponCode" : "test1perc10",
+                    "rebated" : false,
+                    "rebateValue" : 100  
+                  }        
+      /{orderId}:
+        displayName: order id
+        get:
+          description: get the order details with coupon code
+          responses:
+            200:
+              body:
+                application/json:
+                  schema: couponOrder
+        put:
+          queryParameters:
+            signedToken:
+              required: true
+            rebated:
+              required: false
+            rebateValue:
+              required: false
+          description: update coupon-order record.
+    /order:
+      displayName: order
+      get:
+        description: get discounted order after applying the coupon
+        queryParameters:
+          orderId:
+            required: false
+          orderValue:
+            required: true
+            type: integer
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "coupon" : {coupon},
+                    "discountedValue": 800
+                    "orderId" : "guid..."
+                  }
+          
+  /user:
+    displayName: user
+    /{username}:
+      displayName: username
+      get:
+        description: get coupon codes by user name
+      post:
+        description: create a new coupon code for user, similar to post to /coupons. 
