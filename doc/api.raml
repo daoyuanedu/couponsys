@@ -71,7 +71,7 @@ schemas:
       }
 /coupons:
   displayName: coupons
-  get:    
+  get:
     description: list all the coupons
   post:
     description: create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
