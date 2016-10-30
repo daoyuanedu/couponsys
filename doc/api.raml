@@ -71,8 +71,12 @@ schemas:
       }
 /coupons:
   displayName: coupons
-  get:
-    description: list all the coupons
+  get:    
+    description: list all the coupons (admin only)
+    queryParameters:
+      signedToken:
+        required: true
+        type: string
   post:
     description: create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
     body:
@@ -159,7 +163,15 @@ schemas:
     /orders:
       displayName: orders
       get:
-        description: list all the orders linked to this coupon
+        description: list all the orders linked to this coupon, signedToken required.
+        queryParameters:
+          rebated:
+            required: true
+            default: false
+            type: boolean
+          signedToken:
+            required: true
+            type: string
       post:
         description: link an order with this coupon, and return the discounted order for verification
         body:
@@ -172,6 +184,7 @@ schemas:
                   "original" : 1000,
                   "final" : 800
                 },
+                "clientId" : "guid..."
               }
         responses:
           201:
@@ -200,11 +213,12 @@ schemas:
               required: true
             rebated:
               required: false
+              type: boolean
             rebateValue:
               required: false
           description: update coupon-order record.
-    /order:
-      displayName: order
+    /discount:
+      displayName: discount
       get:
         description: get discounted order after applying the coupon
         queryParameters:
