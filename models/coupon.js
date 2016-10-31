@@ -2,7 +2,6 @@
 var mongoose = require('mongoose');
 
 // Schema
-
 var couponSchema = mongoose.Schema({
 	username: String,
 	couponRule: {
@@ -15,5 +14,7 @@ var couponSchema = mongoose.Schema({
 	}
 });
 
+
 // Return Model
 var Coupon = module.exports = mongoose.model('Coupons', couponSchema);
+
