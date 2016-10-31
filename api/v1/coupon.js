@@ -8,7 +8,7 @@ var router = express.Router();
 
 /* GET coupons listing. */
 router.get('/', function(req, res, next) {
-  res.send('This will list all coupons');
+  res.render('coupon', { couponPage: 'Coupon' });
 });
 
 /* POST coupons test */
