@@ -1,9 +1,10 @@
-# couponsys
-The coupon service.
----
-##Run Service
+# Couponsys
+##The coupon service.
 
-* Install npm
+---
+###Run Service
+
+* Install Dependencies
   + npm install
 * Run service
   + node ./bin/www
@@ -18,7 +19,7 @@ Install: npm install -g nodemon
 Run: nodemon .bin/www
 ```
 ---
-##Test
+###Test
 
 Run test:
 
