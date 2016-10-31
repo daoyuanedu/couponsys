@@ -1,17 +1,14 @@
 // Dependencies
-var restful = require('node-restful');
-var mongoose = restful.mongoose;
+var mongoose = require('mongoose');
 
 // Schema
-
 var orderSchema = mongoose.Schema({
-	orderId: Number,
+	orderId: { type: Number, required: true, unique: true },
 	orderName: String,
 	orderValue: {
-		original: Number,
-		final: Number,
-	},
-	clientId: Number,
+		original: { type: Number, required: true },
+		final: { type: Number, required: true }
+	}
 });
 
-module.exports = restful.model('Orders', orderSchema);
+var Orders = module.exports = mongoose.model('Orders', orderSchema);
