@@ -3,14 +3,12 @@ var mongoose = require('mongoose');
 
 // Schema
 var orderSchema = mongoose.Schema({
-	orderId: Number,
+	orderId: { type: Number, required: true, unique: true },
 	orderName: String,
 	orderValue: {
-		original: Number,
-		final: Number,
-	},
-	clientId: Number,
+		original: { type: Number, required: true },
+		final: { type: Number, required: true }
+	}
 });
 
-var Order = module.exports = mongoose.model('Orders', orderSchema);
-
+var Orders = module.exports = mongoose.model('Orders', orderSchema);
