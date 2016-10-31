@@ -7,24 +7,28 @@ var request = require('supertest')(app);
 var path = '/api/v1';
 
 describe("/api/v1/index", function () {
-    describe("get", function () {
-        it("should return 200", function (done) {
-            request.get(path)
-                .expect(200, done);
-        });
-        it("should return the right version number", function (done) {
-            request.get(path)
-                .expect('Content-Type', /json/)
-                .expect(function (res) {
-                    res.body.version.toUpperCase().should.include('V1');
-                })
-                .end(done);
-        })
-        it("should have a description.", function () {
-            request.get(path)
-              .expect(function (res) {
-                  res.body.hasOwnProperty('description').should.equal(true);
-              })
-        })
+  describe("GET", function () {
+    it("should return 200", function (done) {
+      request.get(path)
+        .expect(200, done);
     });
+    it("should return the right version number", function (done) {
+      request.get(path)
+        .expect('Content-Type', /json/)
+        .expect(function (res) {
+          res.body.version.toUpperCase().should.include('V1');
+        })
+        .end(done);
+    })
+    it("should have a description.", function (done) {
+      request.get(path)
+        .expect(function (res) {
+          res.body.hasOwnProperty('description').should.equal(true);
+        })
+        .end(done);
+    });
+
+    it.skip("skip this test, and marked as pending", function () {
+    });
+  });
 });
