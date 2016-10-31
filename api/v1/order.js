@@ -4,7 +4,7 @@ var router = express.Router();
 
 /* GET orders listing. */
 router.get('/', function(req, res, next) {
-  res.send('This will list all orders');
+  res.render('order', { orderPage: 'Order' });
 });
 
 module.exports = router;

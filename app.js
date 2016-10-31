@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 
 // Require API routes
 var index = require('./api/v1/index');
-var coupons = require('./api/v1/coupons');
+var coupons = require('./api/v1/coupon');
 var orders = require('./api/v1/order');
 
 //var logger = require('./common/logger');
