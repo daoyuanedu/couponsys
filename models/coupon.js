@@ -1,21 +1,20 @@
 // Dependencies
-var restful = require('node-restful');
-var mongoose = restful.mongoose;
+var mongoose = require('mongoose');
 
 // Schema
-
 var couponSchema = mongoose.Schema({
-	username: String,
+	username: { type: String, required: true },
 	couponRule: {
-		type: String,
-		value: Number
+		type: { type: String, enum: ['PERCENTAGE', 'CASH'], uppercase: true },
+		value: { tupe: Number }
 	},
 	rebateRule: {
-		type: String,
-		value: Number
-	},
-	signedToken: String
+		type: { type: String, enum: ['PERCENTAGE', 'CASH'], uppercase: true },
+		value: { type: Number }
+	}
 });
 
+
 // Return Model
-module.exports = restful.model('Coupons', couponSchema);
+module.exports = mongoose.model('Coupon', couponSchema);
+
