@@ -1,5 +1,4 @@
 // Dependencies
-
 var mongoose = require('mongoose');
 
 // models 
@@ -9,7 +8,7 @@ require('./order');
 exports.Coupon = mongoose.model('Coupon');
 exports.Order = mongoose.model('Order');
 
-// TODO - Need to now how to use below code 
+// TODO - Need to know how to use below code 
 // This looks like everytime when connect to /index page
 // This will connect to MongoDB or show err
 
