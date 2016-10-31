@@ -6,15 +6,15 @@ var couponSchema = mongoose.Schema({
 	username: { type: String, required: true },
 	couponRule: {
 		type: { type: String, enum: ['PERCENTAGE', 'CASH'], uppercase: true },
-		value: Number
+		value: { tupe: Number }
 	},
 	rebateRule: {
 		type: { type: String, enum: ['PERCENTAGE', 'CASH'], uppercase: true },
-		value: Number
+		value: { type: Number }
 	}
 });
 
 
 // Return Model
-var Coupons = module.exports = mongoose.model('Coupons', couponSchema);
+module.exports = mongoose.model('Coupon', couponSchema);
 
