@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 // Schema
 var couponSchema = mongoose.Schema({
-	username: { type: String,required: true },
+	username: { type: String, required: true },
 	couponRule: {
 		type: { type: String, enum: ['PERCENTAGE', 'CASH'], uppercase: true },
 		value: Number
