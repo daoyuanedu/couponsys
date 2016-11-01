@@ -10,8 +10,7 @@ var bodyParser = require('body-parser');
 // Require API routes
 var index = require('./api/v1/index');
 var coupons = require('./api/v1/coupon');
-var orders = require('./api/v1/order');
-
+//var orders = require('./api/v1/order');
 //var logger = require('./common/logger');
 
 
@@ -32,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // URL path match api
 app.use('/api/v1', index);
 app.use('/api/v1/coupons', coupons);
-app.use('/api/v1/orders', orders);
+//app.use('/api/v1/orders', orders);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
