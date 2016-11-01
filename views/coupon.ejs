@@ -10,13 +10,34 @@
 <!-- Bootstrap CDN End -->
 
   <head>
-    <title><%= title %></title>
+    <title><%= couponPage %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
 
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1><%= couponPage %></h1>
+    <p>Welcome to <%= couponPage %> list Page.</p>
+
+    <!-- Post Test for coupons Form -->
+    <dir>
+    <form action = "/api/v1/coupons" method="POST">
+    Please Input coupons:
+    <br>
+    CouponsID: <input type="text" name="couponsID">
+    <br>
+    Username:  <input type="text" name="username">
+    <br>
+    <input type="submit">
+    </form>
+    </dir>
+    <!-- Post Test End -->
+
+    <ul>
+    <li>coupon 1</li>
+    <li>coupon 2</li>
+    <li>coupon 3</li>
+    </ul>
+
   </body>
 
 
