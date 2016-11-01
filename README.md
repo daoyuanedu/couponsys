@@ -33,7 +33,8 @@ Run: nodemon .bin/www
   - http://localhost:3000/api/v1/coupons/123/orders/
 * /coupons/{couponCode}/orders/{orderId}
   - GET
-  - http://localhost:3000/api/v1/coupons/123/orders/321
+  - http://localhost:3000/api/v1/coupons/123/orders/321/
+  
 ---
 ###Test
 
