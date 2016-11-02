@@ -11,7 +11,7 @@ gulp.task('test', function () {
     reporter: 'list',
     globals: {
       should: require('chai').should(),
-      expect: require('chai').expect(),
+      expect: require('chai').expect()
     }
   })).on('error', gutil.log);
 });
