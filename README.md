@@ -37,7 +37,6 @@ Run: nodemon .bin/www
   
 ---
 ###Test
-
 Run test:
 **Make sure config.db is set to test or dev, otherwise production db could be cleared!!!**
 
