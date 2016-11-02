@@ -15,13 +15,53 @@ describe("Coupon Model", function () {
     couponID: 'user1perc10',
     username: 'user1',
     couponRule: {
-    type: 'PERCENTAGE',
-      value: 10
-  },
-  rebateRule: {
-    type: 'CASH',
+      type: 'PERCENTAGE',
+      alue: 10
+    },
+    rebateRule: {
+      type: 'CASH',
       value: 100
-  }};
+    }
+  };
+
+  var user1CouponWithSameID = {
+    couponID: 'user1perc10',
+    username: 'user1',
+    couponRule: {
+      type: 'PERCENTAGE',
+      alue: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    }
+  };
+
+  var couponWithoutID = {
+    couponID: null,
+    username: 'user1',
+    couponRule: {
+      type: 'PERCENTAGE',
+      alue: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    }
+  };
+
+   var couponWithoutUsername = {
+    couponID: 'user1perc10',
+    username: null,
+    couponRule: {
+      type: 'PERCENTAGE',
+      alue: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    }
+  };
 
   var Coupon = Models.Coupon;
 
@@ -34,6 +74,26 @@ describe("Coupon Model", function () {
     var coupon = new Coupon(user1Coupon);
     coupon.save(done);
   });
+
+  it("should not be able to save a non-couponId coupon to the db", function(err)) {
+    var coupon = new Coupon(couponWithoutID);
+    coupon.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    }
+  }
+
+  it("should not be able to save a non-username coupon to the db", function(err)) {
+    var coupon = new Coupon(couponWithoutUsername);
+    coupon.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    }
+  }
 
   it("should read an exiting coupon from the db", function (done) {
     var coupon = new Coupon(user1Coupon);
@@ -107,4 +167,20 @@ describe("Coupon Model", function () {
     })
 
   })
+
+  it("should failed to save conpons with same couponID", function (done) {
+    var coupon = new Coupon(user1Coupon);
+    var sameCoupon = new Coupon(user1CouponWithSameID);
+    coupon.save(function (err) {
+      if(err) done(err);
+      else{
+        sameCoupon.save(function (err)) {
+          if(err) done(); 
+          else {
+            throw done(err);
+          }
+        }
+      }
+    });
+  }
 });
