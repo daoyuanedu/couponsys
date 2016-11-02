@@ -6,8 +6,7 @@ router.get('/', function (req, res, next) {
   res.send(
     {
       version: "V1",
-      description: 'Daoyuan Edu Coupon Service.',
-      author: "fang"
+      description: 'Daoyuan Edu Coupon Service.'
     });
 });
 
