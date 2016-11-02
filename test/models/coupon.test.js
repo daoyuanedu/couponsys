@@ -16,7 +16,7 @@ describe("Coupon Model", function () {
     username: 'user1',
     couponRule: {
       type: 'PERCENTAGE',
-      alue: 10
+      value: 10
     },
     rebateRule: {
       type: 'CASH',
@@ -29,7 +29,7 @@ describe("Coupon Model", function () {
     username: 'user1',
     couponRule: {
       type: 'PERCENTAGE',
-      alue: 10
+      value: 10
     },
     rebateRule: {
       type: 'CASH',
@@ -42,7 +42,7 @@ describe("Coupon Model", function () {
     username: 'user1',
     couponRule: {
       type: 'PERCENTAGE',
-      alue: 10
+      value: 10
     },
     rebateRule: {
       type: 'CASH',
@@ -55,7 +55,7 @@ describe("Coupon Model", function () {
     username: null,
     couponRule: {
       type: 'PERCENTAGE',
-      alue: 10
+      value: 10
     },
     rebateRule: {
       type: 'CASH',
@@ -75,25 +75,25 @@ describe("Coupon Model", function () {
     coupon.save(done);
   });
 
-  it("should not be able to save a non-couponId coupon to the db", function(err)) {
+  it("should not be able to save a non-couponId coupon to the db", function(done)) {
     var coupon = new Coupon(couponWithoutID);
     coupon.save(function (err) {
       if(err) done();
       else{
         throw done(err);
       }
-    }
-  }
+    });
+  });
 
-  it("should not be able to save a non-username coupon to the db", function(err)) {
+  it("should not be able to save a non-username coupon to the db", function(done)) {
     var coupon = new Coupon(couponWithoutUsername);
     coupon.save(function (err) {
       if(err) done();
       else{
         throw done(err);
       }
-    }
-  }
+    });
+  });
 
   it("should read an exiting coupon from the db", function (done) {
     var coupon = new Coupon(user1Coupon);
@@ -164,9 +164,8 @@ describe("Coupon Model", function () {
         err.should.not.equal(null);
         done();
       }
-    })
-
-  })
+    });
+  });
 
   it("should failed to save conpons with same couponID", function (done) {
     var coupon = new Coupon(user1Coupon);
@@ -179,8 +178,9 @@ describe("Coupon Model", function () {
           else {
             throw done(err);
           }
-        }
+        });
       }
-    });
-  }
+    }
+  });
+
 });
