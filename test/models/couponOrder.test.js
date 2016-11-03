@@ -62,7 +62,7 @@ describe("CouponOrder Model", function () {
     couponOrder.save(done);
   });
 
-  it("should not be able to save a non-orderId couponOrder to the db", function(done)) {
+  it("should not be able to save a non-orderId couponOrder to the db", function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutOrderID);
     couponOrder.save(function (err) {
       if(err) done();
@@ -72,7 +72,7 @@ describe("CouponOrder Model", function () {
     });
   });
 
-  it("should not be able to save a non-couponID couponOrder to the db", function(done)) {
+  it("should not be able to save a non-couponID couponOrder to the db", function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutCouponID);
     couponOrder.save(function (err) {
       if(err) done();
@@ -82,7 +82,7 @@ describe("CouponOrder Model", function () {
     });
   });
 
- it("should not be able to save a non-rebated couponOrder to the db", function(done)) {
+ it("should not be able to save a non-rebated couponOrder to the db", function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
       if(err) done();
@@ -110,35 +110,29 @@ describe("CouponOrder Model", function () {
   });
 
   it("should failed to save conponOrders with same orderID", function (done) {
-    var couponOrder = new CouponOrder(normal1order);
+    var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameOrderID);
-    CouponOrder.save(function (err) {
-      if(err) done(err);
-      else{
-        sameCouponOrder.save(function (err)) {
+    couponOrder.save(function (err) {
+        sameCouponOrder.save(function (err) {
           if(err) done(); 
           else {
             throw done(err);
           }
         });
-      }
-    }
+    });
   });
 
   it("should be able to save conponOrders with same CouponID", function (done) {
-    var couponOrder = new CouponOrder(normal1order);
+    var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameCouponID);
-    CouponOrder.save(function (err) {
-      if(err) done(err);
-      else{
-        sameCouponOrder.save(function (err)) {
-          if(err) done(err); 
+    couponOrder.save(function (err) {
+        sameCouponOrder.save(function (err) {
+          if(err) done(); 
           else {
-            done();
+            throw done(err);
           }
         });
-      }
-    }
+    });
   });
 
 });

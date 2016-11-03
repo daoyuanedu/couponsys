@@ -75,7 +75,7 @@ describe("Coupon Model", function () {
     coupon.save(done);
   });
 
-  it("should not be able to save a non-couponId coupon to the db", function(done)) {
+  it("should not be able to save a non-couponId coupon to the db", function(done) {
     var coupon = new Coupon(couponWithoutID);
     coupon.save(function (err) {
       if(err) done();
@@ -85,7 +85,7 @@ describe("Coupon Model", function () {
     });
   });
 
-  it("should not be able to save a non-username coupon to the db", function(done)) {
+  it("should not be able to save a non-username coupon to the db", function(done) {
     var coupon = new Coupon(couponWithoutUsername);
     coupon.save(function (err) {
       if(err) done();
@@ -171,16 +171,13 @@ describe("Coupon Model", function () {
     var coupon = new Coupon(user1Coupon);
     var sameCoupon = new Coupon(user1CouponWithSameID);
     coupon.save(function (err) {
-      if(err) done(err);
-      else{
-        sameCoupon.save(function (err)) {
+        sameCoupon.save(function (err) {
           if(err) done(); 
           else {
             throw done(err);
           }
         });
-      }
-    }
+    });
   });
 
 });
