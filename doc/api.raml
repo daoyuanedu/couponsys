@@ -16,14 +16,29 @@ schemas:
           "orderId": {
             "type" : "string"
           },
+          "orderName": {
+            "type" : "string"
+          },
+          "orderValue": {
+            "type" : "object",
+            "properties" : {
+              "original" : {
+                "type" : "number"
+              },
+              "final" : {
+                "type" : "number"
+              },
+              "required" : ["original", "final"]
+            }
+          },
           "rebated": {
             "type" : "boolean"
           },
           "rebateValue": {
-            "type" : "integer"
+            "type" : "number"
           }
         },
-        "required": ["couponCode", "orderId", "rebated"] 
+        "required": ["couponCode", "orderId", "orderValue", "rebated"] 
       }
   - coupon: |
       {
@@ -44,7 +59,7 @@ schemas:
                   "enum": ["perc", "cash"]
                 },
                 "value": {
-                  "type" : "integer",
+                  "type" : "number",
                   "minimum": 0,
                   "description" : "must be less than 100 when type is perc."
                 }
@@ -59,7 +74,7 @@ schemas:
                   "enum": ["perc", "cash"]
                 },
                 "value": {
-                  "type" : "integer",
+                  "type" : "number",
                   "minimum": 0,
                   "description" : "must be less than 100 when type is perc."
                 }
@@ -244,5 +259,23 @@ schemas:
       displayName: username
       get:
         description: get coupon codes by user name
+        responses:
+          200:
+            body:
+              application/json:
+                schema: coupon
+                example: |
+                  {
+                    "couponCode": "user1cash10",
+                    "username": {username},
+                    "couponRule": {
+                      "type": "PERCENTAGE",
+                      "value": 10
+                    },
+                    "rebateRule": {
+                      "type": "CASH",
+                      "value": 100
+                    }
+                  }
       post:
         description: create a new coupon code for user, similar to post to /coupons. 

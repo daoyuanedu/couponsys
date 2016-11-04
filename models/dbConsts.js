@@ -3,7 +3,7 @@
  */
 
 var dbConsts = {
-  couponRuleTypes: ["PERCENTAGE", "CASH"]
+  couponRuleTypes: ['PERCENTAGE', 'CASH']
 };
 
 module.exports = dbConsts;
