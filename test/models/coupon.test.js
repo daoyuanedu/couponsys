@@ -34,7 +34,7 @@ describe('Coupon Model', function () {
     coupon.save(done);
   });
 
-  it("should not be able to save a non-couponId coupon to the db", function(done) {
+  it('should not be able to save a non-couponId coupon to the db', function(done) {
     var coupon = new Coupon(couponWithoutID);
     coupon.save(function (err) {
       if(err) done();
@@ -45,7 +45,7 @@ describe('Coupon Model', function () {
     });
   });
 
-  it("should not be able to save a non-username coupon to the db", function(done) {
+  it('should not be able to save a non-username coupon to the db', function(done) {
     var coupon = new Coupon(couponWithoutUsername);
     coupon.save(function (err) {
       if(err) done();
@@ -106,7 +106,7 @@ describe('Coupon Model', function () {
     });
   });
 
-  it("should only allow permitted rule type", function (done) {
+  it('should only allow permitted rule type', function (done) {
     var invalidCoupon = userCouponWithInvalidType;
     new Coupon(invalidCoupon).save(function (err) {
       if(err) done();
