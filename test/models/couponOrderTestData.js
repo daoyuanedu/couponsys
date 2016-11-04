@@ -1,43 +1,99 @@
-  // TODO let model test 'CouponOrder' use test data in this file
+// CouponOrder data here used to support couponOrder.test.js test
 
-  var couponOrderNormal = {
+module.exports = {
+  couponOrderNormal : {
     orderID : "normal1order",
     couponID: "coupon1normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
     rebated: false,
     rebateValue: 0
-  };
+  },
 
-  var couponOrderWithSameOrderID = {
+  couponOrderWithSameOrderID : {
     orderID : "normal1order",
     couponID: "coupon2normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
     rebated: false,
     rebateValue: 0
-  };
+  },
 
-  var couponOrderWithSameCouponID = {
+  couponOrderWithSameCouponID : {
     orderID : "normal2order",
     couponID: "coupon1normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
     rebated: false,
     rebateValue: 0
-  };
+  },
 
-  var couponOrderWithoutOrderID = {
+  couponOrderWithoutOrderID : {
     orderID : null,
     couponID: "coupon1normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
     rebated: false,
     rebateValue: 0
-  };
+  },
 
-  var couponOrderWithoutCouponID = {
+  couponOrderWithoutCouponID : {
     orderID : "normal1order",
     couponID: null,
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
     rebated: false,
     rebateValue: 0
-  };
+  },
 
-  var couponOrderWithoutRebated = {
+  couponOrderWithoutRebated : {
     orderID : "normal1order",
     couponID: "coupon1normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
     rebated: null,
     rebateValue: 0
-  };
+  },
+
+  couponOrderWithoutOriginValue : {
+    orderID : "normal1order",
+    couponID: "coupon1normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: null,
+      final: 800
+    },
+    rebated: false,
+    rebateValue: 0
+  },
+
+  couponOrderWithoutFinalValue : {
+    orderID : "normal1order",
+    couponID: "coupon1normal",
+    orderName: "normal1order",
+    orderValue: {
+      original: 1000,
+      final: null
+    },
+    rebated: false,
+    rebateValue: 0
+  },
+}

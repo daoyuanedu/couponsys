@@ -3,6 +3,7 @@
  */
 var Models = require('../../models');
 var config = require('../../config.default');
+var couponData = require(__dirname + '/couponTestData');
 
 describe("Coupon Model", function () {
 
@@ -10,58 +11,12 @@ describe("Coupon Model", function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
-
-  var user1Coupon = {
-    couponID: 'user1perc10',
-    username: 'user1',
-    couponRule: {
-      type: 'PERCENTAGE',
-      value: 10
-    },
-    rebateRule: {
-      type: 'CASH',
-      value: 100
-    }
-  };
-
-  var user1CouponWithSameID = {
-    couponID: 'user1perc10',
-    username: 'user1',
-    couponRule: {
-      type: 'PERCENTAGE',
-      value: 10
-    },
-    rebateRule: {
-      type: 'CASH',
-      value: 100
-    }
-  };
-
-  var couponWithoutID = {
-    couponID: null,
-    username: 'user1',
-    couponRule: {
-      type: 'PERCENTAGE',
-      value: 10
-    },
-    rebateRule: {
-      type: 'CASH',
-      value: 100
-    }
-  };
-
-   var couponWithoutUsername = {
-    couponID: 'user1perc10',
-    username: null,
-    couponRule: {
-      type: 'PERCENTAGE',
-      value: 10
-    },
-    rebateRule: {
-      type: 'CASH',
-      value: 100
-    }
-  };
+  
+  // Init test data
+  var user1Coupon = couponData.user1Coupon;
+  var user1CouponWithSameID = couponData.user1CouponWithSameID;
+  var couponWithoutID = couponData.couponWithoutID;
+  var couponWithoutUsername = couponData.couponWithoutUsername;
 
   var Coupon = Models.Coupon;
 
