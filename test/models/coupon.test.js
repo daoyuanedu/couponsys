@@ -13,7 +13,7 @@ describe('Coupon Model', function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
-  
+
   // Init test data
   var user1Coupon = couponData.user1Coupon;
   var user1CouponWithSameCouponID = couponData.user1CouponWithSameCouponID;
@@ -25,7 +25,7 @@ describe('Coupon Model', function () {
   var Coupon = Models.Coupon;
 
   //We need to REALLY careful here that we are using dev db!
-  beforeEach(function(done) {
+  beforeEach(function (done) {
     Coupon.remove({}, done);
   });
 
@@ -34,22 +34,22 @@ describe('Coupon Model', function () {
     coupon.save(done);
   });
 
-  it('should not be able to save a non-couponId coupon to the db', function(done) {
+  it('should not be able to save a non-couponId coupon to the db', function (done) {
     var coupon = new Coupon(couponWithoutID);
     coupon.save(function (err) {
-      if(err) done();
-      else{
+      if (err) done();
+      else {
         err.should.not.equal(null);
         done();
       }
     });
   });
 
-  it('should not be able to save a non-username coupon to the db', function(done) {
+  it('should not be able to save a non-username coupon to the db', function (done) {
     var coupon = new Coupon(couponWithoutUsername);
     coupon.save(function (err) {
-      if(err) done();
-      else{
+      if (err) done();
+      else {
         err.should.not.equal(null);
         done();
       }
@@ -92,11 +92,11 @@ describe('Coupon Model', function () {
   it('should fail to save the same coupon code for a different user', function (done) {
     var coupon = new Coupon(user1Coupon);
     coupon.save(function (err) {
-      if(err) done(err);
-      else{
+      if (err) done(err);
+      else {
         var user2Coupon = user1CouponWithSameCouponID;
         new Coupon(user2Coupon).save(function (err) {
-          if(err) done();
+          if (err) done();
           else {
             err.should.not.equal(null);
             done();
@@ -109,7 +109,7 @@ describe('Coupon Model', function () {
   it('should only allow permitted rule type', function (done) {
     var invalidCoupon = userCouponWithInvalidType;
     new Coupon(invalidCoupon).save(function (err) {
-      if(err) done();
+      if (err) done();
       else {
         err.should.not.equal(null);
         done();

@@ -14,5 +14,4 @@ router.get('/info', info);
 router.get('/user/:username', user.getCouponsByUser);
 
 
-
 module.exports = router;
