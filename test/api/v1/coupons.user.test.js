@@ -43,5 +43,25 @@ describe('/api/v1/coupons/user/{username}', function() {
           .end(done);
       }, done);
     });
+
+
+
+    describe('POST', function () {
+
+      it.skip('should create a new coupon for the user', function (done) {
+
+      });
+
+      it.skip('should have the default coupon rule if not authorised', function (done) {
+
+      });
+
+      it.skip('should have the same coupon rule set by the authorised admin', function (done) {
+
+      });
+
+    });
+
+
   });
 });

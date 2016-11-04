@@ -181,7 +181,7 @@
             "enum": ["perc", "cash"]
           },
           "value": {
-            "type" : "integer",
+            "type" : "number",
             "minimum": 0,
             "description" : "must be less than 100 when type is perc."
           }
@@ -196,7 +196,7 @@
             "enum": ["perc", "cash"]
           },
           "value": {
-            "type" : "integer",
+            "type" : "number",
             "minimum": 0,
             "description" : "must be less than 100 when type is perc."
           }
@@ -248,14 +248,29 @@
     "orderId": {
       "type" : "string"
     },
+    "orderName": {
+      "type" : "string"
+    },
+    "orderValue": {
+      "type" : "object",
+      "properties" : {
+        "original" : {
+          "type" : "number"
+        },
+        "final" : {
+          "type" : "number"
+        },
+        "required" : ["original", "final"]
+      }
+    },
     "rebated": {
       "type" : "boolean"
     },
     "rebateValue": {
-      "type" : "integer"
+      "type" : "number"
     }
   },
-  "required": ["couponCode", "orderId", "rebated"] 
+  "required": ["couponCode", "orderId", "orderValue", "rebated"] 
 }
 </code></pre><p><strong>Example</strong>:</p><pre><code>{
   "orderId" : "guid....",
@@ -274,18 +289,88 @@
     "orderId": {
       "type" : "string"
     },
+    "orderName": {
+      "type" : "string"
+    },
+    "orderValue": {
+      "type" : "object",
+      "properties" : {
+        "original" : {
+          "type" : "number"
+        },
+        "final" : {
+          "type" : "number"
+        },
+        "required" : ["original", "final"]
+      }
+    },
     "rebated": {
       "type" : "boolean"
     },
     "rebateValue": {
-      "type" : "integer"
+      "type" : "number"
     }
   },
-  "required": ["couponCode", "orderId", "rebated"] 
+  "required": ["couponCode", "orderId", "orderValue", "rebated"] 
 }
 </code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="coupons__couponCode__orders__orderId__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put</span> <span class="parent">/coupons/{couponCode}/orders</span>/{orderId}</h4></div><div class="modal-body"><div class="alert alert-info"><p>update coupon-order record.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#coupons__couponCode__orders__orderId__put_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="coupons__couponCode__orders__orderId__put_request"><h3>URI Parameters</h3><ul><li><strong>couponCode</strong>: <em>required (string)</em></li><li><strong>orderId</strong>: <em>required (string)</em></li></ul><h3>Query Parameters</h3><ul><li><strong>signedToken</strong>: <em>required (string)</em></li><li><strong>rebated</strong>: <em>(boolean)</em></li><li><strong>rebateValue</strong>: <em>(string)</em></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_coupons__couponCode__discount"><span class="parent">/coupons/{couponCode}</span>/discount</a> <span class="methods"><a href="#coupons__couponCode__discount_get"><span class="badge badge_get">get</span></a></span></h4></div><div id="panel_coupons__couponCode__discount" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#coupons__couponCode__discount_get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>get discounted order after applying the coupon</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="coupons__couponCode__discount_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/coupons/{couponCode}</span>/discount</h4></div><div class="modal-body"><div class="alert alert-info"><p>get discounted order after applying the coupon</p></div><ul class="nav nav-tabs"><li class="active"><a href="#coupons__couponCode__discount_get_request" data-toggle="tab">Request</a></li><li><a href="#coupons__couponCode__discount_get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="coupons__couponCode__discount_get_request"><h3>URI Parameters</h3><ul><li><strong>couponCode</strong>: <em>required (string)</em></li></ul><h3>Query Parameters</h3><ul><li><strong>orderId</strong>: <em>(string)</em></li><li><strong>orderValue</strong>: <em>required (integer)</em></li></ul></div><div class="tab-pane" id="coupons__couponCode__discount_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Example</strong>:</p><pre><code>{
   "coupon" : {coupon},
   "discountedValue": 800
   "orderId" : "guid..."
 }
-</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_coupons_user__username_"><span class="parent">/coupons/user</span>/{username}</a> <span class="methods"><a href="#coupons_user__username__get"><span class="badge badge_get">get</span></a> <a href="#coupons_user__username__post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_coupons_user__username_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#coupons_user__username__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>get coupon codes by user name</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#coupons_user__username__post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>create a new coupon code for user, similar to post to /coupons.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="coupons_user__username__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/coupons/user</span>/{username}</h4></div><div class="modal-body"><div class="alert alert-info"><p>get coupon codes by user name</p></div><ul class="nav nav-tabs"><li class="active"><a href="#coupons_user__username__get_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="coupons_user__username__get_request"><h3>URI Parameters</h3><ul><li><strong>username</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="coupons_user__username__post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/coupons/user</span>/{username}</h4></div><div class="modal-body"><div class="alert alert-info"><p>create a new coupon code for user, similar to post to /coupons.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#coupons_user__username__post_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="coupons_user__username__post_request"><h3>URI Parameters</h3><ul><li><strong>username</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#coupons">coupons</a></li></ul></div></div></div></div></body></html>
+</code></pre></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_coupons_user__username_"><span class="parent">/coupons/user</span>/{username}</a> <span class="methods"><a href="#coupons_user__username__get"><span class="badge badge_get">get</span></a> <a href="#coupons_user__username__post"><span class="badge badge_post">post</span></a></span></h4></div><div id="panel_coupons_user__username_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#coupons_user__username__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>get coupon codes by user name</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#coupons_user__username__post'" class="list-group-item"><span class="badge badge_post">post</span><div class="method_description"><p>create a new coupon code for user, similar to post to /coupons.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="coupons_user__username__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/coupons/user</span>/{username}</h4></div><div class="modal-body"><div class="alert alert-info"><p>get coupon codes by user name</p></div><ul class="nav nav-tabs"><li class="active"><a href="#coupons_user__username__get_request" data-toggle="tab">Request</a></li><li><a href="#coupons_user__username__get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="coupons_user__username__get_request"><h3>URI Parameters</h3><ul><li><strong>username</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="coupons_user__username__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Type: application/json</strong></p><p><strong>Schema</strong>:</p><pre><code>{
+   "$schema": "http://json-schema.org/draft-04/schema#",
+   "type": "object",
+   "properties": {
+      "couponCode" : {
+        "type" : "string"
+      },
+      "username" : {
+        "type": "string"
+      },
+      "couponRule" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum": ["perc", "cash"]
+          },
+          "value": {
+            "type" : "number",
+            "minimum": 0,
+            "description" : "must be less than 100 when type is perc."
+          }
+        },
+        "required" : ["type", "value"]
+      },
+      "rebateRule" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "enum": ["perc", "cash"]
+          },
+          "value": {
+            "type" : "number",
+            "minimum": 0,
+            "description" : "must be less than 100 when type is perc."
+          }
+        },
+        "required" : ["type", "value"]
+      }
+   },
+   "required": ["couponCode", "username", "couponRule", "rebateRule"]  
+}
+</code></pre><p><strong>Example</strong>:</p><pre><code>{
+  "couponCode": "user1cash10",
+  "username": {username},
+  "couponRule": {
+    "type": "PERCENTAGE",
+    "value": 10
+  },
+  "rebateRule": {
+    "type": "CASH",
+    "value": 100
+  }
+}
+</code></pre></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="coupons_user__username__post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post</span> <span class="parent">/coupons/user</span>/{username}</h4></div><div class="modal-body"><div class="alert alert-info"><p>create a new coupon code for user, similar to post to /coupons.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#coupons_user__username__post_request" data-toggle="tab">Request</a></li></ul><div class="tab-content"><div class="tab-pane active" id="coupons_user__username__post_request"><h3>URI Parameters</h3><ul><li><strong>username</strong>: <em>required (string)</em></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#coupons">coupons</a></li></ul></div></div></div></div></body></html>
