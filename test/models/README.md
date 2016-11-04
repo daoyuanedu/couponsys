@@ -14,7 +14,6 @@ Done & PASS
 * should find all the coupons under a username
 * should fail to save the same coupon code for a different user
 * should only allow permitted rule type
-* should failed to save conpons with same couponID"
 ```
 New & TODO
 ```
@@ -34,7 +33,10 @@ Done & PASS
 * should not be able to save a non-final-orderValue couponOrder to the db
 * should read an exiting couponOrder from the db
 * should failed to save conponOrders with same orderID
-* should be able to save conponOrders with same CouponID
+* should be able to save conponOrders with same couponID
+* should be able to save conponOrders with null orderName
+* should find all the couponOrders under a couponId
+
 ```
 New & TODO
 ```

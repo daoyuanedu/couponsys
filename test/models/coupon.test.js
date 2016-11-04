@@ -14,9 +14,11 @@ describe("Coupon Model", function () {
   
   // Init test data
   var user1Coupon = couponData.user1Coupon;
-  var user1CouponWithSameID = couponData.user1CouponWithSameID;
+  var user1CouponWithSameCouponID = couponData.user1CouponWithSameCouponID;
   var couponWithoutID = couponData.couponWithoutID;
   var couponWithoutUsername = couponData.couponWithoutUsername;
+  var user1CouponWithSameUserID = couponData.user1CouponWithSameUserID;
+  var userCouponWithInvalidType = couponData.userCouponWithInvalidType;
 
   var Coupon = Models.Coupon;
 
@@ -35,7 +37,8 @@ describe("Coupon Model", function () {
     coupon.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -45,7 +48,8 @@ describe("Coupon Model", function () {
     coupon.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -72,8 +76,7 @@ describe("Coupon Model", function () {
     coupon.save(function (err) {
       if(err) done(err);
       else{
-        var user1AnotherCoupon = user1Coupon;
-        user1AnotherCoupon.couponID = 'user1cash100';
+        var user1AnotherCoupon = user1CouponWithSameUserID;
         new Coupon(user1AnotherCoupon).save(function (err) {
           if(err) done(err);
           else{
@@ -97,8 +100,7 @@ describe("Coupon Model", function () {
     coupon.save(function (err) {
       if(err) done(err);
       else{
-        var user2Coupon = user1Coupon;
-        user2Coupon.username = 'user2';
+        var user2Coupon = user1CouponWithSameCouponID;
         new Coupon(user2Coupon).save(function (err) {
           if(err) done();
           else {
@@ -111,27 +113,13 @@ describe("Coupon Model", function () {
   });
 
   it("should only allow permitted rule type", function (done) {
-    var invalidCoupon = user1Coupon;
-    invalidCoupon.rebateRule.type = "SOMETHING";
+    var invalidCoupon = userCouponWithInvalidType;
     new Coupon(invalidCoupon).save(function (err) {
       if(err) done();
       else {
         err.should.not.equal(null);
         done();
       }
-    });
-  });
-
-  it("should failed to save conpons with same couponID", function (done) {
-    var coupon = new Coupon(user1Coupon);
-    var sameCoupon = new Coupon(user1CouponWithSameID);
-    coupon.save(function (err) {
-        sameCoupon.save(function (err) {
-          if(err) done(); 
-          else {
-            throw done(err);
-          }
-        });
     });
   });
 

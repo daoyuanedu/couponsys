@@ -14,8 +14,21 @@ module.exports = {
     }
   },
 
-  user1CouponWithSameID : {
+  user1CouponWithSameCouponID : {
     couponID: 'user1perc10',
+    username: 'user1',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    }
+  },
+
+  user1CouponWithSameUserID : {
+    couponID: 'user1perc20',
     username: 'user1',
     couponRule: {
       type: 'PERCENTAGE',
@@ -45,6 +58,19 @@ module.exports = {
     username: null,
     couponRule: {
       type: 'PERCENTAGE',
+      value: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    }
+  },
+
+  userCouponWithInvalidType : {
+    couponID: 'user1perc10',
+    username: 'user1',
+    couponRule: {
+      type: 'INVALIDEE',
       value: 10
     },
     rebateRule: {

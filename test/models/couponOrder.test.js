@@ -18,6 +18,7 @@ describe("CouponOrder Model", function () {
   var couponOrderWithoutRebated = couponOrderData.couponOrderWithoutRebated;
   var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
   var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
+  var couponOrderWithoutOrderName = couponOrderData.couponOrderWithoutOrderName;
 
   var CouponOrder = Models.CouponOrder;
 
@@ -36,7 +37,8 @@ describe("CouponOrder Model", function () {
     couponOrder.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -46,7 +48,8 @@ describe("CouponOrder Model", function () {
     couponOrder.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -56,7 +59,8 @@ describe("CouponOrder Model", function () {
     couponOrder.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -66,7 +70,8 @@ describe("CouponOrder Model", function () {
     couponOrder.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -76,7 +81,8 @@ describe("CouponOrder Model", function () {
     couponOrder.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
@@ -87,7 +93,7 @@ describe("CouponOrder Model", function () {
       if(err) done(err);
       else{
         CouponOrder.findOne({orderID : 'normal1order'}, function (err, couponOrder) {
-          if(err) throw done(err);
+          if(err) done();
           else{
             (couponOrder.couponID).should.equal('coupon1normal');
             (couponOrder.couponID).should.equal(couponOrderNormal.couponID);
@@ -105,7 +111,8 @@ describe("CouponOrder Model", function () {
         sameCouponOrder.save(function (err) {
           if(err) done(); 
           else {
-            throw done(err);
+            err.should.not.equal(null);
+            done();
           }
         });
     });
@@ -116,12 +123,43 @@ describe("CouponOrder Model", function () {
     var sameCouponOrder = new CouponOrder(couponOrderWithSameCouponID);
     couponOrder.save(function (err) {
         sameCouponOrder.save(function (err) {
-          if(err) done(); 
+          if(err) throw done(err);
           else {
-            throw done(err);
+            done();
           }
         });
     });
   });
 
+  it("should be able to save a non-orderName couponOrder to the db", function (done) {
+    var couponOrder = new CouponOrder(couponOrderWithoutOrderName);
+    couponOrder.save(done);
+  });
+
+  it("should find all the couponOrders under a couponId", function (done) {
+    var couponOrder = new CouponOrder(couponOrderNormal);
+    couponOrder.save(function (err) {
+      if(err) done(err);
+      else{
+        var anothercouponOrder = couponOrderWithSameCouponID;
+        new CouponOrder(anothercouponOrder).save(function (err) {
+          if(err) done(err);
+          else{
+            CouponOrder.find({ couponID: "coupon1normal" }, function (err, couponOrders) {
+              if(err) throw done(err);
+              else{
+                var total = 0;
+                couponOrders.forEach(function (couponOrder) {
+                  (couponOrder.couponID).should.equal('coupon1normal');
+                  total++;
+                });
+                total.should.equal(2);
+                done();
+              }
+            })
+          }
+        });
+      }
+    });
+  });
 });
