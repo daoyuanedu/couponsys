@@ -8,6 +8,7 @@ var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var config = require('../../../config.default');
 var Promise = require('bluebird');
+var couponData = require('../../common/couponTestData');
 
 var path = '/api/v1/coupons/user/';
 
@@ -24,31 +25,8 @@ describe('/api/v1/coupons/user/{username}', function() {
       Coupon.remove({}, done);
     });
 
-    var userACoupon1 = {
-      couponID: 'user1perc10',
-      username: 'userA',
-      couponRule: {
-        type: 'PERCENTAGE',
-        value: 10
-      },
-      rebateRule: {
-        type: 'CASH',
-        value: 100
-      }
-    };
-
-    var userACoupon2 = {
-      couponID: 'user1cash10',
-      username: 'userA',
-      couponRule: {
-        type: 'PERCENTAGE',
-        value: 10
-      },
-      rebateRule: {
-        type: 'CASH',
-        value: 100
-      }
-    };
+    var userACoupon1 = couponData.userACoupon1;
+    var userACoupon2 = couponData.userACoupon2;
 
     it('should return all the coupon codes for a specific user', function(done){
       var saveTwoCoupons = Promise.all([new Coupon(userACoupon1).save(), new Coupon(userACoupon2).save()]);

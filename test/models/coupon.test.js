@@ -5,7 +5,7 @@
 var Models = require('../../models');
 var config = require('../../config.default');
 var Promise = require('bluebird');
-var couponData = require(__dirname + '/couponTestData');
+var couponData = require('../common/couponTestData');
 
 describe('Coupon Model', function () {
 
@@ -13,12 +13,14 @@ describe('Coupon Model', function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
-
+  
   // Init test data
   var user1Coupon = couponData.user1Coupon;
-  var user1CouponWithSameID = couponData.user1CouponWithSameID;
+  var user1CouponWithSameCouponID = couponData.user1CouponWithSameCouponID;
   var couponWithoutID = couponData.couponWithoutID;
   var couponWithoutUsername = couponData.couponWithoutUsername;
+  var user1CouponWithSameUserID = couponData.user1CouponWithSameUserID;
+  var userCouponWithInvalidType = couponData.userCouponWithInvalidType;
 
   var Coupon = Models.Coupon;
 
@@ -32,27 +34,28 @@ describe('Coupon Model', function () {
     coupon.save(done);
   });
 
-  it("should not be able to save a non-couponId coupon to the db", function(done) {
+  it('should not be able to save a non-couponId coupon to the db', function(done) {
     var coupon = new Coupon(couponWithoutID);
     coupon.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
 
-  it("should not be able to save a non-username coupon to the db", function(done) {
+  it('should not be able to save a non-username coupon to the db', function(done) {
     var coupon = new Coupon(couponWithoutUsername);
     coupon.save(function (err) {
       if(err) done();
       else{
-        throw done(err);
+        err.should.not.equal(null);
+        done();
       }
     });
   });
 
-  it("should read an exiting coupon from the db", function (done) {
   it('should read an exiting coupon from the db', function (done) {
     var coupon = new Coupon(user1Coupon);
     coupon.save().then(function () {
@@ -69,9 +72,7 @@ describe('Coupon Model', function () {
 
   it('should find all the coupons under a username', function (done) {
     var coupon = new Coupon(user1Coupon);
-    var user1AnotherCoupon = user1Coupon;
-    user1AnotherCoupon.couponID = 'user1cash100';
-    var anotherCoupon = new Coupon(user1AnotherCoupon);
+    var anotherCoupon = new Coupon(user1CouponWithSameUserID);
     var saveTwoCoupons = Promise.all([coupon.save(), anotherCoupon.save()]);
     saveTwoCoupons.then(function () {
       Coupon.find({username: 'user1'}, function (err, coupons) {
@@ -85,6 +86,7 @@ describe('Coupon Model', function () {
         }
       });
     }, done);
+
   });
 
   it('should fail to save the same coupon code for a different user', function (done) {
@@ -92,8 +94,7 @@ describe('Coupon Model', function () {
     coupon.save(function (err) {
       if(err) done(err);
       else{
-        var user2Coupon = user1Coupon;
-        user2Coupon.username = 'user2';
+        var user2Coupon = user1CouponWithSameCouponID;
         new Coupon(user2Coupon).save(function (err) {
           if(err) done();
           else {
@@ -106,28 +107,13 @@ describe('Coupon Model', function () {
   });
 
   it('should only allow permitted rule type', function (done) {
-    var invalidCoupon = user1Coupon;
-    invalidCoupon.rebateRule.type = 'SOMETHING';
+    var invalidCoupon = userCouponWithInvalidType;
     new Coupon(invalidCoupon).save(function (err) {
       if(err) done();
       else {
         err.should.not.equal(null);
         done();
       }
-    });
-  });
-
-  });
-  it("should failed to save conpons with same couponID", function (done) {
-    var coupon = new Coupon(user1Coupon);
-    var sameCoupon = new Coupon(user1CouponWithSameID);
-    coupon.save(function (err) {
-        sameCoupon.save(function (err) {
-          if(err) done();
-          else {
-            throw done(err);
-          }
-        });
     });
   });
 

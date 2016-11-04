@@ -96,4 +96,16 @@ module.exports = {
     rebated: false,
     rebateValue: 0
   },
+
+  couponOrderWithoutOrderName : {
+    orderID : "normal1order",
+    couponID: "coupon1normal",
+    orderName: null,
+    orderValue: {
+      original: 1000,
+      final: 800
+    },
+    rebated: false,
+    rebateValue: 0
+  },
 }
