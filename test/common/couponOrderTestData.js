@@ -1,10 +1,11 @@
 // CouponOrder data here used to support couponOrder.test.js test
 
 module.exports = {
-  couponOrderNormal : {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
-    orderName: "normal1order",
+
+  couponOrderNormal: {
+    orderID: 'normal1order',
+    couponID: 'coupon1normal',
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: 800
@@ -13,10 +14,11 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithSameOrderID : {
-    orderID : "normal1order",
-    couponID: "coupon2normal",
-    orderName: "normal1order",
+
+  couponOrderWithSameOrderID: {
+    orderID: 'normal1order',
+    couponID: 'coupon2normal',
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: 800
@@ -25,10 +27,10 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithSameCouponID : {
-    orderID : "normal2order",
-    couponID: "coupon1normal",
-    orderName: "normal1order",
+  couponOrderWithSameCouponID: {
+    orderID: 'normal2order',
+    couponID: 'coupon1normal',
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: 800
@@ -37,10 +39,10 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithoutOrderID : {
-    orderID : null,
-    couponID: "coupon1normal",
-    orderName: "normal1order",
+  couponOrderWithoutOrderID: {
+    orderID: null,
+    couponID: 'coupon1normal',
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: 800
@@ -49,10 +51,11 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithoutCouponID : {
-    orderID : "normal1order",
+
+  couponOrderWithoutCouponID: {
+    orderID: 'normal1order',
     couponID: null,
-    orderName: "normal1order",
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: 800
@@ -61,10 +64,11 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithoutRebated : {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
-    orderName: "normal1order",
+
+  couponOrderWithoutRebated: {
+    orderID: 'normal1order',
+    couponID: 'coupon1normal',
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: 800
@@ -73,10 +77,11 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithoutOriginValue : {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
-    orderName: "normal1order",
+
+  couponOrderWithoutOriginValue: {
+    orderID: 'normal1order',
+    couponID: 'coupon1normal',
+    orderName: 'normal1order',
     orderValue: {
       original: null,
       final: 800
@@ -85,10 +90,10 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithoutFinalValue : {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
-    orderName: "normal1order",
+  couponOrderWithoutFinalValue: {
+    orderID: 'normal1order',
+    couponID: 'coupon1normal',
+    orderName: 'normal1order',
     orderValue: {
       original: 1000,
       final: null
@@ -97,9 +102,9 @@ module.exports = {
     rebateValue: 0
   },
 
-  couponOrderWithoutOrderName : {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
+  couponOrderWithoutOrderName: {
+    orderID: 'normal1order',
+    couponID: 'coupon1normal',
     orderName: null,
     orderValue: {
       original: 1000,
@@ -107,5 +112,6 @@ module.exports = {
     },
     rebated: false,
     rebateValue: 0
-  },
+  }
 }
+
