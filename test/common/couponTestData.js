@@ -77,6 +77,32 @@ module.exports = {
       type: 'CASH',
       value: 100
     }
+  },
+
+  userACoupon1 : {
+    couponID: 'user1perc10',
+    username: 'userA',
+    couponRule: {
+      type: 'PERCENTAGE',
+        alue: 10
+    },
+    rebateRule: {
+      type: 'CASH',   
+      value: 100
+    }
+   },
+
+  userACoupon2 : {
+    couponID: 'user1cash10',
+    username: 'userA',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    }
   }
 }
 

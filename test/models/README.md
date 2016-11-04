@@ -37,7 +37,7 @@ Done & PASS
 * should not be able to save a non-original-orderValue couponOrder to the db
 * should not be able to save a non-final-orderValue couponOrder to the db
 * should not be able to save conponOrders with same orderID
-
+* should be able to save conponOrders with same CouponID
 ```
 New & TODO
 ```

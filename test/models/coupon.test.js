@@ -1,11 +1,13 @@
 /**
  * Created by ekinr on 2016/11/1.
  */
+
 var Models = require('../../models');
 var config = require('../../config.default');
-var couponData = require(__dirname + '/couponTestData');
+var Promise = require('bluebird');
+var couponData = require('../common/couponTestData');
 
-describe("Coupon Model", function () {
+describe('Coupon Model', function () {
 
   before(function () {
     config.debug.should.equal(true);
@@ -27,7 +29,7 @@ describe("Coupon Model", function () {
     Coupon.remove({}, done);
   });
 
-  it("should be able to save a coupon to the db", function (done) {
+  it('should be able to save a coupon to the db', function (done) {
     var coupon = new Coupon(user1Coupon);
     coupon.save(done);
   });
@@ -54,48 +56,40 @@ describe("Coupon Model", function () {
     });
   });
 
-  it("should read an exiting coupon from the db", function (done) {
+  it('should read an exiting coupon from the db', function (done) {
     var coupon = new Coupon(user1Coupon);
-    coupon.save(function (err) {
-      if(err) done(err);
-      else{
-        Coupon.findOne({username: 'user1'}, function (err, coupon) {
-          if(err) throw done(err);
-          else{
+    coupon.save().then(function () {
+      Coupon.findOne({username: 'user1'}, function (err, coupon) {
+        if (err) throw done(err);
+        else {
+          (coupon.username).should.equal('user1');
+          (coupon.couponID).should.equal(user1Coupon.couponID);
+          done();
+        }
+      });
+    }, done);
+  });
+
+  it('should find all the coupons under a username', function (done) {
+    var coupon = new Coupon(user1Coupon);
+    var anotherCoupon = new Coupon(user1CouponWithSameUserID);
+    var saveTwoCoupons = Promise.all([coupon.save(), anotherCoupon.save()]);
+    saveTwoCoupons.then(function () {
+      Coupon.find({username: 'user1'}, function (err, coupons) {
+        if (err) throw done(err);
+        else {
+          coupons.forEach(function (coupon) {
             (coupon.username).should.equal('user1');
-            (coupon.couponID).should.equal(user1Coupon.couponID);
-            done();
-          }
-        })
-      }
-    });
+          });
+          coupons.length.should.equal(2);
+          done();
+        }
+      });
+    }, done);
+
   });
 
-  it("should find all the coupons under a username", function (done) {
-    var coupon = new Coupon(user1Coupon);
-    coupon.save(function (err) {
-      if(err) done(err);
-      else{
-        var user1AnotherCoupon = user1CouponWithSameUserID;
-        new Coupon(user1AnotherCoupon).save(function (err) {
-          if(err) done(err);
-          else{
-            Coupon.find({username: 'user1'}, function (err, coupons) {
-              if(err) throw done(err);
-              else{
-                coupons.forEach(function (coupon) {
-                  (coupon.username).should.equal('user1');
-                });
-                done();
-              }
-            })
-          }
-        });
-      }
-    });
-  });
-
-  it("should fail to save the same coupon code for a different user", function (done) {
+  it('should fail to save the same coupon code for a different user', function (done) {
     var coupon = new Coupon(user1Coupon);
     coupon.save(function (err) {
       if(err) done(err);
@@ -107,7 +101,7 @@ describe("Coupon Model", function () {
             err.should.not.equal(null);
             done();
           }
-        })
+        });
       }
     });
   });

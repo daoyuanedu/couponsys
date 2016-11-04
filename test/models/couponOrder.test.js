@@ -1,6 +1,6 @@
 var Models = require('../../models');
 var config = require('../../config.default');
-var couponOrderData = require(__dirname + '/couponOrderTestData');
+var couponOrderData = require('../common/couponOrderTestData');
 
 describe("CouponOrder Model", function () {
 
@@ -83,6 +83,26 @@ describe("CouponOrder Model", function () {
       else{
         err.should.not.equal(null);
         done();
+      }
+    });
+  });
+
+  it("should not be able to save a non-original-orderValue couponOrder to the db", function(done) {
+    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    couponOrder.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    });
+  });
+
+  it("should not be able to save a non-final-orderValue couponOrder to the db", function(done) {
+    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    couponOrder.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
       }
     });
   });
