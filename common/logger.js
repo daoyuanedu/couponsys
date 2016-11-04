@@ -2,7 +2,7 @@
  * Created by ekinr on 2016/10/30.
  */
 
-var config = require('../config');
+var config = require('../config.default');
 
 var env = process.env.NODE_ENV || "dev"
 
