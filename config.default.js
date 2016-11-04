@@ -2,8 +2,6 @@
  * Created by ekinr on 2016/10/29.
  */
 
-var path = require('path');
-
 var config = {
   debug: true,
 
