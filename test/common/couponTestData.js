@@ -1,6 +1,7 @@
 // Coupon data here used to support coupon.test.js test
 
 module.exports = {
+
   user1Coupon: {
     couponID: 'user1perc10',
     username: 'user1',
@@ -13,6 +14,7 @@ module.exports = {
       value: 100
     }
   },
+
 
   user1CouponWithSameCouponID: {
     couponID: 'user1perc10',
@@ -27,6 +29,7 @@ module.exports = {
     }
   },
 
+
   user1CouponWithSameUserID: {
     couponID: 'user1perc20',
     username: 'user1',
@@ -39,6 +42,7 @@ module.exports = {
       value: 100
     }
   },
+
 
   couponWithoutID: {
     couponID: null,
@@ -53,6 +57,7 @@ module.exports = {
     }
   },
 
+
   couponWithoutUsername: {
     couponID: 'user1perc10',
     username: null,
@@ -65,6 +70,7 @@ module.exports = {
       value: 100
     }
   },
+
 
   userCouponWithInvalidType: {
     couponID: 'user1perc10',
@@ -79,6 +85,7 @@ module.exports = {
     }
   },
 
+
   userACoupon1: {
     couponID: 'user1perc10',
     username: 'userA',
@@ -87,10 +94,11 @@ module.exports = {
       value: 10
     },
     rebateRule: {
-      type: 'CASH',
+      type: 'CASH',   
       value: 100
     }
-  },
+   },
+
 
   userACoupon2: {
     couponID: 'user1cash10',
@@ -105,4 +113,5 @@ module.exports = {
     }
   }
 };
+
 

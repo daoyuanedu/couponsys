@@ -27,5 +27,8 @@ describe('/api/v1/coupons/info', function () {
         })
         .end(done);
     });
+
+    it.skip('skip this test, and marked as pending', function () {
+    });
   });
 });

@@ -1,6 +1,7 @@
 // CouponOrder data here used to support couponOrder.test.js test
 
 module.exports = {
+
   couponOrderNormal: {
     orderID: 'normal1order',
     couponID: 'coupon1normal',
@@ -12,6 +13,7 @@ module.exports = {
     rebated: false,
     rebateValue: 0
   },
+
 
   couponOrderWithSameOrderID: {
     orderID: 'normal1order',
@@ -49,6 +51,7 @@ module.exports = {
     rebateValue: 0
   },
 
+
   couponOrderWithoutCouponID: {
     orderID: 'normal1order',
     couponID: null,
@@ -61,6 +64,7 @@ module.exports = {
     rebateValue: 0
   },
 
+
   couponOrderWithoutRebated: {
     orderID: 'normal1order',
     couponID: 'coupon1normal',
@@ -72,6 +76,7 @@ module.exports = {
     rebated: null,
     rebateValue: 0
   },
+
 
   couponOrderWithoutOriginValue: {
     orderID: 'normal1order',
@@ -108,4 +113,5 @@ module.exports = {
     rebated: false,
     rebateValue: 0
   }
-};
+}
+

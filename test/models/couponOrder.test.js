@@ -16,12 +16,14 @@ describe('CouponOrder Model', function () {
   var couponOrderWithoutOrderID = couponOrderData.couponOrderWithoutOrderID;
   var couponOrderWithoutCouponID = couponOrderData.couponOrderWithoutCouponID;
   var couponOrderWithoutRebated = couponOrderData.couponOrderWithoutRebated;
+  var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
+  var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
   var couponOrderWithoutOrderName = couponOrderData.couponOrderWithoutOrderName;
 
   var CouponOrder = Models.CouponOrder;
 
   //We need to REALLY careful here as well that we are using dev db!
-  beforeEach(function (done) {
+  beforeEach(function(done) {
     CouponOrder.remove({}, done);
   });
 
@@ -30,76 +32,76 @@ describe('CouponOrder Model', function () {
     couponOrder.save(done);
   });
 
-  it('should not be able to save a non-orderId couponOrder to the db', function (done) {
+  it('should not be able to save a non-orderId couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutOrderID);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         err.should.not.equal(null);
         done();
       }
     });
   });
 
-  it('should not be able to save a non-couponID couponOrder to the db', function (done) {
+  it('should not be able to save a non-couponID couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutCouponID);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         err.should.not.equal(null);
         done();
       }
     });
   });
 
-  it('should not be able to save a non-rebated couponOrder to the db', function (done) {
+ it('should not be able to save a non-rebated couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         err.should.not.equal(null);
         done();
       }
     });
   });
 
-  it('should not be able to save a non-original-orderValue couponOrder to the db', function (done) {
+  it('should not be able to save a non-original-orderValue couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         err.should.not.equal(null);
         done();
       }
     });
   });
 
-  it('should not be able to save a non-final-orderValue couponOrder to the db', function (done) {
+  it('should not be able to save a non-final-orderValue couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         err.should.not.equal(null);
         done();
       }
     });
   });
 
-  it('should not be able to save a non-original-orderValue couponOrder to the db', function (done) {
+  it('should not be able to save a non-original-orderValue couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         throw done(err);
       }
     });
   });
 
-  it('should not be able to save a non-final-orderValue couponOrder to the db', function (done) {
+  it('should not be able to save a non-final-orderValue couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
-      if (err) done();
-      else {
+      if(err) done();
+      else{
         throw done(err);
       }
     });
@@ -108,11 +110,11 @@ describe('CouponOrder Model', function () {
   it('should read an exiting couponOrder from the db', function (done) {
     var couponOrder = new CouponOrder(couponOrderNormal);
     couponOrder.save(function (err) {
-      if (err) done(err);
-      else {
-        CouponOrder.findOne({orderID: 'normal1order'}, function (err, couponOrder) {
-          if (err) done();
-          else {
+      if(err) done(err);
+      else{
+        CouponOrder.findOne({orderID : 'normal1order'}, function (err, couponOrder) {
+          if(err) done();
+          else{
             (couponOrder.couponID).should.equal('coupon1normal');
             (couponOrder.couponID).should.equal(couponOrderNormal.couponID);
             done();
@@ -126,13 +128,13 @@ describe('CouponOrder Model', function () {
     var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameOrderID);
     couponOrder.save(function (err) {
-      sameCouponOrder.save(function (err) {
-        if (err) done();
-        else {
-          err.should.not.equal(null);
-          done();
-        }
-      });
+        sameCouponOrder.save(function (err) {
+          if(err) done(); 
+          else {
+            err.should.not.equal(null);
+            done();
+          }
+        });
     });
   });
 
@@ -140,12 +142,12 @@ describe('CouponOrder Model', function () {
     var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameCouponID);
     couponOrder.save(function (err) {
-      sameCouponOrder.save(function (err) {
-        if (err) throw done(err);
-        else {
-          done();
-        }
-      });
+        sameCouponOrder.save(function (err) {
+          if(err) throw done(err);
+          else {
+            done();
+          }
+        });
     });
   });
 
@@ -157,15 +159,15 @@ describe('CouponOrder Model', function () {
   it('should find all the couponOrders under a couponId', function (done) {
     var couponOrder = new CouponOrder(couponOrderNormal);
     couponOrder.save(function (err) {
-      if (err) done(err);
-      else {
+      if(err) done(err);
+      else{
         var anothercouponOrder = couponOrderWithSameCouponID;
         new CouponOrder(anothercouponOrder).save(function (err) {
-          if (err) done(err);
-          else {
-            CouponOrder.find({couponID: 'coupon1normal'}, function (err, couponOrders) {
-              if (err) throw done(err);
-              else {
+          if(err) done(err);
+          else{
+            CouponOrder.find({ couponID: 'coupon1normal' }, function (err, couponOrders) {
+              if(err) throw done(err);
+              else{
                 var total = 0;
                 couponOrders.forEach(function (couponOrder) {
                   (couponOrder.couponID).should.equal('coupon1normal');
@@ -174,7 +176,7 @@ describe('CouponOrder Model', function () {
                 total.should.equal(2);
                 done();
               }
-            });
+            })
           }
         });
       }
