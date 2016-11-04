@@ -5,6 +5,7 @@
 var Models = require('../../models');
 var config = require('../../config.default');
 var Promise = require('bluebird');
+var couponData = require(__dirname + '/couponTestData');
 
 describe('Coupon Model', function () {
 
@@ -13,17 +14,11 @@ describe('Coupon Model', function () {
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
 
-  var user1Coupon = {
-    couponID: 'user1perc10',
-    username: 'user1',
-    couponRule: {
-      type: 'PERCENTAGE',
-      value: 10
-    },
-    rebateRule: {
-      type: 'CASH',
-      value: 100
-    }};
+  // Init test data
+  var user1Coupon = couponData.user1Coupon;
+  var user1CouponWithSameID = couponData.user1CouponWithSameID;
+  var couponWithoutID = couponData.couponWithoutID;
+  var couponWithoutUsername = couponData.couponWithoutUsername;
 
   var Coupon = Models.Coupon;
 
@@ -37,6 +32,27 @@ describe('Coupon Model', function () {
     coupon.save(done);
   });
 
+  it("should not be able to save a non-couponId coupon to the db", function(done) {
+    var coupon = new Coupon(couponWithoutID);
+    coupon.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    });
+  });
+
+  it("should not be able to save a non-username coupon to the db", function(done) {
+    var coupon = new Coupon(couponWithoutUsername);
+    coupon.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    });
+  });
+
+  it("should read an exiting coupon from the db", function (done) {
   it('should read an exiting coupon from the db', function (done) {
     var coupon = new Coupon(user1Coupon);
     coupon.save().then(function () {
@@ -99,6 +115,20 @@ describe('Coupon Model', function () {
         done();
       }
     });
+  });
 
   });
+  it("should failed to save conpons with same couponID", function (done) {
+    var coupon = new Coupon(user1Coupon);
+    var sameCoupon = new Coupon(user1CouponWithSameID);
+    coupon.save(function (err) {
+        sameCoupon.save(function (err) {
+          if(err) done();
+          else {
+            throw done(err);
+          }
+        });
+    });
+  });
+
 });
