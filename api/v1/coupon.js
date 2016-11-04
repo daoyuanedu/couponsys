@@ -6,7 +6,6 @@ var bodyParser = require('body-parser');
 // api router
 var router = express.Router();
 
-
 // ###### Coupons Block ######
 /* GET coupons list logic */
 router.get('/', function(req, res, next) {
@@ -36,7 +35,6 @@ router.post('/', function(req, res, next) {
   console.log('I have received a coupons data: ' + JSON.stringify(req.body));
   res.send(req.body);
 });
-
 
 // ###### Order Block ######
 /* GET orders list logic */

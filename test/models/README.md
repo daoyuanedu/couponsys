@@ -30,6 +30,8 @@ Done & PASS
 * should not be able to save a non-orderId couponOrder to the db
 * should not be able to save a non-couponID couponOrder to the db
 * should not be able to save a non-rebated couponOrder to the db
+* should not be able to save a non-original-orderValue couponOrder to the db
+* should not be able to save a non-final-orderValue couponOrder to the db
 * should read an exiting couponOrder from the db
 * should failed to save conponOrders with same orderID
 * should be able to save conponOrders with same CouponID

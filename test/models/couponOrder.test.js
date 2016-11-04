@@ -1,5 +1,6 @@
 var Models = require('../../models');
 var config = require('../../config.default');
+var couponOrderData = require(__dirname + '/couponOrderTestData');
 
 describe("CouponOrder Model", function () {
 
@@ -8,47 +9,15 @@ describe("CouponOrder Model", function () {
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
 
-  var couponOrderNormal = {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
-    rebated: false,
-    rebateValue: 0
-  };
-
-  var couponOrderWithSameOrderID = {
-    orderID : "normal1order",
-    couponID: "coupon2normal",
-    rebated: false,
-    rebateValue: 0
-  };
-
-  var couponOrderWithSameCouponID = {
-    orderID : "normal2order",
-    couponID: "coupon1normal",
-    rebated: false,
-    rebateValue: 0
-  };
-
-  var couponOrderWithoutOrderID = {
-    orderID : null,
-    couponID: "coupon1normal",
-    rebated: false,
-    rebateValue: 0
-  };
-
-  var couponOrderWithoutCouponID = {
-    orderID : "normal1order",
-    couponID: null,
-    rebated: false,
-    rebateValue: 0
-  };
-
-  var couponOrderWithoutRebated = {
-    orderID : "normal1order",
-    couponID: "coupon1normal",
-    rebated: null,
-    rebateValue: 0
-  };
+  // Init test data
+  var couponOrderNormal = couponOrderData.couponOrderNormal;
+  var couponOrderWithSameOrderID = couponOrderData.couponOrderWithSameOrderID;
+  var couponOrderWithSameCouponID = couponOrderData.couponOrderWithSameCouponID;
+  var couponOrderWithoutOrderID = couponOrderData.couponOrderWithoutOrderID;
+  var couponOrderWithoutCouponID = couponOrderData.couponOrderWithoutCouponID;
+  var couponOrderWithoutRebated = couponOrderData.couponOrderWithoutRebated;
+  var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
+  var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
 
   var CouponOrder = Models.CouponOrder;
 
@@ -92,6 +61,26 @@ describe("CouponOrder Model", function () {
     });
   });
 
+  it("should not be able to save a non-original-orderValue couponOrder to the db", function(done) {
+    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    couponOrder.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    });
+  });
+
+  it("should not be able to save a non-final-orderValue couponOrder to the db", function(done) {
+    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    couponOrder.save(function (err) {
+      if(err) done();
+      else{
+        throw done(err);
+      }
+    });
+  });
+
   it("should read an exiting couponOrder from the db", function (done) {
     var couponOrder = new CouponOrder(couponOrderNormal);
     couponOrder.save(function (err) {
@@ -104,7 +93,7 @@ describe("CouponOrder Model", function () {
             (couponOrder.couponID).should.equal(couponOrderNormal.couponID);
             done();
           }
-        })
+        });
       }
     });
   });

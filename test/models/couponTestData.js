@@ -1,6 +1,7 @@
-  // TODO let model test 'Coupon' use test data in this file
+// Coupon data here used to support coupon.test.js test
 
-  var user1Coupon = {
+module.exports = {
+    user1Coupon : {
     couponID: 'user1perc10',
     username: 'user1',
     couponRule: {
@@ -11,9 +12,9 @@
       type: 'CASH',
       value: 100
     }
-  };
+  },
 
-  var user1CouponWithSameID = {
+  user1CouponWithSameID : {
     couponID: 'user1perc10',
     username: 'user1',
     couponRule: {
@@ -24,9 +25,9 @@
       type: 'CASH',
       value: 100
     }
-  };
+  },
 
-  var couponWithoutID = {
+  couponWithoutID : {
     couponID: null,
     username: 'user1',
     couponRule: {
@@ -37,9 +38,9 @@
       type: 'CASH',
       value: 100
     }
-  };
+  },
 
-   var couponWithoutUsername = {
+  couponWithoutUsername : {
     couponID: 'user1perc10',
     username: null,
     couponRule: {
@@ -50,4 +51,6 @@
       type: 'CASH',
       value: 100
     }
-  };
+  }
+}
+
