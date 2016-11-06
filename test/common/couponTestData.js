@@ -94,11 +94,24 @@ module.exports = {
       value: 10
     },
     rebateRule: {
-      type: 'CASH',   
+      type: 'CASH',
       value: 100
     }
-   },
+  },
 
+  userACoupon1NotValid: {
+    couponID: 'user1perc10',
+    username: 'userA',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: false
+  },
 
   userACoupon2: {
     couponID: 'user1cash10',
