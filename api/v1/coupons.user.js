@@ -25,3 +25,4 @@ var createCouponForUser = function (req, res) {
 };
 
 exports.createCouponForUser = createCouponForUser;
+

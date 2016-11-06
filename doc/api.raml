@@ -80,6 +80,10 @@ schemas:
                 }
               },
               "required" : ["type", "value"]
+            },
+            "valid" : {
+              "type" : "boolean",
+              "defualt" : true
             }
          },
          "required": ["couponCode", "username", "couponRule", "rebateRule"]  
@@ -100,6 +104,7 @@ schemas:
         example: |
           {
             "username": "test1",
+            "mobile": "12345356467",
             "couponRule" : {
               "type" : "perc",
               "value" : 10
@@ -129,6 +134,15 @@ schemas:
                 }
               }
     
+      
+      406:
+        description: returned when Json posted has invalid properties
+        body:
+          application/json:
+            example: | 
+              {
+                "message" : "mobile is required."
+              }
       
   /defaultRules:
     displayName: defaultRules
@@ -184,6 +198,11 @@ schemas:
             required: true
             default: false
             type: boolean
+          showTotalNum:
+            required: false
+            type: boolean
+            default: false
+            description: only the total number of orders lined to this coupon code.
           signedToken:
             required: true
             type: string
@@ -253,6 +272,14 @@ schemas:
                     "orderId" : "guid..."
                   }
           
+          406:
+            description: when couponcode is not valid
+            body:
+              application/json:
+                example: |
+                  {
+                    "message" : "coupon code 123124 is not valid"
+                  }
   /user:
     displayName: user
     /{username}:
@@ -276,6 +303,14 @@ schemas:
                       "type": "CASH",
                       "value": 100
                     }
+                  }
+          404:
+            description: when username does not exits
+            body:
+              application/json:
+                example: |
+                  {
+                    "message" : "username test01 does not have any coupon code."
                   }
       post:
         description: create a new coupon code for user, similar to post to /coupons. 
