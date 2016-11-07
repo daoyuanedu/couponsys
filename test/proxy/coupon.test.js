@@ -11,6 +11,7 @@ var couponProxy = require('../../proxy/coupon.model');
 
 describe('Coupon Model Proxy', function () {
 
+
   before(function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
@@ -38,7 +39,7 @@ describe('Coupon Model Proxy', function () {
     });
   });
 
-  it('isCouponValid should return true when coupon is not valid', function (done) {
+  it('isCouponValid should return false when coupon is not valid', function (done) {
     var coupon = new Coupon(userACoupon1NotValid);
     coupon.save(function (err) {
       if(err) done(err);

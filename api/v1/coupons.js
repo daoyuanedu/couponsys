@@ -7,7 +7,9 @@ var getCouponsList = function(req, res) {
     res.send(coupons);
   }, function (err) {
     logger.error(err);
-    res.status(404);
+    err.api = true;
+    err.status ＝ 406；
+    next(err);
   });
 };
 exports.getCouponsList = getCouponsList;
@@ -18,7 +20,9 @@ var getCouponCodesByCouponID = function(req, res) {
     res.send(coupons);
   }, function (err) {
     logger.error(err);
-    res.status(406);
+    err.api = true;
+    err.status ＝ 406；
+    next(err);
   });
 };
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;

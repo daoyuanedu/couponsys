@@ -113,5 +113,5 @@ module.exports = {
     rebated: false,
     rebateValue: 0
   }
-}
+};
 

@@ -52,6 +52,7 @@ describe('/api/v1/coupons/user/{username}', function() {
 
       it.skip('should create a new coupon for the user', function (done) {
 
+
       });
 
       it.skip('should have the default coupon rule if not authorised', function (done) {
