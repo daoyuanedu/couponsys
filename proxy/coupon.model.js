@@ -6,7 +6,7 @@
 var Coupon = require('../models').Coupon;
 
 exports.getAllCoupons = function () {
-	return Coupon.find();
+	return Coupon.find({}, {_id : 0, __v : 0});
 };
 
 exports.getCouponCodesByUsername = function (username) {
