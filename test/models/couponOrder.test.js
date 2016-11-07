@@ -16,8 +16,6 @@ describe('CouponOrder Model', function () {
   var couponOrderWithoutOrderID = couponOrderData.couponOrderWithoutOrderID;
   var couponOrderWithoutCouponID = couponOrderData.couponOrderWithoutCouponID;
   var couponOrderWithoutRebated = couponOrderData.couponOrderWithoutRebated;
-  var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
-  var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
   var couponOrderWithoutOrderName = couponOrderData.couponOrderWithoutOrderName;
 
   var CouponOrder = Models.CouponOrder;
@@ -54,7 +52,7 @@ describe('CouponOrder Model', function () {
     });
   });
 
- it('should not be able to save a non-rebated couponOrder to the db', function(done) {
+  it('should not be able to save a non-rebated couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
       if(err) done();
@@ -128,13 +126,13 @@ describe('CouponOrder Model', function () {
     var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameOrderID);
     couponOrder.save(function (err) {
-        sameCouponOrder.save(function (err) {
-          if(err) done(); 
-          else {
-            err.should.not.equal(null);
-            done();
-          }
-        });
+      sameCouponOrder.save(function (err) {
+        if(err) done(); 
+        else {
+          err.should.not.equal(null);
+          done();
+        }
+      });
     });
   });
 
@@ -142,12 +140,12 @@ describe('CouponOrder Model', function () {
     var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameCouponID);
     couponOrder.save(function (err) {
-        sameCouponOrder.save(function (err) {
-          if(err) throw done(err);
-          else {
-            done();
-          }
-        });
+      sameCouponOrder.save(function (err) {
+        if(err) throw done(err);
+        else {
+          done();
+        }
+      });
     });
   });
 
@@ -176,7 +174,7 @@ describe('CouponOrder Model', function () {
                 total.should.equal(2);
                 done();
               }
-            })
+            });
           }
         });
       }

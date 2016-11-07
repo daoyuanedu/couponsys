@@ -7,13 +7,13 @@
 var Coupon = require('../../proxy/coupon.model');
 var logger = require('../../common/logger');
 
-var getCouponCodesByUser = function(req, res) {
+var getCouponCodesByUser = function(req, res, next) {
   var username = req.params.username;
   Coupon.getCouponsByUsername(username).then(function (coupons) {
     res.send(coupons);
   }, function (err) {
     logger.error(err);
-    res.status(500);
+    next(err);
   });
 };
 
