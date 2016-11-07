@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var apiRouterV1 = require('./api.router.v1');
+var errorHandler = require('./middlewares/errorHandler');
 
 
 var app = express();
@@ -37,28 +38,8 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'dev') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
+app.use(errorHandler.apiErrorHandler);
+app.use(errorHandler.standardErrorHandler);
 
 if (!module.parent) {
   app.listen(config.port, function () {

@@ -17,4 +17,4 @@ var couponOrderSchema = mongoose.Schema({
 
 couponOrderSchema.index({orderID : 1});
 
-module.exports = mongoose.model("CouponOrder", couponOrderSchema);
+module.exports = mongoose.model('CouponOrder', couponOrderSchema);
