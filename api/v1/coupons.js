@@ -8,7 +8,7 @@ var getCouponsList = function(req, res) {
   }, function (err) {
     logger.error(err);
     err.api = true;
-    err.status ＝ 406；
+    err.status(406);
     next(err);
   });
 };
@@ -21,7 +21,7 @@ var getCouponCodesByCouponID = function(req, res) {
   }, function (err) {
     logger.error(err);
     err.api = true;
-    err.status ＝ 406；
+    err.status(406);
     next(err);
   });
 };

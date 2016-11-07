@@ -13,7 +13,8 @@ var getCouponCodesByUser = function(req, res, next) {
     res.send(coupons);
   }, function (err) {
     logger.error(err);
-    err.api = true;
+    err.api = true;   
+    err.status(406);
     next(err);
   });
 };
