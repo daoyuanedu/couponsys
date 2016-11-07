@@ -9,7 +9,7 @@ exports.getCouponsAll = function function_name(argument) {
 	return Coupon.find();
 };
 
-exports.getCouponCodesByUseName = function (username) {
+exports.getCouponCodesByUsername = function (username) {
   //return a Promise
   return Coupon.find({ username : username}, {_id : 0, __v : 0});
 };

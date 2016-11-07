@@ -3,7 +3,7 @@ var coupon = require('../../proxy/coupon.model');
 var logger = require('../../common/logger');
 
 var getCouponsList = function(req, res) {
-  coupon.getAllCoupons.then(function (coupons) {
+  coupon.getAllCoupons().then(function (coupons) {
     res.send(coupons);
   }, function (err) {
     logger.error(err);
