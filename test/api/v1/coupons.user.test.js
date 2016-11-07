@@ -25,11 +25,13 @@ describe('/api/v1/coupons/user/{username}', function() {
       Coupon.remove({}, done);
     });
 
-    var userACoupon1 = couponData.userACoupon1;
-    var userACoupon2 = couponData.userACoupon2;
+    var userACouponPerc1 = couponData.userACouponPerc1;
+    var userACouponCash1 = couponData.userACouponCash1;
 
     it('should return all the coupon codes for a specific user', function(done){
-      var saveTwoCoupons = Promise.all([new Coupon(userACoupon1).save(), new Coupon(userACoupon2).save()]);
+      var saveTwoCoupons = Promise.all([new Coupon(userACouponPerc1).save(), 
+        new Coupon(userACouponCash1).save()]);
+      
       saveTwoCoupons.then(function () {
         request.get(path + 'userA')
           .expect('Content-Type', /json/)

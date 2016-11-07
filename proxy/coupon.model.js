@@ -5,9 +5,18 @@
  */
 var Coupon = require('../models').Coupon;
 
-exports.getCouponsByUsername = function (username) {
+exports.getCouponsAll = function function_name(argument) {
+	return Coupon.find();
+};
+
+exports.getCouponCodesByUseName = function (username) {
   //return a Promise
   return Coupon.find({ username : username}, {_id : 0, __v : 0});
+};
+
+exports.getCouponCodesByCouponCode = function (couponID) {
+  //return a Promise
+  return Coupon.find({ couponID : couponID}, {_id : 0, __v : 0});
 };
 
 exports.isCouponValid = function (couponId) {

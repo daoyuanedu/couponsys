@@ -4,20 +4,20 @@
  * route /coupons/user/
  */
 
-var Coupon = require('../../proxy/coupon.model');
+var coupon = require('../../proxy/coupon.model');
 var logger = require('../../common/logger');
 
 var getCouponCodesByUser = function(req, res) {
   var username = req.params.username;
-  Coupon.getCouponsByUsername(username).then(function (coupons) {
+  coupon.getCouponCodesByUseName(username).then(function (coupons) {
     res.send(coupons);
   }, function (err) {
     logger.error(err);
-    res.status(500);
+    res.status(406);
   });
 };
 
-exports.getCouponsByUser = getCouponCodesByUser;
+exports.getCouponCodesByUser = getCouponCodesByUser;
 
 var createCouponForUser = function (req, res) {
   var username = req.param.username;

@@ -1,9 +1,6 @@
 /**
  * Created by ekinr on 2016/11/6.
  */
-/**
- * Created by ekinr on 2016/11/6.
- */
 
 var Models = require('../../models');
 var config = require('../../config.default');

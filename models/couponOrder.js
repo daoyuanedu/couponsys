@@ -8,10 +8,10 @@ var couponOrderSchema = mongoose.Schema({
   couponID: { required: true, type: String},
   orderName: { type: String },
   orderValue: {
-    original: { type: Number, required: true },
-    final: { type: Number, required: true }
+    original: { required: true, type: Number },
+    final: { required: true, type: Number }
   },
-  rebated: { required: true, type: Boolean, default: false},
+  rebated: { type: Boolean, default: false},
   rebateValue: { type: Number, default: 0}
 });
 
