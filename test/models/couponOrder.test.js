@@ -17,6 +17,8 @@ describe('CouponOrder Model', function () {
   var couponOrderWithoutCouponID = couponOrderData.couponOrderWithoutCouponID;
   var couponOrderWithoutRebated = couponOrderData.couponOrderWithoutRebated;
   var couponOrderWithoutOrderName = couponOrderData.couponOrderWithoutOrderName;
+  var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
+  var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
 
   var CouponOrder = Models.CouponOrder;
 
@@ -52,7 +54,8 @@ describe('CouponOrder Model', function () {
     });
   });
 
-  it('should not be able to save a non-rebated couponOrder to the db', function(done) {
+ // Rebated is default, no need test
+ it.skip('should not be able to save a non-rebated couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
       if(err) done();
@@ -64,7 +67,7 @@ describe('CouponOrder Model', function () {
   });
 
   it('should not be able to save a non-original-orderValue couponOrder to the db', function(done) {
-    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    var couponOrder = new CouponOrder(couponOrderWithoutOriginValue);
     couponOrder.save(function (err) {
       if(err) done();
       else{
@@ -75,7 +78,7 @@ describe('CouponOrder Model', function () {
   });
 
   it('should not be able to save a non-final-orderValue couponOrder to the db', function(done) {
-    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    var couponOrder = new CouponOrder(couponOrderWithoutFinalValue);
     couponOrder.save(function (err) {
       if(err) done();
       else{
@@ -86,17 +89,7 @@ describe('CouponOrder Model', function () {
   });
 
   it('should not be able to save a non-original-orderValue couponOrder to the db', function(done) {
-    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
-    couponOrder.save(function (err) {
-      if(err) done();
-      else{
-        throw done(err);
-      }
-    });
-  });
-
-  it('should not be able to save a non-final-orderValue couponOrder to the db', function(done) {
-    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
+    var couponOrder = new CouponOrder(couponOrderWithoutOriginValue);
     couponOrder.save(function (err) {
       if(err) done();
       else{

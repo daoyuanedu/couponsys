@@ -16,8 +16,7 @@ var couponSchema = mongoose.Schema({
   },
   valid: {
     type: Boolean,
-    default: true,
-    required: true
+    default: true
   }
 });
 

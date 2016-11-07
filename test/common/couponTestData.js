@@ -12,7 +12,8 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
+    },
+    valid: true
   },
 
 
@@ -26,7 +27,8 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
+    },
+    valid: true
   },
 
 
@@ -40,7 +42,8 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
+    },
+    valid: true
   },
 
 
@@ -54,7 +57,8 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
+    },
+    valid: true
   },
 
 
@@ -68,7 +72,8 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
+    },
+    valid: true
   },
 
 
@@ -82,25 +87,12 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
-  },
-
-
-  userACoupon1: {
-    couponID: 'user1perc10',
-    username: 'userA',
-    couponRule: {
-      type: 'PERCENTAGE',
-      value: 10
     },
-    rebateRule: {
-      type: 'CASH',
-      value: 100
-    }
+    valid: true
   },
 
   userACoupon1NotValid: {
-    couponID: 'user1perc10',
+    couponID: 'userAperc10',
     username: 'userA',
     couponRule: {
       type: 'PERCENTAGE',
@@ -113,8 +105,8 @@ module.exports = {
     valid: false
   },
 
-  userACoupon2: {
-    couponID: 'user1cash10',
+  userACouponPerc1: {
+    couponID: 'userAperc10',
     username: 'userA',
     couponRule: {
       type: 'PERCENTAGE',
@@ -123,7 +115,22 @@ module.exports = {
     rebateRule: {
       type: 'CASH',
       value: 100
-    }
+    },
+    valid: true
+  },
+
+  userACouponCash1: {
+    couponID: 'userAcash10',
+    username: 'userA',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 10
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: true
   }
 };
 
