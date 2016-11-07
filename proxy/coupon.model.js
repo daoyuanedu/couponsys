@@ -5,7 +5,7 @@
  */
 var Coupon = require('../models').Coupon;
 
-exports.getCouponsAll = function function_name(argument) {
+exports.getAllCoupons = function function_name(argument) {
 	return Coupon.find();
 };
 
