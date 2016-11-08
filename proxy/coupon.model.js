@@ -4,9 +4,10 @@
  * A db proxy for Coupon model
  */
 var Coupon = require('../models').Coupon;
+var defaultRules = require('../config.default').defaultCouponRules;
 
 exports.getAllCoupons = function () {
-	return Coupon.find({}, {_id : 0, __v : 0});
+  return Coupon.find({}, {_id : 0, __v : 0});
 };
 
 exports.getCouponCodesByUsername = function (username) {
@@ -26,4 +27,10 @@ exports.isCouponValid = function (couponId) {
   }, function (err) {
     return err;
   });
+};
+
+exports.createNewCouponWithDefaultRules = function (username, couponId) {
+  var newCoupon = {username : username, couponID : couponId,
+    couponRule : defaultRules.couponRule, rebateRule : defaultRules.rebateRule};
+  return new Coupon(newCoupon).save();
 };
