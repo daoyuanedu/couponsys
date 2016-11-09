@@ -10,7 +10,7 @@ var config = require('../../../config.default');
 var Promise = require('bluebird');
 var couponData = require('../../common/modelCouponTestData');
 
-var testData = require('../../common/APICouponTestData');
+var apiTestData = require('../../common/APICouponTestData');
 
 var path = '/api/v1/coupons/user/';
 
@@ -52,7 +52,7 @@ describe('/api/v1/coupons/user/{username}', function() {
 
     it('should create a new coupon for the user and return 201', function (done) {
       request.post(path + 'userA')
-        .send({ mobile: testData.userAWithoutRules.mobile})
+        .send({ mobile: apiTestData.userAWithoutRules.mobile})
         .set('Accept', 'application/json')
         .expect(201)
         .end(function (err, res) {
@@ -74,7 +74,7 @@ describe('/api/v1/coupons/user/{username}', function() {
 
     it('should not create a new coupon if mobile number is invalid', function (done) {
       request.post(path + 'userA')
-        .send(testData.userAWithInvalidMobileWithoutRules)
+        .send(apiTestData.userAWithInvalidMobileWithoutRules)
         .set('Accept', 'application/json')
         .expect(406)
         .end(function (err, res) {
@@ -94,7 +94,7 @@ describe('/api/v1/coupons/user/{username}', function() {
 
     it('should not create a new coupon if no mobile has been provided', function (done) {
       request.post(path + 'userA')
-        .send(testData.userAWithoutMobile)
+        .send(apiTestData.userAWithoutMobile)
         .set('Accept', 'application/json')
         .expect(406)
         .end(function (err, res) {
@@ -112,9 +112,23 @@ describe('/api/v1/coupons/user/{username}', function() {
         });
     });
 
+    it('should not create a new coupon if no username has been provided', function (done) {
+      request.post(path + null)
+        .send(apiTestData.userAWithoutMobile)
+        .set('Accept', 'application/json')
+        .expect(406)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            res.body.message.should.equal('No Mobile Provided');
+            done();
+          }
+        });
+    });
+
     it('should have the default coupon rule if not authorised', function (done) {
       request.post(path + 'userA')
-        .send(testData.userAWithRules)
+        .send(apiTestData.userAWithRules)
         .set('Accept', 'application/json')
         .expect(201)
         .end(function (err, res) {

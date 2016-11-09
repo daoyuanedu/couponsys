@@ -29,7 +29,15 @@ exports.isCouponValid = function (couponId) {
   });
 };
 
-exports.createNewCouponWithDefaultRules = function (username, couponId) {
+// coupons/:couponID
+exports.createCouponWithDefaultRulesForNewUser = function (username, couponId) {
+  var newCoupon = {username : username, couponID : couponId,
+    couponRule : defaultRules.couponRule, rebateRule : defaultRules.rebateRule};
+  return new Coupon(newCoupon).save();
+};
+
+// coupons/user/:username
+exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, couponId) {
   var newCoupon = {username : username, couponID : couponId,
     couponRule : defaultRules.couponRule, rebateRule : defaultRules.rebateRule};
   return new Coupon(newCoupon).save();

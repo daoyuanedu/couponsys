@@ -21,11 +21,10 @@ var getCouponCodesByUser = function(req, res, next) {
 exports.getCouponCodesByUser = getCouponCodesByUser;
 
 var createCouponForUser = function (req, res, next) {
-  var username = req.params.username;
   if(req.adminAuth){
     next({message: 'unimplemented...'});
   }else{
-    coupon.createNewCouponWithDefaultRules(username, req.couponCode).then(function (coupon) {
+    coupon.createCouponWithDefaultRulesForSpecifiedUser(req.userName, req.couponCode).then(function (coupon) {
       res.statusCode = 201;
       res.send(coupon);
     }, function (err) {

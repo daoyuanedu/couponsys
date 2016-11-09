@@ -13,11 +13,16 @@ var couponCodeGenerator = require('./middlewares/couponCodeGenerator');
 
 var router = express.Router();
 
+// Others
 router.get('/info', info);
+// User api
 router.get('/user/:username', user.getCouponCodesByUser);
 router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser);
+// Coupons api
 router.get('/', coupon.getCouponsList);
 router.get('/:couponID', coupon.getCouponCodesByCouponID);
+router.post('/:couponID', couponCodeGenerator.useMobileAndUsernameToCreateCouponCode, coupon.createCouponForNewUser);
+
 
 
 //for test purpose
