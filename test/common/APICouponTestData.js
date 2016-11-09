@@ -3,7 +3,12 @@ module.exports = {
 
   userAWithoutRules : {
     username : 'userA',
-    mobile : '07873563123'
+    mobile : '13898458462'
+  },
+
+  userAWithInvalidMobileWithoutRules : {
+    username : 'userA',
+    mobile : '03898458462'
   },
 
   userAWithoutMobile : {
@@ -12,7 +17,7 @@ module.exports = {
 
   userAWithRules : {
     username : 'userA',
-    mobile : '07873563123',
+    mobile : '13898458462',
     couponRule: {
       type: 'PERCENTAGE',
       value: 50

@@ -5,7 +5,7 @@ var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var config = require('../../../config.default');
 var Promise = require('bluebird');
-var couponData = require('../../common/couponTestData');
+var couponData = require('../../common/modelCouponTestData');
 
 var path = '/api/v1/coupons/';
 

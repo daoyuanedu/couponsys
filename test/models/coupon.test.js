@@ -5,7 +5,7 @@
 var Models = require('../../models');
 var config = require('../../config.default');
 var Promise = require('bluebird');
-var couponData = require('../common/couponTestData');
+var couponData = require('../common/modelCouponTestData');
 
 describe('Coupon Model', function () {
 

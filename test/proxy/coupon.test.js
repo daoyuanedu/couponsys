@@ -4,10 +4,10 @@
 
 var Models = require('../../models');
 var config = require('../../config.default');
-var couponData = require('../common/couponTestData');
+var couponData = require('../common/modelCouponTestData');
 var Coupon = Models.Coupon;
 
-var couponProxy = require('../../proxy/coupon.model');
+var couponProxy = require('../../proxy/Coupon.model');
 
 describe('Coupon Model Proxy', function () {
 

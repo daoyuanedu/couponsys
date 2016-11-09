@@ -8,9 +8,9 @@ var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var config = require('../../../config.default');
 var Promise = require('bluebird');
-var couponData = require('../../common/couponTestData');
+var couponData = require('../../common/modelCouponTestData');
 
-var testData = require('../../common/newCouponTestData');
+var testData = require('../../common/APICouponTestData');
 
 var path = '/api/v1/coupons/user/';
 
@@ -66,6 +66,26 @@ describe('/api/v1/coupons/user/{username}', function() {
                 coupons.filter(function (coupon) {
                   return coupon.couponID === createdCoupon.couponID;
                 }).length.should.equal(1);
+              })
+              .end(done);
+          }
+        });
+    });
+
+    it('should not create a new coupon if mobile number is invalid', function (done) {
+      request.post(path + 'userA')
+        .send(testData.userAWithInvalidMobileWithoutRules)
+        .set('Accept', 'application/json')
+        .expect(406)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            res.body.message.should.equal('Invalid Mobile Provided');
+            request.get(path + 'userA')
+              .expect('Content-Type', /json/)
+              .expect(function (res) {
+                var coupons = res.body;
+                coupons.length.should.equal(0);
               })
               .end(done);
           }
