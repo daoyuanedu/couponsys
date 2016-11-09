@@ -9,13 +9,11 @@ var showError = function (status, err, next){
 }
 exports.useMobileAsCode = function (req, res, next) {
   var code = req.body.mobile;
-  var username = req.params.username;
 
   if(code) {
     // Only allow valid China mobile number
     if(/1[34578]\d{9}$/.test(code)) {
       req.couponCode = code;
-      req.userName = username;
 
       next();
     }
@@ -35,7 +33,6 @@ exports.useMobileAsCode = function (req, res, next) {
 exports.useMobileAndUsernameToCreateCouponCode = function (req, res, next) {
   var mobile = req.body.mobile;
   var username = req.body.username;
-  var couponID = req.params.couponID;
   
   // Username can not be null
   if(!username) {
@@ -45,18 +42,11 @@ exports.useMobileAndUsernameToCreateCouponCode = function (req, res, next) {
     next(err);
   }
   
-  // couponId and mobile should match or both undefined
-  if(couponID !== mobile) {
-    var err = new Error('No Matched Mobile And CouponID / Both Undefined');
-    err.status = 406;
-    err.api = true;
-    next(err);
-  }
   if(mobile) {
     // Only allow valid China mobile number
     if(/1[34578]\d{9}$/.test(mobile)) {
-      req.couponCode = mobile;
-      req.userName = username;
+      req.sentMobile = mobile;
+      req.sentUsername = username;
       next();
     }
     else {

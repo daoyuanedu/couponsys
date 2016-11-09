@@ -29,7 +29,7 @@ exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
 
 var createCouponForNewUser = function (req, res, next) {
   //No need for adminAuth
-  coupon.createCouponWithDefaultRulesForNewUser(req.userName, req.couponCode).then(function (coupon) {
+  coupon.createCouponWithDefaultRulesForSpecifiedUser(req.sentUsername, req.sentMobile).then(function (coupon) {
       res.statusCode = 201;
       res.send(coupon);
   }, function (err) {

@@ -70,7 +70,7 @@ describe('/api/v1/coupons/', function() {
 
   describe('POST', function () {
     it('should create a coupon for a new user and return 201', function (done) {
-      request.post(path + '13898458462')
+      request.post(path)
         .send({ username: apiTestData.userAWithoutRules.username, 
           mobile: apiTestData.userAWithoutRules.mobile })
         .set('Accept', 'application/json')
@@ -78,43 +78,23 @@ describe('/api/v1/coupons/', function() {
         .end(function (err, res) {
           if(err) done(err);
           else {
-            var createdCoupon = res.body;
             request.get(path + '13898458462')
               .expect('Content-Type', /json/)
               .expect(function (res) {
-                res.body.length.should.equal(1);
                 var coupons = res.body;
-                coupons.forEach(function (coupon) {
-                  coupon.username.should.equal('userA');
-                });
+                coupons.length.should.equal(1);
+                 coupons.forEach(function (coupon) {
+                   coupon.username.should.equal('userA');
+                 });
               })
               .end(done);
           }
         });
     });
 
-    it('should not create a new coupon if no match couponID-mobile has been provided', function (done) {
-      request.post(path + '12345678942')
-        .send(apiTestData.userAWithoutMobile)
-        .set('Accept', 'application/json')
-        .expect(406)
-        .end(function (err, res) {
-          if(err) done(err);
-          else {
-            res.body.message.should.equal('No Matched Mobile And CouponID / Both Undefined');
-            request.get(path + 'userA')
-              .expect('Content-Type', /json/)
-              .expect(function (res) {
-                var coupons = res.body;
-                coupons.length.should.equal(0);
-              })
-              .end(done);
-          }
-        });
-    });
 
     it('should not create a new coupon if invalid mobile has been provided', function (done) {
-      request.post(path + '03898458462')
+      request.post(path)
         .send(apiTestData.userAWithInvalidMobileWithoutRules)
         .set('Accept', 'application/json')
         .expect(406)
@@ -134,14 +114,14 @@ describe('/api/v1/coupons/', function() {
     });
 
     it('should not create a new coupon if no mobile has been provided', function (done) {
-      request.post(path + null)
+      request.post(path)
         .send(apiTestData.userAWithNullMobile)
         .set('Accept', 'application/json')
         .expect(406)
         .end(function (err, res) {
           if(err) done(err);
           else {
-            res.body.message.should.equal('No Matched Mobile And CouponID / Both Undefined');
+            res.body.message.should.equal('No Mobile Provided');
             request.get(path + 'userA')
               .expect('Content-Type', /json/)
               .expect(function (res) {
