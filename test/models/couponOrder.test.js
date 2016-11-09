@@ -1,6 +1,6 @@
 var Models = require('../../models');
 var config = require('../../config.default');
-var couponOrderData = require('../common/couponOrderTestData');
+var couponOrderData = require('../common/modelCouponOrderTestData');
 
 describe('CouponOrder Model', function () {
 
