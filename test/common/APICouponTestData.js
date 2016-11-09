@@ -20,6 +20,11 @@ module.exports = {
     mobile: null
   },
 
+  userAWithNullUser : {
+    username : null,
+    mobile : '13898458462'
+  },
+
   userAWithRules : {
     username : 'userA',
     mobile : '13898458462',

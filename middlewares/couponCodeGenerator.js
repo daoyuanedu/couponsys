@@ -10,15 +10,8 @@ var showError = function (status, err, next){
 exports.useMobileAsCode = function (req, res, next) {
   var code = req.body.mobile;
   var username = req.params.username;
-  
-  // Username can not be null
-  if(!username) {
-    var err = new Error('No Username Provided');
-    showError(406, err, next);
-  }
 
   if(code) {
-
     // Only allow valid China mobile number
     if(/1[34578]\d{9}$/.test(code)) {
       req.couponCode = code;

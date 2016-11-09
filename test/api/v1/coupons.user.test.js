@@ -112,19 +112,6 @@ describe('/api/v1/coupons/user/{username}', function() {
         });
     });
 
-    it('should not create a new coupon if no username has been provided', function (done) {
-      request.post(path + null)
-        .send(apiTestData.userAWithoutMobile)
-        .set('Accept', 'application/json')
-        .expect(406)
-        .end(function (err, res) {
-          if(err) done(err);
-          else {
-            res.body.message.should.equal('No Mobile Provided');
-            done();
-          }
-        });
-    });
 
     it('should have the default coupon rule if not authorised', function (done) {
       request.post(path + 'userA')
