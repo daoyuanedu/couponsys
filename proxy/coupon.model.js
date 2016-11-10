@@ -3,6 +3,7 @@
  *
  * A db proxy for Coupon model
  */
+var Promise = require('bluebird');
 var Coupon = require('../models').Coupon;
 var defaultRules = require('../config.default').defaultCouponRules;
 
@@ -35,6 +36,15 @@ exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, coupo
   return new Coupon(newCoupon).save();
 };
 
+// TODO how to write Promise + Promise
+// exports.isBelongToUsers = function (couponId, username) {
+//   var couponPromise = getCouponCodesByCouponCode(couponId);
+//   var usersCouponsPromise = getCouponCodesByUsername(username);
+//   return Promise.join(couponPromise, usersCouponsPromise, function(coupon, couponArray)){
+//     return Arrays.asList(couponArray).contains(coupon);
+//   }
+// }
+
 exports.getDiscountedValue = function (ruleType, ruleValue, orderValue) {
   var dicountedValue;
   if (ruleType === 'PERCENTAGE')
@@ -52,6 +62,6 @@ exports.getDiscountedValue = function (ruleType, ruleValue, orderValue) {
   dicountedValue = parseInt(dicountedValue);
   console.log("------------------------------------" + dicountedValue);
 
-  var discountedOrder = { 'couponID' : coupon.couponID, 'dicountedValue' : dicountedValue }
+  var discountedOrder = { 'dicountedValue' : dicountedValue }
   return discountedOrder;
 };

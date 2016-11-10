@@ -10,20 +10,21 @@ var coupon = require('./api/v1/coupons');
 var auth = require('./middlewares/auth');
 var couponCodeGenerator = require('./middlewares/couponCodeGenerator');
 var discountChecker = require('./middlewares/discountChecker');
+var errorHandler = require('./middlewares/errorHandler');
+
 
 var router = express.Router();
 
 // Others
 router.get('/info', info);
 // User api
-router.get('/user/:username', user.getCouponCodesByUser);
-router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser);
+router.get('/user/:username', user.getCouponCodesByUser, errorHandler.apiErrorHandler);
+router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser, errorHandler.apiErrorHandler);
 // Coupons api
-router.get('/', coupon.getCouponsList);
-router.get('/:couponID', auth.tryAuth, coupon.getCouponCodesByCouponID);
+router.get('/', coupon.getCouponsList, errorHandler.apiErrorHandler);
+router.get('/:couponID', coupon.getCouponCodesByCouponID, errorHandler.apiErrorHandler);
+router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForNewUser, errorHandler.apiErrorHandler);
 router.get('/:couponID/discount', discountChecker.couponOwnerChecker, coupon.getDiscountOrderValueByCouponID);
-router.post('/', couponCodeGenerator.useMobileAndUsernameToCreateCouponCode, coupon.createCouponForNewUser);
-
 
 
 //for test purpose
@@ -32,7 +33,7 @@ router.get('/error/api', function (req, res, next) {
   err.api = true;
   err.status = 406;
   next(err);
-});
+}, errorHandler.apiErrorHandler);
 
 
 module.exports = router;

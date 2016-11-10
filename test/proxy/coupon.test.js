@@ -20,6 +20,8 @@ describe('Coupon Model Proxy', function () {
   // Init test data
   var user1Coupon = couponData.user1Coupon;
   var userACoupon1NotValid = couponData.userACoupon1NotValid;
+  var userAWithPercRule = couponData.userAWithPercRule;
+  var userBWithCashRule = couponData.userBWithCashRule;
 
 
   beforeEach(function(done) {
@@ -61,5 +63,33 @@ describe('Coupon Model Proxy', function () {
     }, done);
 
   });
+
+  it('getDiscountedValue should return -20% value when use percentage rule', function (done) {
+    var discountOrder = couponProxy.getDiscountedValue(
+      userAWithPercRule.couponRule.type, userAWithPercRule.couponRule.value, 1000);
+      discountOrder.dicountedValue.should.equal(800);
+      done();
+  });
+
+  it('getDiscountedValue should return -200 value when use percentage rule', function (done) {
+    var discountOrder = couponProxy.getDiscountedValue(
+      userBWithCashRule.couponRule.type, userBWithCashRule.couponRule.value, 1000);
+      discountOrder.dicountedValue.should.equal(800);
+      done();
+  });
+
+  it.skip('isBelongToUsers should return true if the user have this coupon', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userACouponCash1).save()]);
+
+  });
+
+  it.skip('isBelongToUsers should return false if the user do not have this coupon', function (done) {
+    var queryPromise = couponProxy.isBelongToUsers()(
+      userBWithCashRule.couponRule.type, userBWithCashRule.couponRule.value, 1000);
+      discountOrder.dicountedValue.should.equal(800);
+      done();
+  });
+  
 
 });

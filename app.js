@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
-app.use(errorHandler.apiErrorHandler);
+//app.use(errorHandler.apiErrorHandler);
 app.use(errorHandler.standardErrorHandler);
 
 if (!module.parent) {

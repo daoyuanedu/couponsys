@@ -1,16 +1,10 @@
 // Dependencies
 var coupon = require('../../proxy/coupon.model');
-var logger = require('../../common/logger');
 
 var getCouponsList = function(req, res, next) {
   coupon.getAllCoupons().then(function (coupons) {
     res.send(coupons);
-  }, function (err) {
-    logger.error(err);
-    err.api = true;
-    err.status = 406;
-    next(err);
-  });
+  }).catch(next);
 };
 exports.getCouponsList = getCouponsList;
 
@@ -18,37 +12,32 @@ var getCouponCodesByCouponID = function(req, res, next) {
   var couponID = req.params.couponID;
   coupon.getCouponCodesByCouponCode(couponID).then(function (coupons) {
     res.send(coupons);
-  }, function (err) {
-    logger.error(err);
-    err.api = true;
-    err.status = 406;
-    next(err);
-  });
+  }).catch(next);
 };
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
 
 var createCouponForNewUser = function (req, res, next) {
-  //No need for adminAuth
-  coupon.createCouponWithDefaultRulesForSpecifiedUser(req.sentUsername, req.sentMobile).then(function (coupon) {
-      res.statusCode = 201;
-      res.send(coupon);
-  }, function (err) {
-      err.api = true;
-      next(err);
-  });
+  if(req.adminAuth){
+    next(new Error('not implemented'));
+  }
+  else{
+    coupon.createCouponWithDefaultRulesForSpecifiedUser(req.body.username, req.body.mobile)
+      .then(function (coupon) {
+        res.statusCode = 201;
+        res.send(coupon);
+      }).catch(next);
+  }
 };
 exports.createCouponForNewUser = createCouponForNewUser;
 
 var getDiscountOrderValueByCouponID = function (req, res, next) {
-  var couponId = req.params.couponID;  
-  var validPromise = coupon.isCouponValid(couponId);
-  var couponPromise = coupon.getCouponCodesByCouponCode(couponId);
-  var valuePromis = req.query.orderValue;
+  var couponId = req.params.couponID;
+  var username = req.query.username;
+  var orderValue = req.query.orderValue;
+  console.log("---" + couponId + "---" + username + "---" + orderValue
+    + '---------------------'); 
 
-  coupon.getDiscountedValue(coupon.couponRule.type, coupon.couponRule.type).then(function (discountedOrder) {
-        res.statusCode = 201;
-        res.send(discountedOrder);
-  });
+  res.send('TODO');
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;
 
