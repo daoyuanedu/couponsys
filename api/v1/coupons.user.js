@@ -47,7 +47,7 @@ var createCouponForUser = function (req, res, next) {
   if(req.adminAuth){
     next({message: 'unimplemented...'});
   }else{
-    coupon.createNewCouponWithDefaultRules(username, req.couponCode).then(function (coupon) {
+    coupon.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode).then(function (coupon) {
       res.statusCode = 201;
       res.send(coupon);
     }, function (err) {

@@ -13,6 +13,7 @@ var couponData = require('../../common/modelCouponTestData');
 var APICouponTestData = require('../../common/APICouponTestData');
 var couponOrderData = require('../../common/modelCouponOrderTestData');
 
+
 var path = '/api/v1/coupons/user/';
 
 describe('/api/v1/coupons/user/{username}', function() {
@@ -141,6 +142,7 @@ describe('/api/v1/coupons/user/{username}', function() {
           }
         });
     });
+
 
     it('should have the default coupon rule if not authorised', function (done) {
       request.post(path + 'userA')

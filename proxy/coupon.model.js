@@ -29,7 +29,7 @@ exports.isCouponValid = function (couponId) {
   });
 };
 
-exports.createNewCouponWithDefaultRules = function (username, couponId) {
+exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, couponId) {
   var newCoupon = {username : username, couponID : couponId,
     couponRule : defaultRules.couponRule, rebateRule : defaultRules.rebateRule};
   return new Coupon(newCoupon).save();
