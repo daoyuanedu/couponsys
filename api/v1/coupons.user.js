@@ -4,24 +4,49 @@
  * route /coupons/user/
  */
 
-var Coupon = require('../../proxy/coupon.model');
-var logger = require('../../common/logger');
+var coupon = require('../../proxy/coupon.model');
+var couponOrder = require('../../proxy/couponOrder.model');
 
-var getCouponCodesByUser = function(req, res) {
+var Promise = require('bluebird');
+
+var getCouponCodesByUser = function (req, res, next) {
   var username = req.params.username;
-  Coupon.getCouponsByUsername(username).then(function (coupons) {
-    res.send(coupons);
-  }, function (err) {
-    logger.error(err);
-    res.status(500);
-  });
+
+  var couponsPromise = coupon.getCouponCodesByUsername(username);
+  if (req.query.showTotalOrderNumber) {
+    var totalOrderNumber = couponsPromise.then(function (coupons) {
+      return Promise.all(coupons.map(function (coupon) {
+        return couponOrder.totalOrdersByCouponId(coupon.couponID);
+      }));
+    }).then(function (orderNumberArray) {
+      return orderNumberArray.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+    }).catch(next);
+    Promise.join(totalOrderNumber, couponsPromise, function (orderNumber, coupons) {
+      return {coupons: coupons, totalCouponOrders: orderNumber};
+    }).then(function (resJson) {
+      res.send(resJson);
+    }).catch(next);
+  }
+  else {
+    couponsPromise.then(function (coupons) {
+      res.send({coupons: coupons});
+    }).catch(next);
+  }
 };
+exports.getCouponCodesByUser = getCouponCodesByUser;
 
-exports.getCouponsByUser = getCouponCodesByUser;
-
-var createCouponForUser = function (req, res) {
-  var username = req.param.username;
-  res.send('unimplemented...' + username);
+var createCouponForUser = function (req, res, next) {
+  var username = req.params.username;
+  if (req.adminAuth) {
+    next({message: 'unimplemented...'});
+  } else {
+    coupon.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode).then(function (coupon) {
+      res.statusCode = 201;
+      res.send(coupon);
+    }).catch(next);
+  }
 };
-
 exports.createCouponForUser = createCouponForUser;
+
