@@ -1,16 +1,10 @@
 // Dependencies
 var coupon = require('../../proxy/coupon.model');
-var logger = require('../../common/logger');
 
 var getCouponsList = function(req, res, next) {
   coupon.getAllCoupons().then(function (coupons) {
     res.send(coupons);
-  }, function (err) {
-    logger.error(err);
-    err.api = true;
-    err.status = 406;
-    next(err);
-  });
+  }).catch(next);
 };
 exports.getCouponsList = getCouponsList;
 
@@ -18,24 +12,17 @@ var getCouponCodesByCouponID = function(req, res, next) {
   var couponID = req.params.couponID;
   coupon.getCouponCodesByCouponCode(couponID).then(function (coupons) {
     res.send(coupons);
-  }, function (err) {
-    logger.error(err);
-    err.api = true;
-    err.status = 406;
-    next(err);
-  });
+  }).catch(next);
 };
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
 
 var createCouponForNewUser = function (req, res, next) {
   //No need for adminAuth
-  coupon.createCouponWithDefaultRulesForSpecifiedUser(req.sentUsername, req.sentMobile).then(function (coupon) {
+  coupon.createCouponWithDefaultRulesForSpecifiedUser(req.sentUsername, req.sentMobile)
+    .then(function (coupon) {
       res.statusCode = 201;
       res.send(coupon);
-  }, function (err) {
-      err.api = true;
-      next(err);
-  });
+    }).catch(next);
 };
 exports.createCouponForNewUser = createCouponForNewUser;
 

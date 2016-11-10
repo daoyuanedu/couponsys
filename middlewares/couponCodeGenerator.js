@@ -3,10 +3,9 @@
  */
 
 var showError = function (status, err, next){
-  err.api = true;
   err.status = status;
   next(err);
-}
+};
 
 
 // Need to handle when generated coupon code already exists,
@@ -24,7 +23,6 @@ exports.useMobileAsCode = function (req, res, next) {
     else {
       var err = new Error('Invalid Mobile Provided');
       showError(406, err, next);
-
     }
    
   }
