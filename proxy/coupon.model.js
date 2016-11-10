@@ -34,3 +34,30 @@ exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, coupo
     couponRule : defaultRules.couponRule, rebateRule : defaultRules.rebateRule};
   return new Coupon(newCoupon).save();
 };
+
+exports.getDiscountedValue = function (couponID, totalValue) {
+  var coupon = Coupon.find({ couponID : couponId});
+  console.log("---------------------coupon---------------" + coupon)
+
+  var dicountedValue;
+  var ruleType = coupon.couponRule.type;
+  var ruleValue = coupon.couponRule.value;
+
+  if (ruleType === 'PERCENTAGE')
+  {
+    dicountedValue = orderValue * (100 - ruleValue) / 100;
+  }
+  else if (ruleType === 'CASH') 
+  {
+    dicountedValue = orderValue - ruleValue;
+  }
+  else
+  {
+    dicountedValue = orderValue;
+  }
+  dicountedValue = parseInt(dicountedValue);
+  console.log("---------------------Start---------------" + dicountedValue);
+
+  var discountedOrder = { 'couponID' : coupon.couponID, 'dicountedValue' : dicountedValue }
+  return discountedOrder;
+};

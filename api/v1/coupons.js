@@ -39,6 +39,21 @@ var createCouponForNewUser = function (req, res, next) {
 };
 exports.createCouponForNewUser = createCouponForNewUser;
 
+var getDiscountOrderValueByCouponID = function (req, res, next) {
+  var couponID = req.params.couponID;
+  var orderValue = req.query.orderValue;
+
+  console.log(couponID + "---------------------Start---------------" + req.orderValue)
+
+  coupon.getDiscountedValue(req.couponId, orderValue).then(function (discountedOrder) {
+      res.statusCode = 201;
+      res.send(discountedOrder);
+  }, function (err) {
+      err.api = true;
+      next(err);
+  });
+};
+exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;
 
 // TODO Old version, need to be replaced later
 // api router

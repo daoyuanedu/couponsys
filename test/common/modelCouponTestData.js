@@ -131,6 +131,34 @@ module.exports = {
       value: 100
     },
     valid: true
+  },
+
+  userBWithPercRule: {
+    couponID: '13898458461',
+    username: 'userB',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 20
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: true
+  },
+
+  userBWithCashRule: {
+    couponID: '13898458462',
+    username: 'userB',
+    couponRule: {
+      type: 'CASH',
+      value: 200
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: true
   }
 };
 

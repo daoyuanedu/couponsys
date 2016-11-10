@@ -18,15 +18,12 @@ exports.useMobileAsCode = function (req, res, next) {
     // Only allow valid China mobile number
     if(/1[34578]\d{9}$/.test(code)) {
       req.couponCode = code;
-
       next();
     }
     else {
       var err = new Error('Invalid Mobile Provided');
       showError(406, err, next);
-
     }
-   
   }
   else {
     var err = new Error('No Mobile Provided');
@@ -68,3 +65,15 @@ exports.useMobileAndUsernameToCreateCouponCode = function (req, res, next) {
     next(err);
   }
 };
+
+exports.discountOrder = function (req, res, next) {
+  var couponId = req.body.couponId;
+  var orderValue = req.body.orderValue;
+
+  req.couponId = couponId;
+  req.totalValue = orderValue;
+  next();
+    
+  
+};
+
