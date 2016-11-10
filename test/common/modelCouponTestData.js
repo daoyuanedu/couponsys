@@ -133,9 +133,9 @@ module.exports = {
     valid: true
   },
 
-  userBWithPercRule: {
+  userAWithPercRule: {
     couponID: '13898458461',
-    username: 'userB',
+    username: 'userA',
     couponRule: {
       type: 'PERCENTAGE',
       value: 20

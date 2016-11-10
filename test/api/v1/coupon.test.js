@@ -24,7 +24,7 @@ describe('/api/v1/coupons/', function() {
   var userACouponPerc1 = couponData.userACouponPerc1;
   var userACouponCash1 = couponData.userACouponCash1;
   var user1Coupon = couponData.user1Coupon; 
-  var userBWithPercRule = couponData.userBWithPercRule;
+  var userAWithPercRule = couponData.userAWithPercRule;
   var userBWithCashRule = couponData.userBWithCashRule;
 
   describe('GET', function() {
@@ -69,14 +69,14 @@ describe('/api/v1/coupons/', function() {
       }, done);
     });
 
-    it('should return one 20% discounted order value by couponID', function(done){
+    it('should return one 20% discounted order value for userB by userA couponID', function(done){
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userBWithPercRule).save(), 
+        [new Coupon(userAWithPercRule).save(), 
         new Coupon(userBWithCashRule).save()]);
       
       saveTwoCoupons.then(function () {
         request.get(path + '13898458461' + '/discount')
-          .query({ couponID : '13898458461', orderValue : 1000})
+          .query({ username : 'userB', orderValue : 1000})
           .expect('Content-Type', /json/)
           .expect(function (res) {
             res.body.length.should.equal(1);
@@ -89,14 +89,14 @@ describe('/api/v1/coupons/', function() {
       }, done);
     });
 
-    it('should return one 800 discounted order value by couponID', function(done){
+    it('should return one 800 discounted order value for userA by userB couponID', function(done){
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userBWithPercRule).save(), 
+        [new Coupon(userAWithPercRule).save(), 
         new Coupon(userBWithCashRule).save()]);
       
       saveTwoCoupons.then(function () {
         request.get(path + '13898458462' + '/discount')
-          .query({ couponID : '13898458462', orderValue : 1000})
+          .query({ username : 'userA', orderValue : 1000})
           .expect('Content-Type', /json/)
           .expect(function (res) {
             res.body.length.should.equal(1);

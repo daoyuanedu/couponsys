@@ -40,17 +40,14 @@ var createCouponForNewUser = function (req, res, next) {
 exports.createCouponForNewUser = createCouponForNewUser;
 
 var getDiscountOrderValueByCouponID = function (req, res, next) {
-  var couponID = req.params.couponID;
-  var orderValue = req.query.orderValue;
+  var couponId = req.params.couponID;  
+  var validPromise = coupon.isCouponValid(couponId);
+  var couponPromise = coupon.getCouponCodesByCouponCode(couponId);
+  var valuePromis = req.query.orderValue;
 
-  console.log(couponID + "---------------------Start---------------" + req.orderValue)
-
-  coupon.getDiscountedValue(req.couponId, orderValue).then(function (discountedOrder) {
-      res.statusCode = 201;
-      res.send(discountedOrder);
-  }, function (err) {
-      err.api = true;
-      next(err);
+  coupon.getDiscountedValue(coupon.couponRule.type, coupon.couponRule.type).then(function (discountedOrder) {
+        res.statusCode = 201;
+        res.send(discountedOrder);
   });
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;

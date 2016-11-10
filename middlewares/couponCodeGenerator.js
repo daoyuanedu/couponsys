@@ -66,14 +66,4 @@ exports.useMobileAndUsernameToCreateCouponCode = function (req, res, next) {
   }
 };
 
-exports.discountOrder = function (req, res, next) {
-  var couponId = req.body.couponId;
-  var orderValue = req.body.orderValue;
-
-  req.couponId = couponId;
-  req.totalValue = orderValue;
-  next();
-    
-  
-};
 

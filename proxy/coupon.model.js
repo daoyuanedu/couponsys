@@ -35,14 +35,8 @@ exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, coupo
   return new Coupon(newCoupon).save();
 };
 
-exports.getDiscountedValue = function (couponID, totalValue) {
-  var coupon = Coupon.find({ couponID : couponId});
-  console.log("---------------------coupon---------------" + coupon)
-
+exports.getDiscountedValue = function (ruleType, ruleValue, orderValue) {
   var dicountedValue;
-  var ruleType = coupon.couponRule.type;
-  var ruleValue = coupon.couponRule.value;
-
   if (ruleType === 'PERCENTAGE')
   {
     dicountedValue = orderValue * (100 - ruleValue) / 100;
@@ -56,7 +50,7 @@ exports.getDiscountedValue = function (couponID, totalValue) {
     dicountedValue = orderValue;
   }
   dicountedValue = parseInt(dicountedValue);
-  console.log("---------------------Start---------------" + dicountedValue);
+  console.log("------------------------------------" + dicountedValue);
 
   var discountedOrder = { 'couponID' : coupon.couponID, 'dicountedValue' : dicountedValue }
   return discountedOrder;
