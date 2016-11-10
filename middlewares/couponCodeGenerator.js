@@ -7,9 +7,13 @@ var showError = function (status, err, next){
   err.status = status;
   next(err);
 }
+
+
+// Need to handle when generated coupon code already exists,
+// Given we are using mobile number as the code,
+// it's unlikely to happen for now.
 exports.useMobileAsCode = function (req, res, next) {
   var code = req.body.mobile;
-
   if(code) {
     // Only allow valid China mobile number
     if(/1[34578]\d{9}$/.test(code)) {

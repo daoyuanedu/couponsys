@@ -25,7 +25,7 @@ describe('CouponOrder Model Proxy', function () {
     CouponOrder.remove({}, done);
   });
 
-  it('totalOrdersByCouponId should return true if a coupon code is valid', function (done) {
+  it('totalOrdersByCouponId should return the number of orders if a coupon code is valid', function (done) {
     var twoSaves = Promise.all([new CouponOrder(couponOrderNormal).save(), new CouponOrder(couponOrderWithSameCouponID).save()]);
     twoSaves.then(function () {
       var queryPromise = couponModelproxy.totalOrdersByCouponId(couponOrderNormal.couponID);
