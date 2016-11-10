@@ -17,12 +17,16 @@ var getCouponCodesByCouponID = function(req, res, next) {
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
 
 var createCouponForNewUser = function (req, res, next) {
-  //No need for adminAuth
-  coupon.createCouponWithDefaultRulesForSpecifiedUser(req.sentUsername, req.sentMobile)
-    .then(function (coupon) {
-      res.statusCode = 201;
-      res.send(coupon);
-    }).catch(next);
+  if(req.adminAuth){
+    next(new Error('not implemented'));
+  }
+  else{
+    coupon.createCouponWithDefaultRulesForSpecifiedUser(req.body.username, req.body.mobile)
+      .then(function (coupon) {
+        res.statusCode = 201;
+        res.send(coupon);
+      }).catch(next);
+  }
 };
 exports.createCouponForNewUser = createCouponForNewUser;
 
