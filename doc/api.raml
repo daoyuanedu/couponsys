@@ -212,13 +212,13 @@ schemas:
           application/json:
             example: |
               {
-                "orderId" : "guid...",
+                "orderId" : "order1239852",
                 "orderName" : "physics01",
                 "orderValue" : {
                   "original" : 1000,
                   "final" : 800
                 },
-                "clientId" : "guid..."
+                "username" : "userA"
               }
         responses:
           201:
@@ -229,9 +229,21 @@ schemas:
                   {
                     "orderId" : "guid....",
                     "couponCode" : "test1perc10",
+                     "orderValue" : {
+                      "original" : 1000,
+                      "final" : 800
+                    },
                     "rebated" : false,
-                    "rebateValue" : 100  
-                  }        
+                    "rebateValue" : 100
+                  }
+          403:
+            description: when the coupon code is not applicable to this user, hence invalid order.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message" : "coupon code 123123 is not valid for userA"
+                  }
       /{orderId}:
         displayName: order id
         get:
@@ -261,17 +273,20 @@ schemas:
           orderValue:
             required: true
             type: integer
+          username:
+            required: true
+            type: string
+            description: used to verify if this coupon is applicable to this user.
         responses:
           200:
             body:
               application/json:
                 example: |
                   {
-                    "coupon" : {coupon},
+                    "coupon" : "userAPerc10",
                     "discountedValue": 800
-                    "orderId" : "guid..."
                   }
-          
+
           406:
             description: when couponcode is not valid
             body:
@@ -280,29 +295,48 @@ schemas:
                   {
                     "message" : "coupon code 123124 is not valid"
                   }
+          403:
+            description: when the coupon code is not applicable to this user
+            body:
+              application/json:
+                example: |
+                  {
+                    "message" : "coupon code 123123 is not valid for userA"
+                  }
   /user:
     displayName: user
     /{username}:
       displayName: username
       get:
-        description: get coupon codes by user name
+        description: get coupon codes by user name.
+        queryParameters:
+          showTotalOrderNumber:
+            required: false
+            default:  false
+            description: if set true, return the number of orders using the coupons/coupon belong to this user.
         responses:
           200:
             body:
               application/json:
-                schema: coupon
+                schema: coupon list
                 example: |
                   {
-                    "couponCode": "user1cash10",
-                    "username": {username},
-                    "couponRule": {
-                      "type": "PERCENTAGE",
-                      "value": 10
-                    },
-                    "rebateRule": {
-                      "type": "CASH",
-                      "value": 100
-                    }
+                    "coupons":
+                      [
+                        {
+                          "couponCode": "user1cash10",
+                          "username": "user1",
+                          "couponRule": {
+                            "type": "PERCENTAGE",
+                            "value": 10
+                          },
+                          "rebateRule": {
+                            "type": "CASH",
+                            "value": 100
+                          }
+                        }
+                      ],
+                    "totalCouponOrders": 25
                   }
           404:
             description: when username does not exits
@@ -312,5 +346,9 @@ schemas:
                   {
                     "message" : "username test01 does not have any coupon code."
                   }
+      /orders:
+        displayName: orders
+        get:
+          description: list all the orders linked to the coupons belong to this user. Auth required.
       post:
         description: create a new coupon code for user, similar to post to /coupons. 
