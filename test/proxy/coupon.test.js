@@ -65,17 +65,31 @@ describe('Coupon Model Proxy', function () {
   });
 
   it('getDiscountedValue should return -20% value when use percentage rule', function (done) {
-    var discountOrder = couponProxy.getDiscountedValue(
-      userAWithPercRule.couponRule.type, userAWithPercRule.couponRule.value, 1000);
-      discountOrder.dicountedValue.should.equal(800);
-      done();
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      discountOrderProxy = couponProxy.getDiscountedValue(
+      userAWithPercRule.couponID, 1000);
+      discountOrderProxy.then(function(discountOrder) {
+        discountOrder.dicountedValue.should.equal(800);
+        done();
+      }, done);
+    });
   });
 
   it('getDiscountedValue should return -200 value when use percentage rule', function (done) {
-    var discountOrder = couponProxy.getDiscountedValue(
-      userBWithCashRule.couponRule.type, userBWithCashRule.couponRule.value, 1000);
-      discountOrder.dicountedValue.should.equal(800);
-      done();
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      discountOrderProxy = couponProxy.getDiscountedValue(
+      userBWithCashRule.couponID, 1000);
+      discountOrderProxy.then(function(discountOrder) {
+        discountOrder.dicountedValue.should.equal(800);
+        done();
+      }, done);
+    });
   });
 
   it('isBelongToUsers should return true if the user have this coupon', function (done) {
@@ -99,6 +113,5 @@ describe('Coupon Model Proxy', function () {
       });
     });
   });
-  
 
 });

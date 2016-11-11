@@ -51,9 +51,12 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
       });
     }
   }).then(function (discountedValue) {
-    console.log(discountedValue + '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+    console.log(discountedValue.couponID +   discountedValue.dicountedValue+ '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+    return { couponID : discountedValue.couponID, dicountedValue : discountedValue.dicountedValue };
+  }).then(function(resJson) {
     res.statusCode = 201;
-    res.send(discountedValue);
+    res.send(resJson);
   }).catch(next);
+
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;

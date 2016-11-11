@@ -82,12 +82,7 @@ describe('/api/v1/coupons/', function () {
           .query({ username : 'userB', orderValue : 1000 })
           .expect('Content-Type', /json/)
           .expect(function (res) {
-            res.body.length.should.equal(1);
-            var discountedOrder = res.body;
-            console.log('---------------------------------' + discountedOrder + '---------------------')
-            discountedOrder.forEach(function (discountedOrder) {
-              discountedOrder.dicountedValue.should.equal(800);
-            });
+            res.body.dicountedValue.should.equal(800);
           })
           .end(done);
       }, done);
@@ -103,11 +98,7 @@ describe('/api/v1/coupons/', function () {
           .query({ username : 'userA', orderValue : 1000 })
           .expect('Content-Type', /json/)
           .expect(function (res) {
-            res.body.length.should.equal(1);
-            var discountedOrder = res.body.coupons;
-            discountedOrder.forEach(function (coupon) {
-              discountedOrder.dicountedValue.should.equal(800);
-            });
+            res.body.dicountedValue.should.equal(800);
           })
           .end(done);
       }, done);
