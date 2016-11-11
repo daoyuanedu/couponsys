@@ -27,7 +27,7 @@ var createCouponForNewUser = function (req, res, next) {
       .then(function (coupon) {
         res.statusCode = 201;
         res.send(coupon);
-      }).catch(next);
+    }).catch(next);
   }
 };
 exports.createCouponForNewUser = createCouponForNewUser;
@@ -46,16 +46,11 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
     return false;
   }).then(function (ableToUse) {
     if (ableToUse) {
-        return getDiscountedValue.then(function (discountedValue) {
-        return discountedValue;
-      });
+      return getDiscountedValue.then(function (discountedValue) {
+        res.statusCode = 201;
+        res.send(discountedValue);
+      }).catch(next);
     }
-  }).then(function (discountedValue) {
-    console.log(discountedValue.couponID +   discountedValue.dicountedValue+ '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
-    return { couponID : discountedValue.couponID, dicountedValue : discountedValue.dicountedValue };
-  }).then(function(resJson) {
-    res.statusCode = 201;
-    res.send(resJson);
   }).catch(next);
 
 };
