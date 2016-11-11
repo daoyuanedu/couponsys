@@ -44,23 +44,35 @@ exports.isBelongToUsers = function (couponId, username) {
   });
 }
 
-exports.getDiscountedValue = function (ruleType, ruleValue, orderValue) {
-  var dicountedValue;
-  if (ruleType === 'PERCENTAGE')
-  {
-    dicountedValue = orderValue * (100 - ruleValue) / 100;
-  }
-  else if (ruleType === 'CASH') 
-  {
-    dicountedValue = orderValue - ruleValue;
-  }
-  else
-  {
-    dicountedValue = orderValue;
-  }
-  dicountedValue = parseInt(dicountedValue);
-  console.log(discountedOrder + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+exports.getDiscountedValue = function (couponId, orderValue) {
+  return Coupon.find({ couponID : couponId} ).then (function (coupons){
+    var couponObject = coupons[0];
+    console.log(couponObject + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
 
-  var discountedOrder = { 'dicountedValue' : dicountedValue }
-  return discountedOrder;
+    var ruleType = couponObject.couponRule.type;
+    var ruleValue = couponObject.couponRule.value;
+    var dicountedValue = 0 ;
+    console.log(ruleType + ruleValue + orderValue + dicountedValue + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+ 
+    if (ruleType === 'PERCENTAGE')
+    {
+      dicountedValue = orderValue * (100 - ruleValue) / 100;
+    }
+    else if (ruleType === 'CASH') 
+    {
+      dicountedValue = orderValue - ruleValue;
+    }
+    else
+    {
+      dicountedValue = orderValue;
+    }
+    dicountedValue = parseInt(dicountedValue);
+    console.log(dicountedValue + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+
+    return { 'couponID': couponObject.couponID, 'dicountedValue' : dicountedValue };
+
+  }).then(function (discountedOrder) {
+    console.log(discountedOrder + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+    return discountedOrder;
+  });
 };

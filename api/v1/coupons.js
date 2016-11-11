@@ -1,10 +1,10 @@
 // Dependencies
-var coupon = require('../../proxy/coupon.model');
+var couponProxy = require('../../proxy/coupon.model');
 var Promise = require('bluebird');
 
 
 var getCouponsList = function(req, res, next) {
-  coupon.getAllCoupons().then(function (coupons) {
+  couponProxy.getAllCoupons().then(function (coupons) {
     res.send(coupons);
   }).catch(next);
 };
@@ -12,7 +12,7 @@ exports.getCouponsList = getCouponsList;
 
 var getCouponCodesByCouponID = function(req, res, next) {
   var couponID = req.params.couponID;
-  coupon.getCouponCodesByCouponCode(couponID).then(function (coupon) {
+  couponProxy.getCouponCodesByCouponCode(couponID).then(function (coupon) {
     res.send(coupon);
   }).catch(next);
 };
@@ -23,7 +23,7 @@ var createCouponForNewUser = function (req, res, next) {
     next(new Error('not implemented'));
   }
   else{
-    coupon.createCouponWithDefaultRulesForSpecifiedUser(req.body.username, req.body.mobile)
+    couponProxy.createCouponWithDefaultRulesForSpecifiedUser(req.body.username, req.body.mobile)
       .then(function (coupon) {
         res.statusCode = 201;
         res.send(coupon);
@@ -37,111 +37,21 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
   var username = req.query.username;
   var orderValue = req.query.orderValue;
 
-  var isBelongToUsers = coupon.isBelongToUsers(couponId, username);
-  var isCouponValid = coupon.isCouponValid(couponId);
-  
-  Promise.join(isBelongToUsers, isCouponValid, function (belong, valid) {
+  var isBelongToUsers = couponProxy.isBelongToUsers(couponId, username);
+  var isCouponValid = couponProxy.isCouponValid(couponId);
+  var getDiscountedValue =  couponProxy.getDiscountedValue(couponId, orderValue);
+
+  Promise.join(isBelongToUsers, isCouponValid, getDiscountedValue, function (belong, valid, discountedValue) {
     if (!belong && valid) return true;
     return false;
   }).then(function (ableToUse) {
     if (ableToUse) {
-        return coupon.getCouponCodesByCouponCode(couponId).then(function (coupons) {
-        return coupons[0];
-      }).then(function (couponObject) {
-        var ruleType = couponObject.couponRule.type;
-        var ruleValue = couponObject.couponRule.value;
-        console.log(ruleType + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
-        console.log(ruleValue + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
-        console.log(orderValue + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
-
-        var discountedValue = coupon.getDiscountedValue(ruleType, ruleValue, orderValue);
+      getDiscountedValue.then(function (discountedValue) {
+        console.log(discountedValue + '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
         res.statusCode = 201;
         res.send(discountedValue);
-      }).catch(next);
+      });
     }
-  }).catch(next);;
-
-  res.send('TODO');
+  }).catch(next);
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;
-
-// TODO Old version, need to be replaced later
-// api router
-// var router = express.Router();
-
-// // ###### Coupons Block ######
-// /* GET coupons list logic */
-// router.get('/', function(req, res, next) {
-//   res.render('coupon', { couponPage: 'Coupon' });
-//   console.log('Get list of all coupons');
-// });
-
-// /* GET one coupon logic */
-// router.get('/:couponID', function(req, res, next) {
-//   var couponId = req.params.couponID;
-//   console.log('Searching for one coupon by using couponID: ' + req.params);
-
-//   // Use this path to get one coupons: /api/v1/coupons/123
-//   // This can be used to send conpon json data back
-//   if (req.params.couponID == 123) {
-//   	res.send('Found Id: ' + couponId);
-//   	console.log('Find ID: ' + couponId);
-//   } else {
-//   	res.send('Not Found Id: ' + couponId )
-//   	console.log('Not Found ID ' + couponId);
-//   }
-// });
-
-// /* POST one coupon logic */
-// router.post('/', function(req, res, next) {
-//   var receivedData = JSON.stringify(req.body);
-//   console.log('I have received a coupons data: ' + JSON.stringify(req.body));
-//   res.send(req.body);
-// });
-
-// // ###### Order Block ######
-// /* GET orders list logic */
-// // Input couponID to get list of orders
-// router.get('/:couponID/orders', function(req, res, next) {
-//   var couponId = req.params.couponID;
-//   console.log('Searching for order lists in one coupon by using couponID: ' + couponId);
-
-//   // Use this path to get one coupons: /api/v1/coupons/123
-//   // This can be used to send conpon json data back
-//   if (couponId == 123) {
-//     res.render('order', { orderPage: 'Order', couponBelong: couponId.toString()});
-//   	console.log('Find orders list by couponID: ' + couponId);
-//   } else {
-//   	res.send('Not Found couponId: '+ couponId + ', can not list orders here');
-//   	console.log('Not Found ID: ' + couponId);
-//   }
-// });
-
-// /* GET one order logic */
-// // Input couponID and orderID to get list of orders
-// router.get('/:couponID/orders/:orderID', function(req, res, next) {
-//   var couponId = req.params.couponID;
-//   var orderId = req.params.orderID;
-//   console.log('Searching for order ID:' + orderId + ' in one coupon by using couponID: ' + couponId);
-
-//   // Use this path to get one coupon: /api/v1/coupons/123/orders/321
-//   // This can be used to send order json data back
-//   if (couponId == 123) {
-//   	console.log('Find couponID: \'' + couponId + '\' start searching order ID: ' + orderId);
-
-//     // If couponID match, search orderID
-//   	if (orderId == 321) {
-//   	   console.log('Found order ID: ' + orderId);
-//        res.send('Found order ID: \'' + orderId + '\' in couponID: ' + couponId);
-//   	} else {
-//   	   console.log('Not Found order ID: ' + orderId);
-//        res.send('Not Found order ID: \'' + orderId + '\' in couponID: ' + couponId);
-//   	}
-
-//   } else {
-//   	res.send('Not Found couponId: '+ couponId + ', can not find orderID: \'' + orderId + '\' here.');
-//   	console.log('Not Found couponId ID: ' + couponId);
-//   }
-// });
-
-// module.exports = router;
