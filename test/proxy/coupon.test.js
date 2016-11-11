@@ -78,17 +78,26 @@ describe('Coupon Model Proxy', function () {
       done();
   });
 
-  it.skip('isBelongToUsers should return true if the user have this coupon', function (done) {
+  it('isBelongToUsers should return true if the user have this coupon', function (done) {
     var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithPercRule).save(), new Coupon(userACouponCash1).save()]);
-
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+    saveTwoCoupons.then(function(){
+      couponProxy.isBelongToUsers('13898458461', 'userA').then(function(result){
+        result.should.equal(true);
+        done();
+      });
+    });
   });
 
-  it.skip('isBelongToUsers should return false if the user do not have this coupon', function (done) {
-    var queryPromise = couponProxy.isBelongToUsers()(
-      userBWithCashRule.couponRule.type, userBWithCashRule.couponRule.value, 1000);
-      discountOrder.dicountedValue.should.equal(800);
-      done();
+  it('isBelongToUsers should return false if the user do not have this coupon', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+    saveTwoCoupons.then(function(){
+      couponProxy.isBelongToUsers('13898458461', 'userB').then(function(result){
+        result.should.equal(false);
+        done();
+      });
+    });
   });
   
 

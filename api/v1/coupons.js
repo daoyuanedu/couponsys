@@ -1,5 +1,7 @@
 // Dependencies
 var coupon = require('../../proxy/coupon.model');
+var Promise = require('bluebird');
+
 
 var getCouponsList = function(req, res, next) {
   coupon.getAllCoupons().then(function (coupons) {
@@ -10,8 +12,8 @@ exports.getCouponsList = getCouponsList;
 
 var getCouponCodesByCouponID = function(req, res, next) {
   var couponID = req.params.couponID;
-  coupon.getCouponCodesByCouponCode(couponID).then(function (coupons) {
-    res.send(coupons);
+  coupon.getCouponCodesByCouponCode(couponID).then(function (coupon) {
+    res.send(coupon);
   }).catch(next);
 };
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
@@ -34,8 +36,30 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
   var couponId = req.params.couponID;
   var username = req.query.username;
   var orderValue = req.query.orderValue;
-  console.log("---" + couponId + "---" + username + "---" + orderValue
-    + '---------------------'); 
+
+  var isBelongToUsers = coupon.isBelongToUsers(couponId, username);
+  var isCouponValid = coupon.isCouponValid(couponId);
+  
+  Promise.join(isBelongToUsers, isCouponValid, function (belong, valid) {
+    if (!belong && valid) return true;
+    return false;
+  }).then(function (ableToUse) {
+    if (ableToUse) {
+        return coupon.getCouponCodesByCouponCode(couponId).then(function (coupons) {
+        return coupons[0];
+      }).then(function (couponObject) {
+        var ruleType = couponObject.couponRule.type;
+        var ruleValue = couponObject.couponRule.value;
+        console.log(ruleType + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+        console.log(ruleValue + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+        console.log(orderValue + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+
+        var discountedValue = coupon.getDiscountedValue(ruleType, ruleValue, orderValue);
+        res.statusCode = 201;
+        res.send(discountedValue);
+      }).catch(next);
+    }
+  }).catch(next);;
 
   res.send('TODO');
 };

@@ -36,14 +36,13 @@ exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, coupo
   return new Coupon(newCoupon).save();
 };
 
-// TODO how to write Promise + Promise
-// exports.isBelongToUsers = function (couponId, username) {
-//   var couponPromise = getCouponCodesByCouponCode(couponId);
-//   var usersCouponsPromise = getCouponCodesByUsername(username);
-//   return Promise.join(couponPromise, usersCouponsPromise, function(coupon, couponArray)){
-//     return Arrays.asList(couponArray).contains(coupon);
-//   }
-// }
+exports.isBelongToUsers = function (couponId, username) {
+  return Coupon.find({ couponID : couponId} ).then (function (coupons){
+    return coupons[0].username === username;
+  }, function (err) {
+    return err;
+  });
+}
 
 exports.getDiscountedValue = function (ruleType, ruleValue, orderValue) {
   var dicountedValue;
@@ -60,7 +59,7 @@ exports.getDiscountedValue = function (ruleType, ruleValue, orderValue) {
     dicountedValue = orderValue;
   }
   dicountedValue = parseInt(dicountedValue);
-  console.log("------------------------------------" + dicountedValue);
+  console.log(discountedOrder + '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
 
   var discountedOrder = { 'dicountedValue' : dicountedValue }
   return discountedOrder;

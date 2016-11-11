@@ -72,7 +72,7 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
 
-    it.skip('should return one 20% discounted order value for userB by userA couponID', function(done){
+    it('should return one 20% discounted order value for userB by userA couponID', function(done){
       var saveTwoCoupons = Promise.all(
         [new Coupon(userAWithPercRule).save(), 
         new Coupon(userBWithCashRule).save()]);
@@ -84,7 +84,8 @@ describe('/api/v1/coupons/', function () {
           .expect(function (res) {
             res.body.length.should.equal(1);
             var discountedOrder = res.body;
-            discountedOrder.forEach(function (coupon) {
+            console.log('---------------------------------' + discountedOrder + '---------------------')
+            discountedOrder.forEach(function (discountedOrder) {
               discountedOrder.dicountedValue.should.equal(800);
             });
           })
@@ -103,7 +104,7 @@ describe('/api/v1/coupons/', function () {
           .expect('Content-Type', /json/)
           .expect(function (res) {
             res.body.length.should.equal(1);
-            var discountedOrder = res.body;
+            var discountedOrder = res.body.coupons;
             discountedOrder.forEach(function (coupon) {
               discountedOrder.dicountedValue.should.equal(800);
             });
