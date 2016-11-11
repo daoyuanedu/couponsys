@@ -46,12 +46,14 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
     return false;
   }).then(function (ableToUse) {
     if (ableToUse) {
-      getDiscountedValue.then(function (discountedValue) {
-        console.log(discountedValue + '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
-        res.statusCode = 201;
-        res.send(discountedValue);
+        return getDiscountedValue.then(function (discountedValue) {
+        return discountedValue;
       });
     }
+  }).then(function (discountedValue) {
+    console.log(discountedValue + '------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------')
+    res.statusCode = 201;
+    res.send(discountedValue);
   }).catch(next);
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;
