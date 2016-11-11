@@ -16,7 +16,7 @@ var getCouponCodesByUser = function (req, res, next) {
   if (req.query.showTotalOrderNumber) {
     var totalOrderNumber = couponsPromise.then(function (coupons) {
       return Promise.all(coupons.map(function (coupon) {
-        return couponOrder.totalOrdersByCouponId(coupon.couponID);
+        return couponOrder.totalOrdersByCouponCode(coupon.couponID);
       }));
     }).then(function (orderNumberArray) {
       return orderNumberArray.reduce(function (a, b) {
