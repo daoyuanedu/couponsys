@@ -159,6 +159,20 @@ module.exports = {
       value: 100
     },
     valid: true
+  },
+
+  userBWithInvalidCoupon: {
+    couponID: '13898458460',
+    username: 'userB',
+    couponRule: {
+      type: 'CASH',
+      value: 200
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: false
   }
 };
 

@@ -50,6 +50,8 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
         res.statusCode = 201;
         res.send(discountedValue);
       }).catch(next);
+    } else {
+      next(new Error('Invalid CouponCode'));
     }
   }).catch(next);
 
