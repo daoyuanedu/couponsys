@@ -2,7 +2,7 @@
 var couponProxy = require('../../proxy/coupon.model');
 var Promise = require('bluebird');
 
-
+// GET coupons/
 var getCouponsList = function(req, res, next) {
   couponProxy.getAllCoupons().then(function (coupons) {
     res.send(coupons);
@@ -10,6 +10,7 @@ var getCouponsList = function(req, res, next) {
 };
 exports.getCouponsList = getCouponsList;
 
+// GET coupons/{couponCode}
 var getCouponCodesByCouponID = function(req, res, next) {
   var couponID = req.params.couponID;
   couponProxy.getCouponCodesByCouponCode(couponID).then(function (coupon) {
@@ -18,6 +19,7 @@ var getCouponCodesByCouponID = function(req, res, next) {
 };
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
 
+// DELETE coupons/{couponCode}
 var deleteCouponCodesByCouponID = function(req, res, next) {
   var couponID = req.params.couponID;
   couponProxy.deleteCouponCodesByCouponCode(couponID).then(function (coupon) {
@@ -26,6 +28,7 @@ var deleteCouponCodesByCouponID = function(req, res, next) {
 };
 exports.deleteCouponCodesByCouponID = deleteCouponCodesByCouponID;
 
+// POST coupons/
 var createCouponForNewUser = function (req, res, next) {
   if(req.adminAuth){
     next(new Error('not implemented'));
@@ -40,6 +43,7 @@ var createCouponForNewUser = function (req, res, next) {
 };
 exports.createCouponForNewUser = createCouponForNewUser;
 
+// GET coupons/{couponCode}/discount
 var getDiscountOrderValueByCouponID = function (req, res, next) {
   var couponId = req.params.couponID;
   var username = req.query.username;
@@ -65,3 +69,26 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
 
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;
+
+// PUT coupons/{couponCode}
+var updateCoupon = function (req, res, next) {
+  var couponCode = req.params.couponID;
+  // propertiesToUpdate
+  var propertiesToUpdate = {};
+  propertiesToUpdate.couponID = couponCode;
+  propertiesToUpdate.username = req.body.username;
+  propertiesToUpdate.couponRule = req.body.couponRule;
+  propertiesToUpdate.couponRule.type = req.body.couponRule.type;  
+  propertiesToUpdate.couponRule.value = req.body.couponRule.value;
+  propertiesToUpdate.rebateRule = req.body.rebateRule;
+  propertiesToUpdate.rebateRule.type = req.body.rebateRule.type;
+  propertiesToUpdate.rebateRule.value = req.body.rebateRule.value;
+  propertiesToUpdate.valid = req.body.valid;
+
+  couponProxy.updateOrderByCouponID(couponCode, propertiesToUpdate)
+    .then(function () {
+      res.status(204);
+      res.send();
+  }).catch(next);
+ };
+ exports.updateCoupon = updateCoupon;

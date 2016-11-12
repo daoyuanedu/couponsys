@@ -47,7 +47,20 @@ exports.isBelongToUsers = function (couponId, username) {
   }, function (err) {
     return err;
   });
-}
+};
+
+exports.updateOrderByCouponID = function (couponCode, propertiesToUpdate) {
+  return Coupon.findOne({couponID : couponCode}).then(function (coupon) {
+    if(typeof coupon !== 'undefined' && coupon !== null){
+      return Coupon.findByIdAndUpdate(coupon._id,  { $set : propertiesToUpdate });
+    }
+    else {
+      var err =  new Error('Coupon ' + couponCode + ' does not exist.');
+      err.status = 404;       
+      throw err;
+    }
+  });
+};
 
 exports.getDiscountedValue = function (couponId, orderValue) {
   return Coupon.find({ couponID : couponId} ).then (function (coupons){

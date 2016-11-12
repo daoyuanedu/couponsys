@@ -259,4 +259,49 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
   });
+
+  describe('PUT', function() {
+
+    it('should update the details of this coupon', function (done) {
+      new Coupon(userAWithPercRule).save().then(function () {
+
+      var newCouponDetails = {
+        couponID: '13898458461', username: 'userB',
+        couponRule: { type: 'CASH', value: 300 },
+        rebateRule: { type: 'PERCENTAGE', value: 10 }, valid: false };
+     
+      request.put(path + userAWithPercRule.couponID)
+        .send(newCouponDetails)
+        .expect(204)
+        .end(function (err) {
+          if(err) done(err);
+          else {
+            Coupon.findOne({ couponID: userAWithPercRule.couponID})
+            .then(function (coupon) {
+              (coupon.username).should.equal('userB');
+              (coupon.couponRule.type).should.equal('CASH');
+              (coupon.couponRule.value).should.equal(300);
+              (coupon.rebateRule.type).should.equal('PERCENTAGE');
+              (coupon.rebateRule.value).should.equal(10);
+              (coupon.valid).should.equal(false);
+
+              done();
+            });
+          }
+        });
+      });
+    });
+
+    it('should return 404 if coupon does not exist', function (done) {
+      var newCouponDetails = {
+        couponID: '13898458461', username: 'userB',
+        couponRule: { type: 'CASH', value: 300 },
+        rebateRule: { type: 'PERCENTAGE', value: 10 }, valid: false };
+
+      request.put(path + userAWithPercRule.couponID)
+        .send(newCouponDetails)
+        .expect(404, done);
+    });
+ 
+  });
 });
