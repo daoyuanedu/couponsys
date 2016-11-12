@@ -17,8 +17,8 @@ var path = ('/api/v1/coupons/');
 describe('/coupons/{couponCode}/orders', function () {
 
   var userACoupon = new Coupon(require('../../common/modelCouponTestData').userACouponCash1);
-  var userARebatedOrder = new CouponOrder(require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated);
-  var userANonRebatedOrder = new CouponOrder(require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated);
+  var userARebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated;
+  var userANonRebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated;
 
   before(function (done) {
     config.debug.should.equal(true);
@@ -34,7 +34,7 @@ describe('/coupons/{couponCode}/orders', function () {
 
   describe('GET', function () {
     it('should return all the orders used this particular coupon code', function (done) {
-      Promise.join(userARebatedOrder.save(), userANonRebatedOrder.save(), function () {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
         request.get(path + userACoupon.couponID + '/orders')
           .expect('Content-Type', /json/)
           .expect(200)
@@ -47,7 +47,7 @@ describe('/coupons/{couponCode}/orders', function () {
     });
 
     it('should only return non-rebated orders if rebated is set to false in the query param', function (done) {
-      Promise.join(userARebatedOrder.save(), userANonRebatedOrder.save(), function () {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
         request.get(path + userACoupon.couponID + '/orders')
           .query({rebated: false})
           .expect('Content-Type', /json/)
