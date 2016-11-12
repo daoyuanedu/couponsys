@@ -112,6 +112,40 @@ module.exports = {
     },
     rebated: false,
     rebateValue: 0
+  },
+
+  orderUsingUserACouponCash1NotRebated : {
+    orderID: 'orderUsingUserACouponCash1NotRebated',
+    couponID: 'userAcash10',
+    orderName: 'testUserA',
+    orderValue: {
+      original: 1000,
+      final: 900
+    },
+    rebated: false,
+    rebateValue: 100
+  },
+
+  orderUsingUserACouponCash1Rebated : {
+    orderID: 'orderUsingUserACouponCash1Rebated',
+    couponID: 'userAcash10',
+    orderName: 'testUserA',
+    orderValue: {
+      original: 1000,
+      final: 900
+    },
+    rebated: true,
+    rebateValue: 100
+  },
+
+  postOrderUsingUserACoupon : {
+    orderID : 'postOrderUsingUserACoupon',
+    couponID : 'userAcash10',
+    orderValue: {
+      original: 5000,
+      final: 4900
+    }
   }
+
 };
 

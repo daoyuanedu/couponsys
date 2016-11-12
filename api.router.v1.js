@@ -7,6 +7,7 @@ var express = require('express');
 var info = require('./api/v1/info');
 var user = require('./api/v1/coupons.user');
 var coupon = require('./api/v1/coupons');
+var couponOrder = require('./api/v1/coupons.order');
 var auth = require('./middlewares/auth');
 var couponCodeGenerator = require('./middlewares/couponCodeGenerator');
 var discountChecker = require('./middlewares/discountChecker');
@@ -28,6 +29,10 @@ router.get('/:couponID/discount', discountChecker.couponOwnerChecker, coupon.get
 router.delete('/:couponID', auth.tryAuth, coupon.deleteCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.put('/:couponID', auth.tryAuth, coupon.updateCoupon, errorHandler.apiErrorHandler);
 
+router.get('/:couponCode/orders', auth.tryAuth, couponOrder.getOrdersByCouponCode, errorHandler.apiErrorHandler);
+router.post('/:couponCode/orders', couponOrder.createNewCouponOrder, errorHandler.apiErrorHandler);
+router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderIdAndCouponCode, errorHandler.apiErrorHandler);
+router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCouponOrder, errorHandler.apiErrorHandler);
 
 //for test purpose
 router.get('/error/api', function (req, res, next) {
