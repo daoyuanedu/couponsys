@@ -1,13 +1,13 @@
 /**
- * Created by ekinr on 2016/11/6.
+ * Proxy test for couponCoder
  */
 
+// Dependencies
 var Models = require('../../models');
 var config = require('../../config.default');
 var couponOrderData = require('../common/modelCouponOrderTestData');
 var CouponOrder = Models.CouponOrder;
 var Promise = require('bluebird');
-
 var couponModelproxy = require('../../proxy/CouponOrder.model');
 
 describe('CouponOrder Model Proxy', function () {
@@ -17,7 +17,7 @@ describe('CouponOrder Model Proxy', function () {
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
 
-  // Init test data
+  // Test Sample Data
   var couponOrderNormal = couponOrderData.couponOrderNormal;
   var couponOrderWithSameCouponID = couponOrderData.couponOrderWithSameCouponID;
 
@@ -43,7 +43,5 @@ describe('CouponOrder Model Proxy', function () {
       num.should.equal(0);
       done();
     }, done);
-
   });
-
 });

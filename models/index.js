@@ -1,9 +1,7 @@
 // Dependencies
 var mongoose = require('mongoose');
-
 var config = require('../config.default');
 var logger = require('../common/logger');
-
 mongoose.Promise = require('bluebird');
 
 mongoose.connect(config.db, {

@@ -3,6 +3,8 @@
  *
  * Routers for API paths
  */
+
+// Dependencies
 var express = require('express');
 var info = require('./api/v1/info');
 var user = require('./api/v1/coupons.user');
@@ -10,11 +12,11 @@ var coupon = require('./api/v1/coupons');
 var couponOrder = require('./api/v1/coupons.order');
 var auth = require('./middlewares/auth');
 var couponCodeGenerator = require('./middlewares/couponCodeGenerator');
+var discountChecker = require('./middlewares/discountChecker');
 var errorHandler = require('./middlewares/errorHandler');
 
-
+// Router
 var router = express.Router();
-
 // Others
 router.get('/info', info);
 // User api
@@ -24,7 +26,10 @@ router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode
 router.get('/', coupon.getCouponsList, errorHandler.apiErrorHandler);
 router.get('/:couponID', coupon.getCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForNewUser, errorHandler.apiErrorHandler);
-
+router.get('/:couponID/discount', discountChecker.couponOwnerChecker, coupon.getDiscountOrderValueByCouponID, errorHandler.apiErrorHandler);
+router.delete('/:couponID', auth.tryAuth, coupon.deleteCouponCodesByCouponID, errorHandler.apiErrorHandler);
+router.put('/:couponID', auth.tryAuth, coupon.updateCoupon, errorHandler.apiErrorHandler);
+// Coupons/Order api
 router.get('/:couponCode/orders', auth.tryAuth, couponOrder.getOrdersByCouponCode, errorHandler.apiErrorHandler);
 router.post('/:couponCode/orders', couponOrder.createNewCouponOrder, errorHandler.apiErrorHandler);
 router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderIdAndCouponCode, errorHandler.apiErrorHandler);
@@ -37,6 +42,5 @@ router.get('/error/api', function (req, res, next) {
   err.status = 406;
   next(err);
 }, errorHandler.apiErrorHandler);
-
 
 module.exports = router;

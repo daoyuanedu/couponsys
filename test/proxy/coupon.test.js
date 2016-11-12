@@ -1,30 +1,30 @@
 /**
- * Created by ekinr on 2016/11/6.
+ * Proxy test for coupon
  */
 
+// Dependencies
 var Models = require('../../models');
 var config = require('../../config.default');
 var couponData = require('../common/modelCouponTestData');
 var Coupon = Models.Coupon;
-
 var couponProxy = require('../../proxy/Coupon.model');
 
 describe('Coupon Model Proxy', function () {
-
 
   before(function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
 
-  // Init test data
-  var user1Coupon = couponData.user1Coupon;
-  var userACoupon1NotValid = couponData.userACoupon1NotValid;
-
-
   beforeEach(function(done) {
     Coupon.remove({}, done);
   });
+
+  // Test Sample data
+  var user1Coupon = couponData.user1Coupon;
+  var userACoupon1NotValid = couponData.userACoupon1NotValid;
+  var userAWithPercRule = couponData.userAWithPercRule;
+  var userBWithCashRule = couponData.userBWithCashRule;
 
   it('isCouponValid should return true when coupon is valid', function (done) {
     var coupon = new Coupon(user1Coupon);
@@ -62,4 +62,83 @@ describe('Coupon Model Proxy', function () {
 
   });
 
+  it('getDiscountedValue should return -20% value when use percentage rule', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      discountOrderProxy = couponProxy.getDiscountedValue(
+      userAWithPercRule.couponID, 1000);
+      discountOrderProxy.then(function(discountOrder) {
+        discountOrder.dicountedValue.should.equal(800);
+        done();
+      }, done);
+    });
+  });
+
+  it('getDiscountedValue should return -200 value when use percentage rule', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      discountOrderProxy = couponProxy.getDiscountedValue(
+      userBWithCashRule.couponID, 1000);
+      discountOrderProxy.then(function(discountOrder) {
+        discountOrder.dicountedValue.should.equal(800);
+        done();
+      }, done);
+    });
+  });
+
+  it('isBelongToUsers should return true if the user have this coupon', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+    saveTwoCoupons.then(function(){
+      couponProxy.isBelongToUsers('13898458461', 'userA').then(function(result){
+        result.should.equal(true);
+        done();
+      });
+    });
+  });
+
+  it('isBelongToUsers should return false if the user do not have this coupon', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+    saveTwoCoupons.then(function(){
+      couponProxy.isBelongToUsers('13898458461', 'userB').then(function(result){
+        result.should.equal(false);
+        done();
+      });
+    });
+  });
+
+  it('deleteCouponCodesByCouponCode should delete one coupon by couponCode', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      couponProxy.deleteCouponCodesByCouponCode('13898458461').then(function(result){
+        result.couponID.should.equal('13898458461');
+        Coupon.count({}, function(err, count){
+              count.should.equal(1);
+        });
+        done();
+      });
+    });
+  });
+
+  it('deleteCouponCodesByCouponCode should not delete coupons by wrong couponCode', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      couponProxy.deleteCouponCodesByCouponCode('wrong').then(function(result){
+        if(result !== null) done(err);
+        Coupon.count({}, function(err, count){
+              count.should.equal(2);
+        });
+        done();
+      });
+    });
+  });
 });
