@@ -5,18 +5,18 @@
  */
 
 // Dependencies
-var coupon = require('../../proxy/coupon.model');
-var couponOrder = require('../../proxy/couponOrder.model');
+var couponProxy = require('../../proxy/coupon.model');
+var couponOrderProxy = require('../../proxy/couponOrder.model');
 var Promise = require('bluebird');
 
 var getCouponCodesByUser = function (req, res, next) {
   var username = req.params.username;
-  var couponsPromise = coupon.getCouponCodesByUsername(username);
+  var couponsPromise = couponProxy.getCouponCodesByUsername(username);
   
   if (req.query.showTotalOrderNumber) {
     var totalOrderNumber = couponsPromise.then(function (coupons) {
       return Promise.all(coupons.map(function (coupon) {
-        return couponOrder.totalOrdersByCouponCode(coupon.couponID);
+        return couponOrderProxy.totalOrdersByCouponCode(coupon.couponID);
       }));
     }).then(function (orderNumberArray) {
       return orderNumberArray.reduce(function (a, b) {
@@ -42,7 +42,7 @@ var createCouponForUser = function (req, res, next) {
   if (req.adminAuth) {
     next({message: 'unimplemented...'});
   } else {
-    coupon.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode).then(function (coupon) {
+    couponProxy.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode).then(function (coupon) {
       res.statusCode = 201;
       res.send(coupon);
     }).catch(next);
