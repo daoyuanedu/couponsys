@@ -6,5 +6,4 @@ var info = function (req, res) {
       description: 'Daoyuan Edu Coupon Service.'
     });
 };
-
 module.exports = info;
