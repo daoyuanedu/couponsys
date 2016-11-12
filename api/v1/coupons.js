@@ -18,6 +18,14 @@ var getCouponCodesByCouponID = function(req, res, next) {
 };
 exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
 
+var deleteCouponCodesByCouponID = function(req, res, next) {
+  var couponID = req.params.couponID;
+  couponProxy.deleteCouponCodesByCouponCode(couponID).then(function (coupon) {
+    res.send(coupon);
+  }).catch(next);
+};
+exports.deleteCouponCodesByCouponID = deleteCouponCodesByCouponID;
+
 var createCouponForNewUser = function (req, res, next) {
   if(req.adminAuth){
     next(new Error('not implemented'));

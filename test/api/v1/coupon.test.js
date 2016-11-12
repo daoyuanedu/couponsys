@@ -217,4 +217,46 @@ describe('/api/v1/coupons/', function () {
     });
 
   });
+
+  describe('DELETE', function () {
+
+    it('should delete one coupon codes by couponID', function (done) {
+      var saveCoupons = Promise.all(
+        [new Coupon(userACouponPerc1).save(),
+          new Coupon(userBWithInvalidCoupon).save()]);
+
+      saveCoupons.then(function () {
+        Coupon.count({}, function(err, count){
+          count.should.equal(2);
+        });
+        request.delete(path + 'userAperc10')
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .expect(function (res) {
+            res.body.couponID.should.equal('userAperc10');
+            Coupon.count({}, function(err, count){
+              count.should.equal(1);
+            });
+          })
+          .end(done);
+      }, done);
+    });
+
+    it('should not delete coupons codes by wrong couponID', function (done) {
+      var saveCoupons = Promise.all(
+        [new Coupon(userACouponPerc1).save(),
+          new Coupon(userBWithInvalidCoupon).save()]);
+
+      saveCoupons.then(function () {
+        request.delete(path + 'wrongcode')
+          .expect(200)
+          .expect(function (res) {
+            Coupon.count({}, function(err, count){
+              count.should.equal(2);
+            });
+          })
+          .end(done);
+      }, done);
+    });
+  });
 });

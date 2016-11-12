@@ -13,13 +13,18 @@ exports.getAllCoupons = function () {
 
 exports.getCouponCodesByUsername = function (username) {
   //return a Promise
-  return Coupon.find({ username : username}, {_id : 0, __v : 0});
+  return Coupon.find({ username : username }, { _id : 0, __v : 0 });
 };
 
 exports.getCouponCodesByCouponCode = function (couponID) {
   //return a Promise
-  return Coupon.find({ couponID : couponID}, {_id : 0, __v : 0});
+  return Coupon.find({ couponID : couponID }, { _id : 0, __v : 0 });
 };
+
+exports.deleteCouponCodesByCouponCode = function (couponID) {
+  return Coupon.findOneAndRemove({ couponID : couponID }, { _id : 0, __v : 0 });
+};
+
 
 exports.isCouponValid = function (couponId) {
   return Coupon.find({ couponID : couponId}).then(function (coupons) {

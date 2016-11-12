@@ -114,4 +114,34 @@ describe('Coupon Model Proxy', function () {
     });
   });
 
+  it('deleteCouponCodesByCouponCode should delete one coupon by couponCode', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      couponProxy.deleteCouponCodesByCouponCode('13898458461').then(function(result){
+        result.couponID.should.equal('13898458461');
+        Coupon.count({}, function(err, count){
+              count.should.equal(1);
+        });
+        done();
+      });
+    });
+  });
+
+  it('deleteCouponCodesByCouponCode should not delete coupons by wrong couponCode', function (done) {
+    var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
+
+    saveTwoCoupons.then(function(){
+      couponProxy.deleteCouponCodesByCouponCode('wrong').then(function(result){
+        if(result !== null) done(err);
+        Coupon.count({}, function(err, count){
+              count.should.equal(2);
+        });
+        done();
+      });
+    });
+  });
+
 });

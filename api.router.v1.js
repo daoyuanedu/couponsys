@@ -25,6 +25,7 @@ router.get('/', coupon.getCouponsList, errorHandler.apiErrorHandler);
 router.get('/:couponID', coupon.getCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForNewUser, errorHandler.apiErrorHandler);
 router.get('/:couponID/discount', discountChecker.couponOwnerChecker, coupon.getDiscountOrderValueByCouponID, errorHandler.apiErrorHandler);
+router.delete('/:couponID', coupon.deleteCouponCodesByCouponID, errorHandler.apiErrorHandler);
 
 
 //for test purpose
