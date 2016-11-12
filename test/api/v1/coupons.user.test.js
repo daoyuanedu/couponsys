@@ -13,6 +13,7 @@ var couponData = require('../../common/modelCouponTestData');
 var APICouponTestData = require('../../common/APICouponTestData');
 var couponOrderData = require('../../common/modelCouponOrderTestData');
 
+var should = require('chai').Should();
 
 var path = '/api/v1/coupons/user/';
 

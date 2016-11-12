@@ -24,8 +24,11 @@ router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode
 router.get('/', coupon.getCouponsList, errorHandler.apiErrorHandler);
 router.get('/:couponID', coupon.getCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForNewUser, errorHandler.apiErrorHandler);
+
 router.get('/:couponCode/orders', auth.tryAuth, couponOrder.getOrdersByCouponCode, errorHandler.apiErrorHandler);
+router.post('/:couponCode/orders', couponOrder.createNewCouponOrder, errorHandler.apiErrorHandler);
 router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderIdAndCouponCode, errorHandler.apiErrorHandler);
+router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCouponOrder, errorHandler.apiErrorHandler);
 
 //for test purpose
 router.get('/error/api', function (req, res, next) {

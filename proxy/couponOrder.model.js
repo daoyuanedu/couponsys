@@ -28,3 +28,23 @@ var getOrderByOrderIdAndCouponCode = function (orderId, couponCode) {
   return CouponOrder.findOne({couponID : couponCode, orderID : orderId}, {_id : 0, __v : 0});
 };
 exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
+
+var createNewOrder = function (couponOrder) {
+  return new CouponOrder(couponOrder).save();
+};
+exports.createNewOrder = createNewOrder;
+
+var updateOrderByOrderIdAndCouponCode = function (orderId, couponCode, propertiesToUpdate) {
+  return CouponOrder.findOne({couponID : couponCode, orderID : orderId})
+    .then(function (order) {
+      if(typeof order !== 'undefined' && order !== null){
+        return CouponOrder.findByIdAndUpdate(order._id,  { $set : propertiesToUpdate });
+      }
+      else {
+        var err =  new Error('Order ' + orderId + ' does not exist.');
+        err.status = 404;
+        throw err;
+      }
+    });
+};
+exports.updateOrderByOrderIdAndCouponCode = updateOrderByOrderIdAndCouponCode;

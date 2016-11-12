@@ -20,6 +20,8 @@ describe('/coupons/{couponCode}/orders', function () {
   var userARebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated;
   var userANonRebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated;
 
+  var userACouponOrderPost =  require('../../common/modelCouponOrderTestData').postOrderUsingUserACoupon;
+
   before(function (done) {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
@@ -64,29 +66,109 @@ describe('/coupons/{couponCode}/orders', function () {
 
   describe('POST', function () {
 
-    it.skip('should create a new order with this coupon code', function (done) {
+    it('should create a new order with this coupon code', function (done) {
+      request.post(path + userACoupon.couponID + '/orders')
+        .send(userACouponOrderPost)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            var newOrder = res.body;
+            (newOrder.orderID).should.equal(userACouponOrderPost.orderID);
+            (newOrder.orderValue.final).should.equal(userACouponOrderPost.orderValue.final);
+            (newOrder.orderValue.original).should.equal(userACouponOrderPost.orderValue.original);
 
+            CouponOrder.find({orderID: userACouponOrderPost.orderID}).then(function (orders) {
+              (orders.length).should.equal(1);
+              done();
+            });
+          }
+        });
     });
 
+    it('should return an 403 Forbidden error if coupon code is not valid', function (done) {
+      request.post(path + 'InvalidCouponCode' + '/orders')
+        .send(userACouponOrderPost)
+        .set('Accept', 'application/json')
+        .expect(403, done);
+    });
+
+    it('should return an 406 error if order with the same order id already exists', function (done) {
+      new CouponOrder(userANonRebatedOrder).save()
+        .then(function () {
+          var userAOrderSameOrderId = userACouponOrderPost;
+          userAOrderSameOrderId.orderID = userANonRebatedOrder.orderID;
+          request.post(path + userACoupon.couponID + '/orders')
+            .send(userAOrderSameOrderId)
+            .set('Accept', 'application/json')
+            .expect(406)
+            .end(done);
+        });
+    });
   });
 
   describe('GET /{order}', function () {
 
-    it.skip('should get the details of this order', function (done) {
-
+    it('should get the details of this order', function (done) {
+      new CouponOrder(userANonRebatedOrder).save().then(function () {
+        request.get(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .expect(function (res) {
+            (res.body.orderID).should.equal(userANonRebatedOrder.orderID);
+            (res.body.rebated).should.equal(userANonRebatedOrder.rebated);
+            (res.body.orderValue.final).should.equal(userANonRebatedOrder.orderValue.final);
+          })
+          .end(done);
+      }).catch(done);
     });
 
-    it.skip('should return 404 if order does not exit under this coupon code', function (done) {
-
+    it('should return 404 if order does not exit under this coupon code', function (done) {
+      request.get(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+        .expect('Content-Type', /json/)
+        .expect(404)
+        .end(done);
     });
-
   });
 
   describe('PUT /{order}', function () {
-    it.skip('should update the details of this order', function (done) {
-
+    it('should update the details of this order', function (done) {
+      new CouponOrder(userANonRebatedOrder).save().then(function () {
+        var newRebateValue = 50;
+        request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+          .query({rebateValue : newRebateValue, rebated : true})
+          .expect(204)
+          .end(function (err) {
+            if(err) done(err);
+            else {
+              CouponOrder.findOne({orderID: userANonRebatedOrder.orderID}).then(function (order) {
+                (order.rebateValue).should.equal(newRebateValue);
+                (order.rebated).should.equal(true);
+                done();
+              });
+            }
+          });
+      });
     });
 
+    it('should return 404 if order does not exist', function (done) {
+      var newRebateValue = 50;
+      request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+        .query({rebateValue : newRebateValue, rebated : true})
+        .expect(404, done);
+    });
+
+    it('should return 200 if nothing to update', function (done) {
+      new CouponOrder(userANonRebatedOrder).save().then(function () {
+        request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+          .expect(200, done);
+      });
+    });
+
+    it.skip('should return 403 if request is not admin auth', function (done) {
+
+    });
   });
 
 });

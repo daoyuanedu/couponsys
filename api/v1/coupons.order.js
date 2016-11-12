@@ -1,8 +1,8 @@
 /**
  * Created by ekinr on 2016/11/10.
  */
-var couponOrder = require('../../proxy/couponOrder.model');
-
+var CouponOrderProxy = require('../../proxy/couponOrder.model');
+var CouponProxy = require('../../proxy/coupon.model');
 
 var getOrdersByCouponCode = function (req, res, next) {
 
@@ -12,7 +12,7 @@ var getOrdersByCouponCode = function (req, res, next) {
   var couponCode = req.params.couponCode;
   var rebated = req.query.rebated; // if undefined, show all.
 
-  couponOrder.getOrdersByCouponCode(couponCode, rebated)
+  CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated)
     .then(function (orders) {
       res.status = 200;
       res.send({orders : orders});
@@ -25,7 +25,7 @@ var getOrderByOrderIdAndCouponCode = function (req, res, next) {
   var couponCode = req.params.couponCode;
   var orderId = req.params.orderId;
 
-  couponOrder.getOrderByOrderIdAndCouponCode(orderId, couponCode)
+  CouponOrderProxy.getOrderByOrderIdAndCouponCode(orderId, couponCode)
     .then(function (order) {
       if(typeof order !== 'undefined' && order !== null)
         res.send(order);
@@ -37,3 +37,63 @@ var getOrderByOrderIdAndCouponCode = function (req, res, next) {
     }).catch(next);
 };
 exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
+
+var createNewCouponOrder = function (req, res, next) {
+  var couponCode = req.params.couponCode;
+  CouponProxy.isCouponValid(couponCode)
+    .then(function (couponValid) {
+      if(couponValid) {
+        var couponOrder = req.body;
+        couponOrder.couponCode = couponCode;
+        return CouponOrderProxy.createNewOrder(couponOrder);
+      }
+      else{
+        var err = new Error( 'coupon code ' + couponCode + ' is not valid.');
+        err.status = 403;
+        throw err;
+      }
+    })
+    .then(function (createdOrder) {
+      res.status(201);
+      res.send(createdOrder);
+    })
+    .catch(function (err) {
+      // MongoError Code
+      if(err.code && err.code === 11000) {
+        err.status = 406;
+        err.message = 'order ID already exists.';
+      }
+      next(err);
+    });
+};
+exports.createNewCouponOrder = createNewCouponOrder;
+
+var updateCouponOrder = function (req, res, next) {
+  var couponCode = req.params.couponCode;
+  var orderId = req.params.orderId;
+
+  var rebated = req.query.rebated;
+  var rebateValue = req.query.rebateValue;
+  var propertiesToUpdate = {};
+  var needToUpdate = false;
+  if(typeof rebated !== 'undefined') {
+    needToUpdate = true;
+    propertiesToUpdate.rebated = rebated;
+  }
+  if(typeof rebateValue !== 'undefined') {
+    propertiesToUpdate.rebateValue = rebateValue;
+    needToUpdate = true;
+  }
+  if(needToUpdate) {
+    CouponOrderProxy.updateOrderByOrderIdAndCouponCode(orderId, couponCode, propertiesToUpdate)
+      .then(function () {
+        res.status(204);
+        res.send();
+      }).catch(next);
+  }
+  else {
+    res.status(200);
+    res.send();
+  }
+};
+exports.updateCouponOrder = updateCouponOrder;

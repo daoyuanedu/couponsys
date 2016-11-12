@@ -136,6 +136,16 @@ module.exports = {
     },
     rebated: true,
     rebateValue: 100
+  },
+
+  postOrderUsingUserACoupon : {
+    orderID : 'postOrderUsingUserACoupon',
+    couponID : 'userAcash10',
+    orderValue: {
+      original: 5000,
+      final: 4900
+    }
   }
+
 };
 
