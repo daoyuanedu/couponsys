@@ -1,27 +1,22 @@
 /**
- * Created by ekinr on 2016/11/10.
+ * API coupons/:couponID/orders/ TEST
  */
 
+// Dependencies
 var should = require('chai').Should();
-
 var app = require('../../../app');
 var request = require('supertest')(app);
-
 var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var CouponOrder = Models.CouponOrder;
 var config = require('../../../config.default');
 var Promise = require('bluebird');
 
+// API path 
 var path = ('/api/v1/coupons/');
+
 describe('/coupons/{couponCode}/orders', function () {
-
-  var userACoupon = new Coupon(require('../../common/modelCouponTestData').userACouponCash1);
-  var userARebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated;
-  var userANonRebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated;
-
-  var userACouponOrderPost =  require('../../common/modelCouponOrderTestData').postOrderUsingUserACoupon;
-
+  
   before(function (done) {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
@@ -34,7 +29,14 @@ describe('/coupons/{couponCode}/orders', function () {
     CouponOrder.remove({}, done);
   });
 
+  // Test Sample Data
+  var userACoupon = new Coupon(require('../../common/modelCouponTestData').userACouponCash1);
+  var userARebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated;
+  var userANonRebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated;
+  var userACouponOrderPost =  require('../../common/modelCouponOrderTestData').postOrderUsingUserACoupon;
+
   describe('GET', function () {
+    
     it('should return all the orders used this particular coupon code', function (done) {
       Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
         request.get(path + userACoupon.couponID + '/orders')
@@ -61,7 +63,6 @@ describe('/coupons/{couponCode}/orders', function () {
           });
       }).catch(done);
     });
-
   });
 
   describe('POST', function () {
@@ -133,6 +134,7 @@ describe('/coupons/{couponCode}/orders', function () {
   });
 
   describe('PUT /{order}', function () {
+    
     it('should update the details of this order', function (done) {
       new CouponOrder(userANonRebatedOrder).save().then(function () {
         var newRebateValue = 50;
@@ -170,5 +172,4 @@ describe('/coupons/{couponCode}/orders', function () {
 
     });
   });
-
 });

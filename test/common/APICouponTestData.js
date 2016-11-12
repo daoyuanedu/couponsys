@@ -1,3 +1,4 @@
+// API data here used to support test that need special Json body
 
 module.exports = {
 

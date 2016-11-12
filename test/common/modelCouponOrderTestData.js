@@ -1,4 +1,4 @@
-// CouponOrder data here used to support couponOrder.test.js test
+// CouponOrder data here used to support test that need couponOrder
 
 module.exports = {
 
@@ -13,7 +13,6 @@ module.exports = {
     rebated: false,
     rebateValue: 0
   },
-
 
   couponOrderWithSameOrderID: {
     orderID: 'normal1order',
@@ -146,6 +145,5 @@ module.exports = {
       final: 4900
     }
   }
-
 };
 

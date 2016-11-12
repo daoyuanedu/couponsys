@@ -25,7 +25,6 @@ exports.deleteCouponCodesByCouponCode = function (couponID) {
   return Coupon.findOneAndRemove({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 
-
 exports.isCouponValid = function (couponId) {
   return Coupon.find({ couponID : couponId}).then(function (coupons) {
     if(coupons.length === 0) return false;

@@ -1,32 +1,30 @@
 /**
- * Created by ekinr on 2016/11/6.
+ * Proxy test for coupon
  */
 
+// Dependencies
 var Models = require('../../models');
 var config = require('../../config.default');
 var couponData = require('../common/modelCouponTestData');
 var Coupon = Models.Coupon;
-
 var couponProxy = require('../../proxy/Coupon.model');
 
 describe('Coupon Model Proxy', function () {
-
 
   before(function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
 
-  // Init test data
+  beforeEach(function(done) {
+    Coupon.remove({}, done);
+  });
+
+  // Test Sample data
   var user1Coupon = couponData.user1Coupon;
   var userACoupon1NotValid = couponData.userACoupon1NotValid;
   var userAWithPercRule = couponData.userAWithPercRule;
   var userBWithCashRule = couponData.userBWithCashRule;
-
-
-  beforeEach(function(done) {
-    Coupon.remove({}, done);
-  });
 
   it('isCouponValid should return true when coupon is valid', function (done) {
     var coupon = new Coupon(user1Coupon);
@@ -143,5 +141,4 @@ describe('Coupon Model Proxy', function () {
       });
     });
   });
-
 });

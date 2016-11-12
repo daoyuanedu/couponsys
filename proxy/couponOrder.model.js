@@ -12,7 +12,6 @@ var totalOrdersByCouponCode = function (couponCode) {
     return err;
   });
 };
-
 exports.totalOrdersByCouponCode = totalOrdersByCouponCode;
 
 

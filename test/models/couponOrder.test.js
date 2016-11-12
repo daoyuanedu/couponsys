@@ -1,6 +1,12 @@
+/**
+ * Model test for couponCoder
+ */
+
+// Dependencies
 var Models = require('../../models');
 var config = require('../../config.default');
 var couponOrderData = require('../common/modelCouponOrderTestData');
+var CouponOrder = Models.CouponOrder;
 
 describe('CouponOrder Model', function () {
 
@@ -9,7 +15,7 @@ describe('CouponOrder Model', function () {
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
 
-  // Init test data
+  // Test Sample Data
   var couponOrderNormal = couponOrderData.couponOrderNormal;
   var couponOrderWithSameOrderID = couponOrderData.couponOrderWithSameOrderID;
   var couponOrderWithSameCouponID = couponOrderData.couponOrderWithSameCouponID;
@@ -19,8 +25,6 @@ describe('CouponOrder Model', function () {
   var couponOrderWithoutOrderName = couponOrderData.couponOrderWithoutOrderName;
   var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
   var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
-
-  var CouponOrder = Models.CouponOrder;
 
   //We need to REALLY careful here as well that we are using dev db!
   beforeEach(function(done) {

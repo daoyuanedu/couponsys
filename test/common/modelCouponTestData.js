@@ -1,4 +1,4 @@
-// Coupon data here used to support coupon.test.js test
+// Coupon data here used to support test that need Coupon Data
 
 module.exports = {
 
@@ -16,7 +16,6 @@ module.exports = {
     valid: true
   },
 
-
   user1CouponWithSameCouponID: {
     couponID: 'user1perc10',
     username: 'user1',
@@ -30,7 +29,6 @@ module.exports = {
     },
     valid: true
   },
-
 
   user1CouponWithSameUserID: {
     couponID: 'user1perc20',

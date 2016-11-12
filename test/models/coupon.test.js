@@ -1,11 +1,13 @@
 /**
- * Created by ekinr on 2016/11/1.
+ * Model test for coupon
  */
 
+// Dependencies
 var Models = require('../../models');
 var config = require('../../config.default');
 var Promise = require('bluebird');
 var couponData = require('../common/modelCouponTestData');
+var Coupon = Models.Coupon;
 
 describe('Coupon Model', function () {
 
@@ -14,20 +16,18 @@ describe('Coupon Model', function () {
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
   });
   
-  // Init test data
+  //We need to REALLY careful here that we are using dev db!
+  beforeEach(function(done) {
+    Coupon.remove({}, done);
+  });
+  
+  // Test Sample Data
   var user1Coupon = couponData.user1Coupon;
   var user1CouponWithSameCouponID = couponData.user1CouponWithSameCouponID;
   var couponWithoutID = couponData.couponWithoutID;
   var couponWithoutUsername = couponData.couponWithoutUsername;
   var user1CouponWithSameUserID = couponData.user1CouponWithSameUserID;
   var userCouponWithInvalidType = couponData.userCouponWithInvalidType;
-
-  var Coupon = Models.Coupon;
-
-  //We need to REALLY careful here that we are using dev db!
-  beforeEach(function(done) {
-    Coupon.remove({}, done);
-  });
 
   it('should be able to save a coupon to the db', function (done) {
     var coupon = new Coupon(user1Coupon);

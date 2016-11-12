@@ -1,19 +1,23 @@
+/**
+ * API coupons/:couponID/ TEST
+ */
+
+// Dependencies
 var app = require('../../../app');
 var request = require('supertest')(app);
-
 var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var config = require('../../../config.default');
 var Promise = require('bluebird');
 var couponData = require('../../common/modelCouponTestData');
 var apiTestData = require('../../common/APICouponTestData');
-
 var should = require('chai').should();
 
+// API path 
 var path = '/api/v1/coupons/';
 
 describe('/api/v1/coupons/', function () {
-
+  
   before(function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
@@ -22,14 +26,14 @@ describe('/api/v1/coupons/', function () {
   beforeEach(function (done) {
     Coupon.remove({}, done);
   });
-
+  
+  // Test Sample Data
   var userACouponPerc1 = couponData.userACouponPerc1;
   var userACouponCash1 = couponData.userACouponCash1;
   var user1Coupon = couponData.user1Coupon; 
   var userAWithPercRule = couponData.userAWithPercRule;
   var userBWithCashRule = couponData.userBWithCashRule;
   var userBWithInvalidCoupon = couponData.userBWithInvalidCoupon;
-
 
   describe('GET', function () {
 
@@ -150,6 +154,7 @@ describe('/api/v1/coupons/', function () {
   });
 
   describe('POST', function () {
+    
     it('should create a coupon for a new user and return 201', function (done) {
       request.post(path)
         .send({
@@ -264,7 +269,6 @@ describe('/api/v1/coupons/', function () {
 
     it('should update the details of this coupon', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {
-
       var newCouponDetails = {
         couponID: '13898458461', username: 'userB',
         couponRule: { type: 'CASH', value: 300 },
@@ -302,6 +306,5 @@ describe('/api/v1/coupons/', function () {
         .send(newCouponDetails)
         .expect(404, done);
     });
- 
   });
 });

@@ -5,10 +5,8 @@ var CouponOrderProxy = require('../../proxy/couponOrder.model');
 var CouponProxy = require('../../proxy/coupon.model');
 
 var getOrdersByCouponCode = function (req, res, next) {
-
   //unimplemented
   var adminAuth = req.adminAuth;
-
   var couponCode = req.params.couponCode;
   var rebated = req.query.rebated; // if undefined, show all.
 
@@ -40,6 +38,7 @@ exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
 
 var createNewCouponOrder = function (req, res, next) {
   var couponCode = req.params.couponCode;
+  
   CouponProxy.isCouponValid(couponCode)
     .then(function (couponValid) {
       if(couponValid) {
@@ -76,6 +75,7 @@ var updateCouponOrder = function (req, res, next) {
   var rebateValue = req.query.rebateValue;
   var propertiesToUpdate = {};
   var needToUpdate = false;
+  
   if(typeof rebated !== 'undefined') {
     needToUpdate = true;
     propertiesToUpdate.rebated = rebated;

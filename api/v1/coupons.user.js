@@ -4,15 +4,15 @@
  * route /coupons/user/
  */
 
+// Dependencies
 var coupon = require('../../proxy/coupon.model');
 var couponOrder = require('../../proxy/couponOrder.model');
-
 var Promise = require('bluebird');
 
 var getCouponCodesByUser = function (req, res, next) {
   var username = req.params.username;
-
   var couponsPromise = coupon.getCouponCodesByUsername(username);
+  
   if (req.query.showTotalOrderNumber) {
     var totalOrderNumber = couponsPromise.then(function (coupons) {
       return Promise.all(coupons.map(function (coupon) {

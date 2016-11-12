@@ -1,9 +1,10 @@
 /**
- * Created by ekinr on 2016/11/4.
+ * API coupons/user/:username/ TEST
  */
+
+// Dependencies
 var app = require('../../../app');
 var request = require('supertest')(app);
-
 var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var CouponOrder = Models.CouponOrder;
@@ -12,9 +13,9 @@ var Promise = require('bluebird');
 var couponData = require('../../common/modelCouponTestData');
 var APICouponTestData = require('../../common/APICouponTestData');
 var couponOrderData = require('../../common/modelCouponOrderTestData');
-
 var should = require('chai').Should();
 
+// API path 
 var path = '/api/v1/coupons/user/';
 
 describe('/api/v1/coupons/user/{username}', function() {
@@ -29,13 +30,14 @@ describe('/api/v1/coupons/user/{username}', function() {
       CouponOrder.remove({}, done);
     }, done);
   });
+
+  // Test Sample Data
+  var userACouponPerc1 = couponData.userACouponPerc1;
+  var userACouponCash1 = couponData.userACouponCash1;
+  var couponOrderNormal = couponOrderData.couponOrderNormal;
+  var couponOrderWithSameCouponID = couponOrderData.couponOrderWithSameCouponID;
+
   describe('GET', function() {
-
-    var userACouponPerc1 = couponData.userACouponPerc1;
-    var userACouponCash1 = couponData.userACouponCash1;
-
-    var couponOrderNormal = couponOrderData.couponOrderNormal;
-    var couponOrderWithSameCouponID = couponOrderData.couponOrderWithSameCouponID;
 
     it('should return all the coupon codes for a specific user', function (done) {
       var saveTwoCoupons = Promise.all([new Coupon(userACouponPerc1).save(),
@@ -72,15 +74,11 @@ describe('/api/v1/coupons/user/{username}', function() {
             })
             .end(done);
         }, done);
-
       }, done);
     });
-
-
   });
 
   describe('POST', function () {
-
 
     it('should create a new coupon for the user and return 201', function (done) {
       request.post(path + 'userA')
@@ -144,7 +142,6 @@ describe('/api/v1/coupons/user/{username}', function() {
         });
     });
 
-
     it('should have the default coupon rule if not authorised', function (done) {
       request.post(path + 'userA')
         .send(APICouponTestData.userAWithRules)
@@ -166,13 +163,10 @@ describe('/api/v1/coupons/user/{username}', function() {
               .end(done);
           }
         });
-
     });
 
     it.skip('should have the same coupon rule set by the authorised admin', function (done) {
 
     });
-
   });
-
 });

@@ -6,7 +6,6 @@ var mongoose = require('mongoose');
 var couponOrderSchema = mongoose.Schema({
   orderID : { required: true, type: String, unique: true},
   couponID: { required: true, type: String},
-  orderName: { type: String },
   orderValue: {
     original: { required: true, type: Number },
     final: { required: true, type: Number }
