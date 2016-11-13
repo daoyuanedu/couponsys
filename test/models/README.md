@@ -1,4 +1,4 @@
-## TEST CASE SUMMARY
+## MODEL TEST CASE SUMMARY
 Find any new test cases can add here first and then implement it.
 ---
 
@@ -14,6 +14,7 @@ Done & PASS
 * should not be able to save the same coupon code for a different user
 * should not be able to save a non-couponId coupon to the db
 * should not be able to save a non-username coupon to the db
+* should only allow permitted rule type
 
 ```
 New & TODO
@@ -38,6 +39,8 @@ Done & PASS
 * should not be able to save a non-final-orderValue couponOrder to the db
 * should not be able to save conponOrders with same orderID
 * should be able to save conponOrders with same CouponID
+* should be able to save a non-orderName couponOrder to the db
+* should find all the couponOrders under a couponId
 ```
 New & TODO
 ```

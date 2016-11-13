@@ -6,7 +6,6 @@ var config = require('../config.default');
 
 var env = process.env.NODE_ENV || 'dev';
 
-
 var log4js = require('log4js');
 log4js.configure({
   appenders: [
