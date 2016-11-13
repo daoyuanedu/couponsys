@@ -26,7 +26,7 @@ router.get('/user/:username', user.getCouponCodesByUser, errorHandler.apiErrorHa
 router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser, errorHandler.apiErrorHandler);
 
 // Coupons api
-router.get('/', coupon.getCouponsList, errorHandler.apiErrorHandler);
+router.get('/', auth.tryAuth, coupon.getCouponsList, errorHandler.apiErrorHandler);
 router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForNewUser, errorHandler.apiErrorHandler);
 router.get('/:couponID', coupon.getCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.delete('/:couponID', auth.tryAuth, coupon.deleteCouponCodesByCouponID, errorHandler.apiErrorHandler);
