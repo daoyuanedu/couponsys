@@ -76,19 +76,23 @@ var updateCoupon = function (req, res, next) {
   // propertiesToUpdate
   var propertiesToUpdate = {};
   propertiesToUpdate.couponID = couponCode;
-  propertiesToUpdate.username = req.body.username;
-  propertiesToUpdate.couponRule = req.body.couponRule;
-  propertiesToUpdate.couponRule.type = req.body.couponRule.type;  
-  propertiesToUpdate.couponRule.value = req.body.couponRule.value;
-  propertiesToUpdate.rebateRule = req.body.rebateRule;
-  propertiesToUpdate.rebateRule.type = req.body.rebateRule.type;
-  propertiesToUpdate.rebateRule.value = req.body.rebateRule.value;
-  propertiesToUpdate.valid = req.body.valid;
+  if (typeof req.body.username  !== 'undefined') propertiesToUpdate.username = req.body.username;
+  if (typeof req.body.couponRule  !== 'undefined') {
+    propertiesToUpdate.couponRule = req.body.couponRule;
+    if (typeof req.body.couponRule.type  !== 'undefined') propertiesToUpdate.couponRule.type = req.body.couponRule.type;  
+    if (typeof req.body.couponRule.value  !== 'undefined') propertiesToUpdate.couponRule.value = req.body.couponRule.value;
+  }
+  if (typeof req.body.rebateRule !== 'undefined') {
+    propertiesToUpdate.rebateRule = req.body.rebateRule;
+    if (typeof req.body.rebateRule.type !== 'undefined') propertiesToUpdate.rebateRule.type = req.body.rebateRule.type;
+    if (typeof req.body.rebateRule.value  !== 'undefined') propertiesToUpdate.rebateRule.value = req.body.rebateRule.value;
+  }
+  if (typeof req.body.valid  !== 'undefined') propertiesToUpdate.valid = req.body.valid;
 
   couponProxy.updateOrderByCouponID(couponCode, propertiesToUpdate)
-    .then(function () {
+    .then(function (coupon) {
       res.status(204);
-      res.send();
+      res.send(coupon);
   }).catch(next);
  };
  exports.updateCoupon = updateCoupon;
