@@ -22,7 +22,9 @@ Done & PASS
 * should delete one coupon codes by couponID
 * should not delete coupons codes by wrong couponID
 #### PUT
-* should update the details of this coupon
+* should update all details except couponCode of this coupon
+* should update couponRule properties details except couponCode and no changed properties of this coupon
+* should update random properties details except couponCode and no changed properties of this coupon
 * should return 404 if coupon does not exist
 ```
 New & TODO

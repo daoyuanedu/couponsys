@@ -267,7 +267,7 @@ describe('/api/v1/coupons/', function () {
 
   describe('PUT', function() {
 
-    it('should update the details of this coupon', function (done) {
+    it('should update all details except couponCode of this coupon', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {
       var newCouponDetails = {
         couponID: '13898458461', username: 'userB',
@@ -282,6 +282,7 @@ describe('/api/v1/coupons/', function () {
           else {
             Coupon.findOne({ couponID: userAWithPercRule.couponID})
             .then(function (coupon) {
+              (coupon.couponID).should.equal('13898458461');
               (coupon.username).should.equal('userB');
               (coupon.couponRule.type).should.equal('CASH');
               (coupon.couponRule.value).should.equal(300);
@@ -289,6 +290,69 @@ describe('/api/v1/coupons/', function () {
               (coupon.rebateRule.value).should.equal(10);
               (coupon.valid).should.equal(false);
 
+              done();
+            });
+          }
+        });
+      });
+    });
+
+    it('should update couponRule properties details except couponCode and no changed properties of this coupon', function (done) {
+      new Coupon(userAWithPercRule).save().then(function () {
+      var newCouponDetails = {
+        couponID: '13898458461', username: 'userB',
+        couponRule: { type: 'CASH', value: 200 }
+      };
+     
+      request.put(path + userAWithPercRule.couponID)
+        .send(newCouponDetails)
+        .expect(204)
+        .end(function (err) {
+          if(err) done(err);
+          else {
+            Coupon.findOne({ couponID: userAWithPercRule.couponID})
+            .then(function (coupon) {
+              // Update properties
+              (coupon.couponID).should.equal('13898458461');
+              (coupon.username).should.equal('userB');
+              (coupon.couponRule.type).should.equal('CASH');
+              (coupon.couponRule.value).should.equal(200);
+              // Origin properties
+              (coupon.rebateRule.type).should.equal('CASH');
+              (coupon.rebateRule.value).should.equal(100);
+              (coupon.valid).should.equal(true);
+              done();
+            });
+          }
+        });
+      });
+    });
+
+    it('should update random properties details except couponCode and no changed properties of this coupon', function (done) {
+      new Coupon(userAWithPercRule).save().then(function () {
+      var newCouponDetails = {
+        couponID: '13898458461',
+        couponRule: { type: 'CASH', value: 100},
+        rebateRule: { type: 'CASH', value : 50 }
+      };
+     
+      request.put(path + userAWithPercRule.couponID)
+        .send(newCouponDetails)
+        .expect(204)
+        .end(function (err) {
+          if(err) done(err);
+          else {
+            Coupon.findOne({ couponID: userAWithPercRule.couponID})
+            .then(function (coupon) {
+              // Update properties
+              (coupon.couponID).should.equal('13898458461');
+              (coupon.couponRule.type).should.equal('CASH');
+              (coupon.rebateRule.value).should.equal(50);
+              // Origin properties
+              (coupon.username).should.equal('userA');
+              (coupon.rebateRule.type).should.equal('CASH');
+              (coupon.couponRule.value).should.equal(100);
+              (coupon.valid).should.equal(true);
               done();
             });
           }
