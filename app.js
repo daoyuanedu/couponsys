@@ -15,6 +15,8 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
+var viewRouterV1 = require('./views.router.v1');
+app.use('/views/v1/view/',  viewRouterV1);
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
