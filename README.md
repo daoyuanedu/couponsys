@@ -6,8 +6,11 @@
 ---
 * Install Dependencies
   + npm install
+  + npm install forever -g
 * Run service
   + node ./bin/www
+  or
+  + forever start ./bin/www
 
 ```
 Better with nodemon:
