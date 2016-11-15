@@ -1,17 +1,26 @@
 // Dependencies
 var express = require('express');
-var index = require('./views/v1/index');
-var views = require('./views/v1/component');
+var Others = require('./views/v1/others');
+var Coupons = require('./views/v1/coupons');
+var Users = require('./views/v1/users');
+var Orders = require('./views/v1/orders');
+
 
 // Router
 var router = express.Router();
 
 // Index
-router.get('/info', function(req, res) {
-    res.render('pages/info');
-});
-// Coupons api
-router.get('/', function(req, res) {
-    res.render('pages/index');
-});
+router.get('/', Others.index);
+// coupons
+router.get('/coupons', Coupons.coupons);
+// users
+router.get('/users', Users.users);
+// orders
+router.get('/orders', Orders.orders);
+// Info
+router.get('/info', Others.info);
+
+
+
+
 module.exports = router;

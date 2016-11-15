@@ -1,21 +1,37 @@
 <!-- views/partials/header.ejs -->
 
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
     <div class="container-fluid">
 
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
-                <span class="glyphicon glyphicon glyphicon-tree-deciduous"></span>
+                <span class="glyphicon glyphicon glyphicon-book"></span>
                 Daoyuan Education
             </a>
         </div>
 
         <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/">Coupons</a></li>
-            <li><a href="/">Users</a></li>
-            <li><a href="/">Orders</a></li>
-            <li><a href="/">Info</a></li>
+
+            <li><a href="/views/v1/view">
+            <span class="glyphicon glyphicon glyphicon-home"></span>
+            Home</a></li>
+
+            <li><a href="/views/v1/view/coupons">
+            <span class="glyphicon glyphicon glyphicon-barcode"></span>
+            Coupons</a></li>
+
+            <li><a href="/views/v1/view/users">
+            <span class="glyphicon glyphicon glyphicon-user"></span>
+            Users</a></li>
+
+            <li><a href="/views/v1/view/orders">
+            <span class="glyphicon glyphicon glyphicon-list"></span>
+            Orders</a></li>
+
+            <li><a href="/views/v1/view/info">
+            <span class="glyphicon glyphicon glyphicon-info-sign"></span>
+            Info</a></li>
+
         </ul>
     </div>
 </nav>
