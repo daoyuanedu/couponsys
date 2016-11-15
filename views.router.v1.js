@@ -1,9 +1,9 @@
 // Dependencies
 var express = require('express');
-var Others = require('./views/v1/others');
-var Coupons = require('./views/v1/coupons');
-var Users = require('./views/v1/users');
-var Orders = require('./views/v1/orders');
+var Others = require('./controller/v1/others');
+var Coupons = require('./controller/v1/coupons');
+var Users = require('./controller/v1/users');
+var Orders = require('./controller/v1/orders');
 
 
 // Router
@@ -19,7 +19,6 @@ router.get('/users', Users.users);
 router.get('/orders', Orders.orders);
 // Info
 router.get('/info', Others.info);
-
 
 
 
