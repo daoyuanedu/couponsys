@@ -6,9 +6,11 @@
 ---
 * Install Dependencies
   + npm install
+  + npm install forever -g
 * Run service
   + node ./bin/www
-* Current Views:
+  or
+  + forever start ./bin/www
 
 ```
 Better with nodemon:
@@ -17,35 +19,10 @@ Run: nodemon .bin/www
 ```
 ---
 
-### TODO
+###  API
 ---
-* Clean code and write doc
-* UI design and implementation
-* Solve admin authorization issue
 
----
-### UI View
----
-#### To be continue...
-
----
-### Working API
----
-* /coupons/
-  - GET POST
-  - e.g http://localhost:3000/api/v1/coupons/
-* /coupons/{couponCode}
-  - GET DELETE PUT
-  - e.g http://localhost:3000/api/v1/coupons/123/
-* /coupons/{couponCode}/discount
-  - GET
-  - e.g http://localhost:3000/api/v1/coupons/123/discount
-* /coupons/{couponCode}/orders
-  - GET POST
-  - http://localhost:3000/api/v1/coupons/123/orders/
-* /coupons/{couponCode}/orders/{orderId}
-  - GET PUT
-  - http://localhost:3000/api/v1/coupons/123/orders/321/
+see doc/api.html
 
 ---
 ###Test

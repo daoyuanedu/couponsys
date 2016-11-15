@@ -6,6 +6,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
+var FileStreamRotator = require('file-stream-rotator');
 var errorHandler = require('./middlewares/errorHandler');
 
 // Express Framewrok
@@ -20,18 +22,32 @@ app.use('/views/v1/view/',  viewRouterV1);
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+
+// ensure log directory exists
+var logDirectory = path.join(__dirname, 'logs');
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+
+// create a rotating write stream
+var accessLogStream = FileStreamRotator.getStream({
+  date_format: 'YYYYMMDD',
+  filename: path.join(logDirectory, 'access-%DATE%.log'),
+  frequency: 'daily',
+  verbose: false
+});
+app.use(logger('combined', { stream : accessLogStream}));
+//app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// API routes collection
+// routes collection
 var apiRouterV1 = require('./api.router.v1');
 app.use('/api/v1/coupons',  apiRouterV1); // do we want cors?
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error(req.originalUrl + ' Not Found');
   err.status = 404;
   next(err);
 });
