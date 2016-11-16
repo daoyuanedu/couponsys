@@ -1,7 +1,7 @@
 var couponOrderProxy = require('../../proxy/couponOrder.model');
 var couponOrder = require('../../models').CouponOrder;
 
-// For UI test, need to be delete later
+// For UI test, need to delete later
 var couponOrderData = require('../../test/common/modelCouponOrderTestData');
 var saveToUITest = function () {
    new couponOrder(couponOrderData.orderUsingUserACouponCash1Rebated).save();
@@ -12,7 +12,7 @@ var saveToUITest = function () {
 
 // Orders
 var orders = function (req, res) {
-  //saveToUITest();
+  saveToUITest();
   couponOrderProxy.getAllOrders().then(function (orders) {
   	res.render('pages/orders', 
   		{

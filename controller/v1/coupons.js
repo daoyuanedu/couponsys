@@ -1,7 +1,7 @@
 var couponProxy = require('../../proxy/coupon.model');
 var Coupon = require('../../models').Coupon;
 
-// For UI test, need to be delete later
+// For UI test, need to delete later
 var couponData = require('../../test/common/modelCouponTestData');
 var saveToUITest = function () {
    new Coupon(couponData.userACouponPerc1).save();
@@ -14,7 +14,7 @@ var saveToUITest = function () {
 
 // Coupons
 var coupons = function (req, res) {
-	//saveToUITest();
+	saveToUITest();
   couponProxy.getAllCoupons().then(function (coupons) {
   	res.render('pages/coupons', 
   		{
