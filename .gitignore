@@ -1,6 +1,7 @@
 *.zip
 .idea
 .DS_Store
+.gitignore
 
 # Logs
 logs

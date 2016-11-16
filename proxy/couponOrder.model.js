@@ -4,6 +4,11 @@
 
 var CouponOrder = require('../models').CouponOrder;
 
+var getAllOrders = function () {
+  return CouponOrder.find({}, {_id : 0, __v : 0});
+};
+exports.getAllOrders = getAllOrders;
+
 var totalOrdersByCouponCode = function (couponCode) {
   var queryPromise = CouponOrder.find({couponID: couponCode});
   return queryPromise.then(function (coupons) {
@@ -13,7 +18,6 @@ var totalOrdersByCouponCode = function (couponCode) {
   });
 };
 exports.totalOrdersByCouponCode = totalOrdersByCouponCode;
-
 
 var getOrdersByCouponCode = function (couponCode, rebated) {
   if(typeof rebated !== 'undefined' )
