@@ -17,7 +17,7 @@ var should = require('chai').should();
 var path = '/api/v1/coupons/';
 
 describe('/api/v1/coupons/', function () {
-  
+
   before(function () {
     config.debug.should.equal(true);
     config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
@@ -26,11 +26,11 @@ describe('/api/v1/coupons/', function () {
   beforeEach(function (done) {
     Coupon.remove({}, done);
   });
-  
+
   // Test Sample Data
   var userACouponPerc1 = couponData.userACouponPerc1;
   var userACouponCash1 = couponData.userACouponCash1;
-  var user1Coupon = couponData.user1Coupon; 
+  var user1Coupon = couponData.user1Coupon;
   var userAWithPercRule = couponData.userAWithPercRule;
   var userBWithCashRule = couponData.userBWithCashRule;
   var userBWithInvalidCoupon = couponData.userBWithInvalidCoupon;
@@ -66,6 +66,7 @@ describe('/api/v1/coupons/', function () {
       saveThreeCoupons.then(function () {
         request.get(path + 'user1perc10')
           .expect('Content-Type', /json/)
+          .expect(200)
           .expect(function (res) {
             res.body.length.should.equal(1);
             var coupons = res.body;
@@ -77,15 +78,15 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
 
-    it('should return a 20% discounted order value for userB by userA couponID', function(done){
+    it('should return a 20% discounted order value for userB by userA couponID', function (done) {
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithPercRule).save(), 
-        new Coupon(userBWithCashRule).save()]);
-      
+        [new Coupon(userAWithPercRule).save(),
+          new Coupon(userBWithCashRule).save()]);
+
       saveTwoCoupons.then(function () {
         request.get(path + '13898458461' + '/discount')
-          .query({ username : 'userB', orderValue : 1000 })
-          .expect(201)
+          .query({username: 'userB', orderValue: 1000})
+          .expect(200)
           .expect('Content-Type', /json/)
           .expect(function (res) {
             res.body.dicountedValue.should.equal(800);
@@ -94,15 +95,15 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
 
-    it('should return a -200 order value for userA by userB couponID', function(done){
+    it('should return a -200 order value for userA by userB couponID', function (done) {
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithPercRule).save(), 
-        new Coupon(userBWithCashRule).save()]);
-      
+        [new Coupon(userAWithPercRule).save(),
+          new Coupon(userBWithCashRule).save()]);
+
       saveTwoCoupons.then(function () {
         request.get(path + '13898458462' + '/discount')
-          .query({ username : 'userA', orderValue : 1000 })
-          .expect(201)
+          .query({username: 'userA', orderValue: 1000})
+          .expect(200)
           .expect('Content-Type', /json/)
           .expect(function (res) {
             res.body.dicountedValue.should.equal(800);
@@ -111,18 +112,18 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
 
-    it('should not return a discounted order value for userA by userA couponID', function(done){
+    it('should not return a discounted order value for userA by userA couponID', function (done) {
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithPercRule).save(), 
-        new Coupon(userBWithCashRule).save()]);
-      
+        [new Coupon(userAWithPercRule).save(),
+          new Coupon(userBWithCashRule).save()]);
+
       saveTwoCoupons.then(function () {
         request.get(path + '13898458461' + '/discount')
-          .query({ username : 'userA', orderValue : 1000 })
+          .query({username: 'userA', orderValue: 1000})
           .expect(500)
           .expect('Content-Type', /json/)
           .expect(function (err) {
-            if(err) done();
+            if (err) done();
             else {
               err.should.not.equal(null);
               done();
@@ -131,18 +132,18 @@ describe('/api/v1/coupons/', function () {
       });
     });
 
-    it('should not return a discounted order value for userA by invalid couponID', function(done){
+    it('should not return a discounted order value for userA by invalid couponID', function (done) {
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithPercRule).save(), 
-        new Coupon(userBWithInvalidCoupon).save()]);
-      
+        [new Coupon(userAWithPercRule).save(),
+          new Coupon(userBWithInvalidCoupon).save()]);
+
       saveTwoCoupons.then(function () {
         request.get(path + '13898458460' + '/discount')
-          .query({ username : 'userA', orderValue : 1000 })
+          .query({username: 'userA', orderValue: 1000})
           .expect(500)
           .expect('Content-Type', /json/)
           .expect(function (err) {
-            if(err) done();
+            if (err) done();
             else {
               err.should.not.equal(null);
               done();
@@ -154,7 +155,7 @@ describe('/api/v1/coupons/', function () {
   });
 
   describe('POST', function () {
-    
+
     it('should create a coupon for a new user and return 201', function (done) {
       request.post(path)
         .send({
@@ -235,10 +236,8 @@ describe('/api/v1/coupons/', function () {
           count.should.equal(2);
         });
         request.delete(path + 'userAperc10')
-          .expect('Content-Type', /json/)
-          .expect(200)
+          .expect(204)
           .expect(function (res) {
-            res.body.couponID.should.equal('userAperc10');
             Coupon.count({}, function(err, count){
               count.should.equal(1);
             });
@@ -247,124 +246,130 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
 
+    //Should return an error code 403 FORBIDDEN
     it('should not delete coupons codes by wrong couponID', function (done) {
       var saveCoupons = Promise.all(
         [new Coupon(userACouponPerc1).save(),
           new Coupon(userBWithInvalidCoupon).save()]);
 
       saveCoupons.then(function () {
-        request.delete(path + 'wrongcode')
-          .expect(200)
-          .expect(function (res) {
-            Coupon.count({}, function(err, count){
-              count.should.equal(2);
-            });
-          })
-          .end(done);
+        request.del(path + 'wrongcode')
+          //.expect(403)
+          .end(function (err, res) {
+            if (err) done(err);
+            else {
+              Coupon.count({}, function (err, count) {
+                count.should.equal(2);
+                done();
+              });
+            }
+          });
       }, done);
     });
   });
 
-  describe('PUT', function() {
+  describe('PUT', function () {
 
     it('should update all details except couponCode of this coupon', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {
-      var newCouponDetails = {
-        couponID: '13898458461', username: 'userB',
-        couponRule: { type: 'CASH', value: 300 },
-        rebateRule: { type: 'PERCENTAGE', value: 10 }, valid: false };
-     
-      request.put(path + userAWithPercRule.couponID)
-        .send(newCouponDetails)
-        .expect(204)
-        .end(function (err) {
-          if(err) done(err);
-          else {
-            Coupon.findOne({ couponID: userAWithPercRule.couponID})
-            .then(function (coupon) {
-              (coupon.couponID).should.equal('13898458461');
-              (coupon.username).should.equal('userB');
-              (coupon.couponRule.type).should.equal('CASH');
-              (coupon.couponRule.value).should.equal(300);
-              (coupon.rebateRule.type).should.equal('PERCENTAGE');
-              (coupon.rebateRule.value).should.equal(10);
-              (coupon.valid).should.equal(false);
+        var newCouponDetails = {
+          couponID: '13898458461', username: 'userB',
+          couponRule: {type: 'CASH', value: 300},
+          rebateRule: {type: 'PERCENTAGE', value: 10}, valid: false
+        };
 
-              done();
-            });
-          }
-        });
+        request.put(path + userAWithPercRule.couponID)
+          .send(newCouponDetails)
+          .expect(204)
+          .end(function (err) {
+            if (err) done(err);
+            else {
+              Coupon.findOne({couponID: userAWithPercRule.couponID})
+                .then(function (coupon) {
+                  (coupon.couponID).should.equal('13898458461');
+                  (coupon.username).should.equal('userB');
+                  (coupon.couponRule.type).should.equal('CASH');
+                  (coupon.couponRule.value).should.equal(300);
+                  (coupon.rebateRule.type).should.equal('PERCENTAGE');
+                  (coupon.rebateRule.value).should.equal(10);
+                  (coupon.valid).should.equal(false);
+
+                  done();
+                });
+            }
+          });
       });
     });
 
     it('should update couponRule properties details except couponCode and no changed properties of this coupon', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {
-      var newCouponDetails = {
-        couponID: '13898458461', username: 'userB',
-        couponRule: { type: 'CASH', value: 200 }
-      };
-     
-      request.put(path + userAWithPercRule.couponID)
-        .send(newCouponDetails)
-        .expect(204)
-        .end(function (err) {
-          if(err) done(err);
-          else {
-            Coupon.findOne({ couponID: userAWithPercRule.couponID})
-            .then(function (coupon) {
-              // Update properties
-              (coupon.couponID).should.equal('13898458461');
-              (coupon.username).should.equal('userB');
-              (coupon.couponRule.type).should.equal('CASH');
-              (coupon.couponRule.value).should.equal(200);
-              // Origin properties
-              (coupon.rebateRule.type).should.equal('CASH');
-              (coupon.rebateRule.value).should.equal(100);
-              (coupon.valid).should.equal(true);
-              done();
-            });
-          }
-        });
+        var newCouponDetails = {
+          couponID: '13898458461', username: 'userB',
+          couponRule: {type: 'CASH', value: 200}
+        };
+
+        request.put(path + userAWithPercRule.couponID)
+          .send(newCouponDetails)
+          .expect(204)
+          .end(function (err) {
+            if (err) done(err);
+            else {
+              Coupon.findOne({couponID: userAWithPercRule.couponID})
+                .then(function (coupon) {
+                  // Update properties
+                  (coupon.couponID).should.equal('13898458461');
+                  (coupon.username).should.equal('userB');
+                  (coupon.couponRule.type).should.equal('CASH');
+                  (coupon.couponRule.value).should.equal(200);
+                  // Origin properties
+                  (coupon.rebateRule.type).should.equal('CASH');
+                  (coupon.rebateRule.value).should.equal(100);
+                  (coupon.valid).should.equal(true);
+                  done();
+                });
+            }
+          });
       });
     });
 
     it('should update random properties details except couponCode and no changed properties of this coupon', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {
-      var newCouponDetails = {
-        couponID: '13898458461',
-        couponRule: { type: 'CASH', value: 100},
-        rebateRule: { type: 'CASH', value : 50 }
-      };
-     
-      request.put(path + userAWithPercRule.couponID)
-        .send(newCouponDetails)
-        .expect(204)
-        .end(function (err) {
-          if(err) done(err);
-          else {
-            Coupon.findOne({ couponID: userAWithPercRule.couponID})
-            .then(function (coupon) {
-              // Update properties
-              (coupon.couponID).should.equal('13898458461');
-              (coupon.couponRule.type).should.equal('CASH');
-              (coupon.rebateRule.value).should.equal(50);
-              // Origin properties
-              (coupon.username).should.equal('userA');
-              (coupon.rebateRule.type).should.equal('CASH');
-              (coupon.couponRule.value).should.equal(100);
-              (coupon.valid).should.equal(true);
-              done();
-            });
-          }
-        });
+        var newCouponDetails = {
+          couponID: '13898458461',
+          couponRule: {type: 'CASH', value: 100},
+          rebateRule: {type: 'CASH', value: 50}
+        };
+
+        request.put(path + userAWithPercRule.couponID)
+          .send(newCouponDetails)
+          .expect(204)
+          .end(function (err) {
+            if (err) done(err);
+            else {
+              Coupon.findOne({couponID: userAWithPercRule.couponID})
+                .then(function (coupon) {
+                  // Update properties
+                  (coupon.couponID).should.equal('13898458461');
+                  (coupon.couponRule.type).should.equal('CASH');
+                  (coupon.rebateRule.value).should.equal(50);
+                  // Origin properties
+                  (coupon.username).should.equal('userA');
+                  (coupon.rebateRule.type).should.equal('CASH');
+                  (coupon.couponRule.value).should.equal(100);
+                  (coupon.valid).should.equal(true);
+                  done();
+                });
+            }
+          });
       });
     });
 
     it('should return 404 if coupon does not exist', function (done) {
       var newCouponDetails = {
         couponID: '13898458461', username: 'userB',
-        couponRule: { type: 'CASH', value: 300 },
-        rebateRule: { type: 'PERCENTAGE', value: 10 }, valid: false };
+        couponRule: {type: 'CASH', value: 300},
+        rebateRule: {type: 'PERCENTAGE', value: 10}, valid: false
+      };
 
       request.put(path + userAWithPercRule.couponID)
         .send(newCouponDetails)
