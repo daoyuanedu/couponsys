@@ -3,7 +3,6 @@
  *
  * A db proxy for Coupon model
  */
-var Promise = require('bluebird');
 var Coupon = require('../models').Coupon;
 var defaultRules = require('../config.default').defaultCouponRules;
 
@@ -12,12 +11,10 @@ exports.getAllCoupons = function () {
 };
 
 exports.getCouponCodesByUsername = function (username) {
-  //return a Promise
   return Coupon.find({ username : username }, { _id : 0, __v : 0 });
 };
 
 exports.getCouponCodesByCouponCode = function (couponID) {
-  //return a Promise
   return Coupon.find({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 

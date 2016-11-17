@@ -15,6 +15,9 @@ var couponCodeGenerator = require('./middlewares/couponCodeGenerator');
 var discountChecker = require('./middlewares/discountChecker');
 var errorHandler = require('./middlewares/errorHandler');
 
+var passport = require('passport');
+
+
 // Router
 var router = express.Router();
 
@@ -38,6 +41,9 @@ router.get('/:couponCode/orders', auth.tryAuth, couponOrder.getOrdersByCouponCod
 router.post('/:couponCode/orders', couponOrder.createNewCouponOrder, errorHandler.apiErrorHandler);
 router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderIdAndCouponCode, errorHandler.apiErrorHandler);
 router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCouponOrder, errorHandler.apiErrorHandler);
+
+auth.initPassportLocalStrategy();
+router.post('/login',  passport.authenticate('local'), auth.generateAdminToken, auth.sendToken, errorHandler.apiErrorHandler);
 
 //for test purpose
 router.get('/error/api', function (req, res, next) {
