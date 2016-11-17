@@ -1,25 +1,26 @@
 var couponProxy = require('../../proxy/coupon.model');
-var Coupon = require('../../models').Coupon;
 
-// For UI test, need to delete later
-var couponData = require('../../test/common/modelCouponTestData');
-var saveToUITest = function () {
-   new Coupon(couponData.userACouponPerc1).save();
-   new Coupon(couponData.userACouponCash1).save();
-   new Coupon(couponData.user1Coupon).save();
-   new Coupon(couponData.userAWithPercRule).save();
-   new Coupon(couponData.userBWithCashRule).save();
-   new Coupon(couponData.userBWithInvalidCoupon).save();
-};
-
-// Coupons
-var coupons = function (req, res) {
-	saveToUITest();
+// List Coupons Page
+var getCouponsList = function (req, res) {
   couponProxy.getAllCoupons().then(function (coupons) {
+    res.status(200);
   	res.render('pages/coupons', 
   		{
   			CouponList: coupons
   		});
   });
 };
-exports.coupons = coupons;
+exports.getCouponsList = getCouponsList;
+
+// One Coupons Page
+var getCouponCodesByCouponID = function (req, res, next) {
+  var couponID = req.params.couponID;
+  couponProxy.getCouponCodesByCouponCode(couponID).then(function (coupon) {
+    res.status(200);
+    res.render('modify/couponDetails', 
+      {
+        CouponList: coupon
+      });
+  }).catch(next);
+};
+exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
