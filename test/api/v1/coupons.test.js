@@ -68,11 +68,8 @@ describe('/api/v1/coupons/', function () {
           .expect('Content-Type', /json/)
           .expect(200)
           .expect(function (res) {
-            res.body.length.should.equal(1);
-            var coupons = res.body;
-            coupons.forEach(function (coupon) {
-              coupon.username.should.equal('user1');
-            });
+            var coupon = res.body;
+            coupon.username.should.equal('user1');
           })
           .end(done);
       }, done);
@@ -170,11 +167,8 @@ describe('/api/v1/coupons/', function () {
             request.get(path + '13898458462')
               .expect('Content-Type', /json/)
               .expect(function (res) {
-                var coupons = res.body;
-                coupons.length.should.equal(1);
-                coupons.forEach(function (coupon) {
-                  coupon.username.should.equal('userA');
-                });
+                var coupon = res.body;
+                coupon.username.should.equal('userA');
               })
               .end(done);
           }
@@ -192,12 +186,7 @@ describe('/api/v1/coupons/', function () {
           else {
             res.body.message.should.equal('Invalid Mobile Provided');
             request.get(path + 'userA')
-              .expect('Content-Type', /json/)
-              .expect(function (res) {
-                var coupons = res.body;
-                coupons.length.should.equal(0);
-              })
-              .end(done);
+              .expect(404, done);
           }
         });
     });
@@ -212,10 +201,75 @@ describe('/api/v1/coupons/', function () {
           else {
             res.body.message.should.equal('No Mobile Provided');
             request.get(path + 'userA')
+              .expect(404, done);
+          }
+        });
+    });
+
+    it('should have the default coupon rule if not authorised', function (done) {
+      request.post(path)
+        .send(apiTestData.userAWithRulesNoToken)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            request.get(path + apiTestData.userAWithRulesNoToken.mobile)
               .expect('Content-Type', /json/)
               .expect(function (res) {
-                var coupons = res.body;
-                coupons.length.should.equal(0);
+                var coupon = res.body;
+                coupon.couponRule.type.should.equal(config.defaultCouponRules.couponRule.type);
+                coupon.couponRule.value.should.equal(config.defaultCouponRules.couponRule.value);
+                coupon.rebateRule.type.should.equal(config.defaultCouponRules.rebateRule.type);
+                coupon.rebateRule.value.should.equal(config.defaultCouponRules.rebateRule.value);
+              })
+              .end(done);
+          }
+        });
+    });
+    var testToken = require('../../common/mockUsers').genTestToken();
+    it('should have the user defined coupon rule if admin auth', function (done) {
+      var couponWithToken = apiTestData.userAWithRulesAndToken;
+      couponWithToken.token = testToken;
+      request.post(path)
+        .send(couponWithToken)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            request.get(path + couponWithToken.mobile)
+              .expect('Content-Type', /json/)
+              .expect(function (res) {
+                var coupon = res.body;
+                coupon.couponRule.type.should.equal(couponWithToken.couponRule.type);
+                coupon.couponRule.value.should.equal(couponWithToken.couponRule.value);
+                coupon.rebateRule.type.should.equal(couponWithToken.rebateRule.type);
+                coupon.rebateRule.value.should.equal(couponWithToken.rebateRule.value);
+              })
+              .end(done);
+          }
+        });
+    });
+
+    it('should handle incomplete user defined coupon rule if admin auth', function (done) {
+      var incompleteCouponWithToken = apiTestData.userAWithIncompleteRulesAndToken;
+      incompleteCouponWithToken.token = testToken;
+      request.post(path)
+        .send(incompleteCouponWithToken)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            request.get(path + incompleteCouponWithToken.mobile)
+              .expect('Content-Type', /json/)
+              .expect(function (res) {
+                var coupon = res.body;
+                coupon.couponRule.type.should.equal(config.defaultCouponRules.couponRule.type);
+                coupon.couponRule.value.should.equal(config.defaultCouponRules.couponRule.value);
+                coupon.rebateRule.type.should.equal(incompleteCouponWithToken.rebateRule.type);
+                coupon.rebateRule.value.should.equal(incompleteCouponWithToken.rebateRule.value);
               })
               .end(done);
           }
@@ -270,12 +324,45 @@ describe('/api/v1/coupons/', function () {
 
   describe('PUT', function () {
 
+    var testToken = require('../../common/mockUsers').genTestToken();
+
+    it('should get a 403 FORBIDDEN if no token was passed in', function (done) {
+      new Coupon(userAWithPercRule).save().then(function () {
+        var testCoupon = {
+          couponID: '13898458461', username: 'userB',
+          couponRule: {type: 'CASH', value: 300},
+          rebateRule: {type: 'PERCENTAGE', value: 10},
+          valid: false
+        };
+        request.put(path + userAWithPercRule.couponID)
+          .send(testCoupon)
+          .expect(403, done);
+      });
+    });
+
+    it('should get a 403 FORBIDDEN if wrong token was passed in', function (done) {
+      new Coupon(userAWithPercRule).save().then(function () {
+        var testCoupon = {
+          couponID: '13898458461', username: 'userB',
+          couponRule: {type: 'CASH', value: 300},
+          rebateRule: {type: 'PERCENTAGE', value: 10},
+          valid: false
+        };
+        testCoupon.token = 'fake';
+        request.put(path + userAWithPercRule.couponID)
+          .send(testCoupon)
+          .expect(403, done);
+      });
+    });
+
     it('should update all details except couponCode of this coupon', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {
         var newCouponDetails = {
           couponID: '13898458461', username: 'userB',
           couponRule: {type: 'CASH', value: 300},
-          rebateRule: {type: 'PERCENTAGE', value: 10}, valid: false
+          rebateRule: {type: 'PERCENTAGE', value: 10},
+          valid: false,
+          token: testToken
         };
 
         request.put(path + userAWithPercRule.couponID)
@@ -305,7 +392,8 @@ describe('/api/v1/coupons/', function () {
       new Coupon(userAWithPercRule).save().then(function () {
         var newCouponDetails = {
           couponID: '13898458461', username: 'userB',
-          couponRule: {type: 'CASH', value: 200}
+          couponRule: {type: 'CASH', value: 200},
+          token: testToken
         };
 
         request.put(path + userAWithPercRule.couponID)
@@ -337,7 +425,8 @@ describe('/api/v1/coupons/', function () {
         var newCouponDetails = {
           couponID: '13898458461',
           couponRule: {type: 'CASH', value: 100},
-          rebateRule: {type: 'CASH', value: 50}
+          rebateRule: {type: 'CASH', value: 50},
+          token: testToken
         };
 
         request.put(path + userAWithPercRule.couponID)
@@ -368,7 +457,9 @@ describe('/api/v1/coupons/', function () {
       var newCouponDetails = {
         couponID: '13898458461', username: 'userB',
         couponRule: {type: 'CASH', value: 300},
-        rebateRule: {type: 'PERCENTAGE', value: 10}, valid: false
+        rebateRule: {type: 'PERCENTAGE', value: 10},
+        valid: false,
+        token: testToken
       };
 
       request.put(path + userAWithPercRule.couponID)

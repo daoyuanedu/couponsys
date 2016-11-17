@@ -26,9 +26,36 @@ module.exports = {
     mobile : '13898458462'
   },
 
-  userAWithRules : {
+  userAWithRulesAndToken : {
     username : 'userA',
     mobile : '13898458462',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 50
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 1000
+    },
+    token: 'tobefilled'
+  },
+
+  userAWithIncompleteRulesAndToken : {
+    username : 'userA',
+    mobile : '13898458462',
+    couponRule: {
+      type: 'PERCENTAGE'
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 1000
+    },
+    token: 'tobefilled'
+  },
+
+  userAWithRulesNoToken : {
+    username : 'userB',
+    mobile : '13898458461',
     couponRule: {
       type: 'PERCENTAGE',
       value: 50

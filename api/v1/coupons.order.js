@@ -1,21 +1,29 @@
 /**
  * Created by ekinr on 2016/11/10.
  */
-var CouponOrderProxy = require('../../proxy/couponOrder.model');
-var CouponProxy = require('../../proxy/coupon.model');
+var CouponOrderProxy = require('../../proxy/couponOrder.proxy.js');
+var CouponProxy = require('../../proxy/coupon.proxy.js');
 
 var getOrdersByCouponCode = function (req, res, next) {
-  //unimplemented
   var adminAuth = req.adminAuth;
-  var couponCode = req.params.couponCode;
-  var rebated = req.query.rebated; // if undefined, show all.
 
-  CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated)
-    .then(function (orders) {
-      res.status = 200;
-      res.send({orders : orders});
-    })
-    .catch(next);
+  adminAuth = true; // TODO do we want auth?
+
+  if(adminAuth){
+    var couponCode = req.params.couponCode;
+    var rebated = req.query.rebated; // if undefined, show all.
+
+    CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated)
+      .then(function (orders) {
+        res.status = 200;
+        res.send({orders : orders});
+      })
+      .catch(next);
+  }else {
+    var err = new Error('Only Admin can edit an order');
+    err.status = 403;
+    next(err);
+  }
 };
 exports.getOrdersByCouponCode = getOrdersByCouponCode;
 
@@ -68,32 +76,38 @@ var createNewCouponOrder = function (req, res, next) {
 exports.createNewCouponOrder = createNewCouponOrder;
 
 var updateCouponOrder = function (req, res, next) {
-  var couponCode = req.params.couponCode;
-  var orderId = req.params.orderId;
+  if (req.adminAuth) {
+    var couponCode = req.params.couponCode;
+    var orderId = req.params.orderId;
 
-  var rebated = req.query.rebated;
-  var rebateValue = req.query.rebateValue;
-  var propertiesToUpdate = {};
-  var needToUpdate = false;
-  
-  if(typeof rebated !== 'undefined') {
-    needToUpdate = true;
-    propertiesToUpdate.rebated = rebated;
-  }
-  if(typeof rebateValue !== 'undefined') {
-    propertiesToUpdate.rebateValue = rebateValue;
-    needToUpdate = true;
-  }
-  if(needToUpdate) {
-    CouponOrderProxy.updateOrderByOrderIdAndCouponCode(orderId, couponCode, propertiesToUpdate)
-      .then(function () {
-        res.status(204);
-        res.send();
-      }).catch(next);
-  }
-  else {
-    res.status(200);
-    res.send();
+    var rebated = req.query.rebated;
+    var rebateValue = req.query.rebateValue;
+    var propertiesToUpdate = {};
+    var needToUpdate = false;
+
+    if (typeof rebated !== 'undefined') {
+      needToUpdate = true;
+      propertiesToUpdate.rebated = rebated;
+    }
+    if (typeof rebateValue !== 'undefined') {
+      propertiesToUpdate.rebateValue = rebateValue;
+      needToUpdate = true;
+    }
+    if (needToUpdate) {
+      CouponOrderProxy.updateOrderByOrderIdAndCouponCode(orderId, couponCode, propertiesToUpdate)
+        .then(function () {
+          res.status(204);
+          res.send();
+        }).catch(next);
+    }
+    else {
+      res.status(200);
+      res.send();
+    }
+  } else{
+    var err = new Error('Only Admin can edit an order');
+    err.status = 403;
+    next(err);
   }
 };
 exports.updateCouponOrder = updateCouponOrder;

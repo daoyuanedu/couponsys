@@ -4,6 +4,9 @@
 
 var app = require('../../../app');
 var request = require('supertest')(app);
+var jwt = require('jsonwebtoken');
+var signSecret = require('../../../config.default').signSecret;
+
 var User = require('../../../models').User;
 var config = require('../../../config.default');
 var mockUsers = require('../../common/mockUsers');
@@ -23,14 +26,19 @@ describe('/api/v1/coupons/login', function () {
     }).catch(done);
   });
 
-  it('should login the user with right password and send back token', function (done) {
+  it('should login the user with right password and send back a valid token', function (done) {
     request.post(path)
       .send({username : testAdmin1.username, password : testAdmin1.password})
-      .expect(function (res) {
-        (res.body.success).should.equal(true);
-        (res.body.token).should.be.a('string');
-      })
-      .end(done);
+      .end(function (err, res) {
+        if(err) done(err);
+        else {
+          (res.body.success).should.equal(true);
+          (res.body.token).should.be.a('string');
+          jwt.verify(res.body.token, signSecret, function(err) {
+            done(err);
+          });
+        }
+      });
   });
 
   it('should not login a user with wrong password', function (done) {
@@ -38,6 +46,5 @@ describe('/api/v1/coupons/login', function () {
       .send({username : testAdmin1.username, password : 'fake'})
       .expect(401, done);
   });
-
 
 });
