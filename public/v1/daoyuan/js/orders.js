@@ -6,7 +6,9 @@ $(document).ready(function(){
     	var order = $("#orderSearchInput").val();
     	var currentUrl = window.location.pathname;
     	var targetUrl = currentUrl + '/' + order;
-    	window.location.href = targetUrl;
+
+    	if (order === '' ) alert("Please Input CouponCode");
+    	else window.location.href = targetUrl;
     });
 });
 

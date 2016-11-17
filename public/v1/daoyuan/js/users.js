@@ -6,7 +6,9 @@ $(document).ready(function(){
     	var username = $("#userSearchInput").val();
     	var currentUrl = window.location.pathname;
     	var targetUrl = currentUrl + '/' + username;
-    	window.location.href = targetUrl;
+
+    	if (username === '' ) alert("Please Input Username");
+    	else window.location.href = targetUrl;
     });
 });
 

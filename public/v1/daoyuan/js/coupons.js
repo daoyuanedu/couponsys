@@ -6,7 +6,9 @@ $(document).ready(function(){
     	var couponCode = $("#couponSearchInput").val();
     	var currentUrl = window.location.href;
     	var targetUrl = currentUrl + '/' + couponCode;
-    	window.location.href = targetUrl;
+
+    	if (couponCode === '' ) alert("Please Input CouponCode");
+    	else window.location.href = targetUrl;
     });
 });
 
