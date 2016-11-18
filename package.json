@@ -13,9 +13,12 @@
     "ejs": "^2.5.2",
     "express": "^4.13.4",
     "file-stream-rotator": "0.0.7",
+    "jsonwebtoken": "^7.1.9",
     "log4js": "^0.6.38",
     "mongoose": "^4.6.5",
     "morgan": "~1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
@@ -25,6 +28,7 @@
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.0.1",
+    "flow-bin": "^0.35.0",
     "gulp": "~3.9.1",
     "gulp-mocha": "~3.0.1",
     "gulp-util": "~3.0.7",

@@ -144,7 +144,7 @@ describe('/api/v1/coupons/user/{username}', function() {
 
     it('should have the default coupon rule if not authorised', function (done) {
       request.post(path + 'userA')
-        .send(APICouponTestData.userAWithRules)
+        .send(APICouponTestData.userAWithRulesNoToken)
         .set('Accept', 'application/json')
         .expect(201)
         .end(function (err, res) {
@@ -165,8 +165,30 @@ describe('/api/v1/coupons/user/{username}', function() {
         });
     });
 
-    it.skip('should have the same coupon rule set by the authorised admin', function (done) {
-
+    var testToken = require('../../common/mockUsers').genTestToken();
+    it('should have the same coupon rule set by the authorised admin', function (done) {
+      var couponWithToken = APICouponTestData.userAWithRulesAndToken;
+      couponWithToken.token = testToken;
+      request.post(path + 'userA')
+        .send(couponWithToken)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            request.get(path + 'userA')
+              .expect('Content-Type', /json/)
+              .expect(function (res) {
+                var coupons = res.body.coupons;
+                coupons.length.should.equal(1);
+                coupons[0].couponRule.type.should.equal(couponWithToken.couponRule.type);
+                coupons[0].couponRule.value.should.equal(couponWithToken.couponRule.value);
+                coupons[0].rebateRule.type.should.equal(couponWithToken.rebateRule.type);
+                coupons[0].rebateRule.value.should.equal(couponWithToken.rebateRule.value);
+              })
+              .end(done);
+          }
+        });
     });
   });
 });

@@ -1,0 +1,72 @@
+<!-- views/pages/coupons.ejs -->
+<!-- The coupons page for coupons will have search/list/add/delete/update UI here -->
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- User head in partials/index.ejs -->
+<head>
+    <% include ../partials/head %>
+</head>
+
+<body>
+
+<!-- User header in partials/header.ejs -->
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+<!-- Main body -->
+    <main class="container">
+        <div class="jumbotron couponTitle">
+            <h1>Coupons</h1>
+            <h4>You can find all coupons in below list !</h4>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="input-group btn-group">
+                       <input type="text" class="form-control" placeholder="Input CouponCode...">
+                          <span class="input-group-btn">
+                       <button class="btn btn-info" type="button">Search</button>
+                          </span>                       
+                    </div>   
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="couponList">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-info">
+                   <h4> CouponCode </h4>
+                   <h4> Username </h4>
+                   <h4> Valid </h4>
+                   <h4> Coupon Rule </h4>
+                   <h4> Rebate Rule </h4>
+
+                </li>
+
+<!-- List All Coupon Code -->        
+                <% CouponList.forEach(function(coupon) { %>
+                   <a class="list-group-item">
+                        <h4><%= coupon.couponID %></h4>
+                        <h4><%= coupon.username %></h4>
+                        <h4><%= coupon.valid %></h4>
+                        <h4><%= coupon.couponRule.type %> <%= coupon.couponRule.value %></h4>
+                        <h4><%= coupon.rebateRule.type %> <%= coupon.rebateRule.value %></h4>
+                   </a>
+                <% }); %>
+
+            </ul>
+
+        </div>
+
+    </main>
+
+<!-- User footer in partials/footer.ejs -->
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

@@ -5,18 +5,18 @@
  */
 
 // Dependencies
-var couponProxy = require('../../proxy/coupon.model');
-var couponOrderProxy = require('../../proxy/couponOrder.model');
+var CouponProxy = require('../../proxy/coupon.proxy.js');
+var CouponOrderProxy = require('../../proxy/couponOrder.proxy.js');
 var Promise = require('bluebird');
 
 var getCouponCodesByUser = function (req, res, next) {
   var username = req.params.username;
-  var couponsPromise = couponProxy.getCouponCodesByUsername(username);
-  
+  var couponsPromise = CouponProxy.getCouponCodesByUsername(username);
+
   if (req.query.showTotalOrderNumber) {
     var totalOrderNumber = couponsPromise.then(function (coupons) {
       return Promise.all(coupons.map(function (coupon) {
-        return couponOrderProxy.totalOrdersByCouponCode(coupon.couponID);
+        return CouponOrderProxy.totalOrdersByCouponCode(coupon.couponID);
       }));
     }).then(function (orderNumberArray) {
       return orderNumberArray.reduce(function (a, b) {
@@ -38,14 +38,28 @@ var getCouponCodesByUser = function (req, res, next) {
 exports.getCouponCodesByUser = getCouponCodesByUser;
 
 var createCouponForUser = function (req, res, next) {
+  var sendCoupon = function (coupon) {
+    res.statusCode = 201;
+    res.send(coupon);
+  };
   var username = req.params.username;
-  if (req.adminAuth) {
-    next({message: 'unimplemented...'});
+  if(username) {
+    if (req.adminAuth) {
+      var coupon = req.body;
+      coupon.couponID = req.couponCode;
+      coupon.username = username;
+      CouponProxy.createCouponWithRules(coupon)
+        .then(sendCoupon)
+        .catch(next);
+    } else {
+      CouponProxy.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode)
+        .then(sendCoupon)
+        .catch(next);
+    }
   } else {
-    couponProxy.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode).then(function (coupon) {
-      res.statusCode = 201;
-      res.send(coupon);
-    }).catch(next);
+    var err = new Error('Username required');
+    err.status = 406;
+    next(err);
   }
 };
 exports.createCouponForUser = createCouponForUser;

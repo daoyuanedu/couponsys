@@ -47,3 +47,9 @@ var updateOrderByOrderIdAndCouponCode = function (orderId, couponCode, propertie
     });
 };
 exports.updateOrderByOrderIdAndCouponCode = updateOrderByOrderIdAndCouponCode;
+
+
+var getAllOrders = function () {
+  return CouponOrder.find({}, {_id : 0, __v : 0});
+};
+exports.getAllOrders = getAllOrders;
