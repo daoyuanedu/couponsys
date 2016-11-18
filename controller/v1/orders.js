@@ -19,12 +19,19 @@ var getOrdersByCouponCode = function (req, res, next) {
 
   couponOrderProxy.getOrdersByCouponCode(couponCode, rebated)
     .then(function (orders) {
-      res.status = 200;
+    if (orders.length !== 0) {
+      res.status(200);
       res.render('modify/orderDetails', 
-      {
-        OrderList: orders
-      });
-    })
-    .catch(next);
+        {
+          userList: couponCode
+        });
+    } else {
+      res.status(404);
+      res.render('partials/noFoundError',
+        {
+          errorData: couponCode
+        });
+    }
+  }).catch(next);  
 };
 exports.getOrdersByCouponCode = getOrdersByCouponCode;

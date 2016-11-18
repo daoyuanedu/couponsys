@@ -10,11 +10,19 @@ exports.userPage = userPage;
 var getCouponCodesByUser = function (req, res, next) {
   var username = req.params.username;
   couponProxy.getCouponCodesByUsername(username).then(function (coupons) {
-    res.status(200);
-  	res.render('modify/userDetails', 
-  		{
-  			userList: coupons
-  		});
-  }).catch(next);
+    if (coupons.length !== 0) {
+      res.status(200);
+      res.render('modify/userDetails', 
+        {
+          userList: coupons
+        });
+    } else {
+      res.status(404);
+      res.render('partials/noFoundError',
+        {
+          errorData: username
+        });
+    }
+  }).catch(next);   
 };
 exports.getCouponCodesByUser = getCouponCodesByUser;

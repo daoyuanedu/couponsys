@@ -12,4 +12,17 @@ $(document).ready(function(){
     });
 });
 
+
+// TODO Click eidt button to edit special CouponCode
+$(document).ready(function(){
+    $(".couponItemButton").click(function(){
+    	// var couponCode = $("#couponItem").val();
+    	// alert(couponCode + "--");
+    	// var currentUrl = window.location.href;
+    	// var targetUrl = currentUrl + '/' + couponCode;
+    	// if (couponCode === '' ) alert("Please Input CouponCode");
+    	// else window.location.href = targetUrl;
+    });
+});
+
 // ------------- UI JS -----------------
