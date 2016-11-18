@@ -12,11 +12,16 @@ var router = express.Router();
 // Index
 router.get('/', Others.index);
 // coupons
-router.get('/coupons', Coupons.coupons);
+router.get('/coupons', Coupons.getCouponsList);
+router.get('/coupons/:couponID', Coupons.getCouponCodesByCouponID);
+
 // users
-router.get('/users', Users.users);
+router.get('/users', Users.userPage);
+router.get('/users/:username', Users.getCouponCodesByUser);
 // orders
-router.get('/orders', Orders.orders);
+router.get('/orders', Orders.getAllOrders);
+router.get('/orders/:couponCode/', Orders.getOrdersByCouponCode);
+
 // Info
 router.get('/info', Others.info);
 
