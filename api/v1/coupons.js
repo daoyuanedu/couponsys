@@ -12,9 +12,9 @@ var getCouponsList = function (req, res, next) {
 exports.getCouponsList = getCouponsList;
 
 // GET coupons/{couponCode}
-var getCouponCodesByCouponID = function (req, res, next) {
+var getCouponByCouponCode = function (req, res, next) {
   var couponID = req.params.couponID;
-  CouponProxy.getCouponCodeByCode(couponID).then(function (coupon) {
+  CouponProxy.getCouponByCouponCode(couponID).then(function (coupon) {
     if(coupon) {
       res.status(200);
       res.send(coupon);
@@ -25,17 +25,23 @@ var getCouponCodesByCouponID = function (req, res, next) {
     }
   }).catch(next);
 };
-exports.getCouponCodesByCouponID = getCouponCodesByCouponID;
+exports.getCouponByCouponCode = getCouponByCouponCode;
 
 // DELETE coupons/{couponCode}
-var deleteCouponCodesByCouponID = function (req, res, next) {
-  var couponID = req.params.couponID;
-  CouponProxy.deleteCouponCodesByCouponCode(couponID).then(function () {
-    res.status(204);
-    res.send();
-  }).catch(next);
+var deleteCouponByCouponCode = function (req, res, next) {
+  if(req.adminAuth){
+    var couponID = req.params.couponID;
+    CouponProxy.deleteCouponByCouponCode(couponID).then(function () {
+      res.status(204);
+      res.send();
+    }).catch(next);
+  } else {
+    var err = new Error('Only Admin can delete a coupon');
+    err.status = 403;
+    next(err);
+  }
 };
-exports.deleteCouponCodesByCouponID = deleteCouponCodesByCouponID;
+exports.deleteCouponByCouponCode = deleteCouponByCouponCode;
 
 // POST coupons/
 var createCouponForUser = function (req, res, next) {
@@ -43,16 +49,23 @@ var createCouponForUser = function (req, res, next) {
     res.statusCode = 201;
     res.send(coupon);
   };
+  var handleDBError = function (err) {
+    if(err.code && err.code === 11000) {
+      err.status = 406;
+      err.message = 'coupon code already exists.';
+    }
+    next(err);
+  };
   var coupon = req.body;
   if(coupon.username) {
     if (req.adminAuth) {
       coupon.couponID = req.couponCode;
       CouponProxy.createCouponWithRules(coupon)
-        .then(sendCoupon).catch(next);
+        .then(sendCoupon).catch(handleDBError);
     }
     else {
       CouponProxy.createCouponWithDefaultRulesForSpecifiedUser(coupon.username, req.couponCode)
-        .then(sendCoupon).catch(next);
+        .then(sendCoupon).catch(handleDBError);
     }
   } else{
     var err = new Error('username required');
@@ -69,23 +82,28 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
   var username = req.query.username;
   var orderValue = req.query.orderValue;
 
-  var isBelongToUsers = CouponProxy.isBelongToUsers(couponId, username);
-  var isCouponValid = CouponProxy.isCouponValid(couponId);
-  var getDiscountedValue = CouponProxy.getDiscountedValue(couponId, orderValue);
+  if(!username || !orderValue) {
+    var err = new Error('Need to provide both username and order');
+    err.status = 406;
+    next(err);
+  } else {
+    var isCouponBelongToUser = CouponProxy.isCouponBelongToUser(couponId, username);
+    var isCouponValid = CouponProxy.isCouponValid(couponId);
+    var getDiscountedValue = CouponProxy.getDiscountedValue(couponId, orderValue);
 
-  Promise.join(isBelongToUsers, isCouponValid, function (belong, valid) {
-    return (!belong && valid);
-  }).then(function (ableToUse) {
-    if (ableToUse) {
-      return getDiscountedValue;
-    } else {
-      throw new Error('Invalid CouponCode');
-    }
-  }).then(function (discountedValue) {
-    res.statusCode = 200;
-    res.send(discountedValue);
-  }).catch(next);
-
+    Promise.join(isCouponBelongToUser, isCouponValid, function (belong, valid) {
+      return (!belong && valid);
+    }).then(function (ableToUse) {
+      if (ableToUse) {
+        return getDiscountedValue;
+      } else {
+        throw new Error('Invalid CouponCode');
+      }
+    }).then(function (discountedValue) {
+      res.statusCode = 200;
+      res.send(discountedValue);
+    }).catch(next);
+  }
 };
 exports.getDiscountOrderValueByCouponID = getDiscountOrderValueByCouponID;
 

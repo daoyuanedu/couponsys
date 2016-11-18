@@ -59,9 +59,6 @@ exports.sendToken = function (req, res, next) {
 
 exports.initPassportLocalStrategy = function () {
   passport.use(new LocalStrategy(
-    {
-      session: false
-    },
     function(username, password, done) {
       UserProxy.validateUserWithPassword(username, password)
         .then(function (user) {
@@ -72,7 +69,10 @@ exports.initPassportLocalStrategy = function () {
     }
   ));
 
+  // No session
+  /*
   passport.serializeUser(function(user, cb) {
     cb(null, user);
   });
+  */
 };

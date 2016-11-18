@@ -42,6 +42,13 @@ var createCouponForUser = function (req, res, next) {
     res.statusCode = 201;
     res.send(coupon);
   };
+  var handleDBError = function (err) {
+    if(err.code && err.code === 11000) {
+      err.status = 406;
+      err.message = 'coupon code already exists.';
+    }
+    next(err);
+  };
   var username = req.params.username;
   if(username) {
     if (req.adminAuth) {
@@ -50,11 +57,11 @@ var createCouponForUser = function (req, res, next) {
       coupon.username = username;
       CouponProxy.createCouponWithRules(coupon)
         .then(sendCoupon)
-        .catch(next);
+        .catch(handleDBError);
     } else {
       CouponProxy.createCouponWithDefaultRulesForSpecifiedUser(username, req.couponCode)
         .then(sendCoupon)
-        .catch(next);
+        .catch(handleDBError);
     }
   } else {
     var err = new Error('Username required');
