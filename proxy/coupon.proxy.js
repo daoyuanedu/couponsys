@@ -14,8 +14,8 @@ exports.getCouponCodesByUsername = function (username) {
   return Coupon.find({ username : username }, { _id : 0, __v : 0 });
 };
 
-exports.getCouponCodesByCouponCode = function (couponID) {
-  return Coupon.find({ couponID : couponID }, { _id : 0, __v : 0 });
+exports.getCouponCodeByCode = function (couponID) {
+  return Coupon.findOne({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 
 exports.deleteCouponCodesByCouponCode = function (couponID) {
@@ -35,6 +35,18 @@ exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, coupo
   var newCoupon = {username : username, couponID : couponId,
     couponRule : defaultRules.couponRule, rebateRule : defaultRules.rebateRule};
   return new Coupon(newCoupon).save();
+};
+
+exports.createCouponWithRules = function (coupon) {
+  // Is there an elegant way?
+  if(typeof coupon.couponRule === 'undefined') coupon.couponRule = defaultRules.couponRule;
+  if(typeof coupon.couponRule.type === 'undefined' || typeof coupon.couponRule.value === 'undefined')
+    coupon.couponRule = defaultRules.couponRule;
+  if(typeof coupon.rebateRule === 'undefined') coupon.rebateRule = defaultRules.rebateRule;
+  if(typeof coupon.rebateRule.type === 'undefined' || typeof coupon.rebateRule.value === 'undefined')
+    coupon.rebateRule = defaultRules.rebateRule;
+
+  return new Coupon(coupon).save();
 };
 
 exports.isBelongToUsers = function (couponId, username) {

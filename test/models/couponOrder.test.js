@@ -21,7 +21,6 @@ describe('CouponOrder Model', function () {
   var couponOrderWithSameCouponID = couponOrderData.couponOrderWithSameCouponID;
   var couponOrderWithoutOrderID = couponOrderData.couponOrderWithoutOrderID;
   var couponOrderWithoutCouponID = couponOrderData.couponOrderWithoutCouponID;
-  var couponOrderWithoutRebated = couponOrderData.couponOrderWithoutRebated;
   var couponOrderWithoutOrderName = couponOrderData.couponOrderWithoutOrderName;
   var couponOrderWithoutOriginValue = couponOrderData.couponOrderWithoutOriginValue;
   var couponOrderWithoutFinalValue = couponOrderData.couponOrderWithoutFinalValue;
@@ -49,18 +48,6 @@ describe('CouponOrder Model', function () {
 
   it('should not be able to save a non-couponID couponOrder to the db', function(done) {
     var couponOrder = new CouponOrder(couponOrderWithoutCouponID);
-    couponOrder.save(function (err) {
-      if(err) done();
-      else{
-        err.should.not.equal(null);
-        done();
-      }
-    });
-  });
-
- // Rebated is default, no need test
- it.skip('should not be able to save a non-rebated couponOrder to the db', function(done) {
-    var couponOrder = new CouponOrder(couponOrderWithoutRebated);
     couponOrder.save(function (err) {
       if(err) done();
       else{
@@ -123,13 +110,16 @@ describe('CouponOrder Model', function () {
     var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameOrderID);
     couponOrder.save(function (err) {
-      sameCouponOrder.save(function (err) {
-        if(err) done(); 
-        else {
-          err.should.not.equal(null);
-          done();
-        }
-      });
+      if(err) done(err);
+      else {
+        sameCouponOrder.save(function (err) {
+          if(err) done();
+          else {
+            err.should.not.equal(null);
+            done();
+          }
+        });
+      }
     });
   });
 
@@ -137,12 +127,15 @@ describe('CouponOrder Model', function () {
     var couponOrder = new CouponOrder(couponOrderNormal);
     var sameCouponOrder = new CouponOrder(couponOrderWithSameCouponID);
     couponOrder.save(function (err) {
-      sameCouponOrder.save(function (err) {
-        if(err) throw done(err);
-        else {
-          done();
-        }
-      });
+      if(err) done(err);
+      else{
+        sameCouponOrder.save(function (err) {
+          if(err) throw done(err);
+          else {
+            done();
+          }
+        });
+      }
     });
   });
 
@@ -156,8 +149,7 @@ describe('CouponOrder Model', function () {
     couponOrder.save(function (err) {
       if(err) done(err);
       else{
-        var anothercouponOrder = couponOrderWithSameCouponID;
-        new CouponOrder(anothercouponOrder).save(function (err) {
+        new CouponOrder(couponOrderWithSameCouponID).save(function (err) {
           if(err) done(err);
           else{
             CouponOrder.find({ couponID: 'coupon1normal' }, function (err, couponOrders) {

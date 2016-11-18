@@ -18,6 +18,8 @@ exports.tryAuth = function (req, res, next) {
       if (err) {
         req.adminAuth = false;
         logger.error('failed to the authenticate token');
+        err.status = 403;
+        next(err);
       } else {
         logger.info('token authenticated');
         req.decoded = decoded;
@@ -29,8 +31,8 @@ exports.tryAuth = function (req, res, next) {
   else {
     logger.info('no token provided');
     req.adminAuth = false;
+    next();
   }
-  next();
 };
 
 exports.generateAdminToken = function (req, res, next) {
@@ -57,6 +59,9 @@ exports.sendToken = function (req, res, next) {
 
 exports.initPassportLocalStrategy = function () {
   passport.use(new LocalStrategy(
+    {
+      session: false
+    },
     function(username, password, done) {
       UserProxy.validateUserWithPassword(username, password)
         .then(function (user) {
@@ -70,5 +75,4 @@ exports.initPassportLocalStrategy = function () {
   passport.serializeUser(function(user, cb) {
     cb(null, user);
   });
-
 };

@@ -30,7 +30,7 @@ router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode
 
 // Coupons api
 router.get('/', auth.tryAuth, coupon.getCouponsList, errorHandler.apiErrorHandler);
-router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForNewUser, errorHandler.apiErrorHandler);
+router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForUser, errorHandler.apiErrorHandler);
 router.get('/:couponID', coupon.getCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.delete('/:couponID', auth.tryAuth, coupon.deleteCouponCodesByCouponID, errorHandler.apiErrorHandler);
 router.put('/:couponID', auth.tryAuth, coupon.updateCoupon, errorHandler.apiErrorHandler);
