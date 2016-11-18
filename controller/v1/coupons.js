@@ -23,7 +23,11 @@ var getCouponCodesByCouponID = function (req, res, next) {
           coupon: coupon
         });
     } else {
-      res.render('pages/index');
+      res.status(404);
+      res.render('partials/noFoundError',
+        {
+          errorData: couponID
+        });
     }
   }).catch(next);   
 };
