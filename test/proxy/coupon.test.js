@@ -94,7 +94,7 @@ describe('Coupon Model Proxy', function () {
     var saveTwoCoupons = Promise.all(
       [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
     saveTwoCoupons.then(function () {
-      couponProxy.isBelongToUsers('13898458461', 'userA').then(function (result) {
+      couponProxy.isCouponBelongToUser('13898458461', 'userA').then(function (result) {
         result.should.equal(true);
         done();
       });
@@ -105,7 +105,7 @@ describe('Coupon Model Proxy', function () {
     var saveTwoCoupons = Promise.all(
       [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
     saveTwoCoupons.then(function () {
-      couponProxy.isBelongToUsers('13898458461', 'userB').then(function (result) {
+      couponProxy.isCouponBelongToUser('13898458461', 'userB').then(function (result) {
         result.should.equal(false);
         done();
       });
@@ -117,7 +117,7 @@ describe('Coupon Model Proxy', function () {
       [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
 
     saveTwoCoupons.then(function () {
-      couponProxy.deleteCouponCodesByCouponCode('13898458461').then(function (result) {
+      couponProxy.deleteCouponByCouponCode('13898458461').then(function (result) {
         result.couponID.should.equal('13898458461');
         Coupon.count({}, function (err, count) {
           count.should.equal(1);
@@ -132,7 +132,7 @@ describe('Coupon Model Proxy', function () {
       [new Coupon(userAWithPercRule).save(), new Coupon(userBWithCashRule).save()]);
 
     saveTwoCoupons.then(function () {
-      couponProxy.deleteCouponCodesByCouponCode('wrong').then(function (result) {
+      couponProxy.deleteCouponByCouponCode('wrong').then(function (result) {
         if (result !== null) done(new Error());
         Coupon.count({}, function (err, count) {
           count.should.equal(2);

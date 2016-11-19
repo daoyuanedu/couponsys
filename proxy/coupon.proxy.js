@@ -14,11 +14,11 @@ exports.getCouponCodesByUsername = function (username) {
   return Coupon.find({ username : username }, { _id : 0, __v : 0 });
 };
 
-exports.getCouponCodeByCode = function (couponID) {
+exports.getCouponByCouponCode = function (couponID) {
   return Coupon.findOne({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 
-exports.deleteCouponCodesByCouponCode = function (couponID) {
+exports.deleteCouponByCouponCode = function (couponID) {
   return Coupon.findOneAndRemove({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 
@@ -49,7 +49,7 @@ exports.createCouponWithRules = function (coupon) {
   return new Coupon(coupon).save();
 };
 
-exports.isBelongToUsers = function (couponId, username) {
+exports.isCouponBelongToUser = function (couponId, username) {
   return Coupon.find({ couponID : couponId} ).then (function (coupons){
     return coupons[0].username === username;
   }, function (err) {

@@ -7,7 +7,6 @@ exports.findUserByUsername = function (username) {
   return User.findOne({ username : username }, { _id : 0, __v : 0 });
 };
 
-
 //TODO: proper validate user password
 exports.validateUserWithPassword = function (username, password) {
   return User.findOne({ username : username })

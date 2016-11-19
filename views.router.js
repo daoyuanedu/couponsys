@@ -13,7 +13,7 @@ var router = express.Router();
 router.get('/', Others.index);
 // coupons
 router.get('/coupons', Coupons.getCouponsList);
-router.get('/coupons/:couponID', Coupons.getCouponCodesByCouponID);
+router.get('/coupons/:couponID', Coupons.getCouponByCouponCode);
 
 // users
 router.get('/users', Users.userPage);

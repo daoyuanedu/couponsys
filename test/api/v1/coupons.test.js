@@ -15,6 +15,7 @@ var should = require('chai').should();
 
 // API path 
 var path = '/api/v1/coupons/';
+var testToken = require('../../common/mockUsers').genTestToken();
 
 describe('/api/v1/coupons/', function () {
 
@@ -280,7 +281,7 @@ describe('/api/v1/coupons/', function () {
 
   describe('DELETE', function () {
 
-    it('should delete one coupon codes by couponID', function (done) {
+    it('should not delete a coupon without admin token', function (done) {
       var saveCoupons = Promise.all(
         [new Coupon(userACouponPerc1).save(),
           new Coupon(userBWithInvalidCoupon).save()]);
@@ -290,6 +291,21 @@ describe('/api/v1/coupons/', function () {
           count.should.equal(2);
         });
         request.delete(path + 'userAperc10')
+          .expect(403, done);
+      }, done);
+    });
+
+    it('should delete a coupon if an admin token passed in', function (done) {
+      var saveCoupons = Promise.all(
+        [new Coupon(userACouponPerc1).save(),
+          new Coupon(userBWithInvalidCoupon).save()]);
+
+      saveCoupons.then(function () {
+        Coupon.count({}, function(err, count){
+          count.should.equal(2);
+        });
+        request.delete(path + 'userAperc10')
+          .query({token : testToken})
           .expect(204)
           .expect(function (res) {
             Coupon.count({}, function(err, count){
@@ -300,6 +316,7 @@ describe('/api/v1/coupons/', function () {
       }, done);
     });
 
+
     //Should return an error code 403 FORBIDDEN
     it('should not delete coupons codes by wrong couponID', function (done) {
       var saveCoupons = Promise.all(
@@ -308,6 +325,7 @@ describe('/api/v1/coupons/', function () {
 
       saveCoupons.then(function () {
         request.del(path + 'wrongcode')
+          .query({token : testToken})
           //.expect(403)
           .end(function (err, res) {
             if (err) done(err);
@@ -323,8 +341,6 @@ describe('/api/v1/coupons/', function () {
   });
 
   describe('PUT', function () {
-
-    var testToken = require('../../common/mockUsers').genTestToken();
 
     it('should get a 403 FORBIDDEN if no token was passed in', function (done) {
       new Coupon(userAWithPercRule).save().then(function () {

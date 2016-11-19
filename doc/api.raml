@@ -93,7 +93,7 @@ schemas:
   get:    
     description: list all the coupons (admin only)
     queryParameters:
-      signedToken:
+      token:
         required: true
         type: string
   post:
@@ -113,7 +113,7 @@ schemas:
               "type": "cash",
               "value": 100
             },
-            "signedToken" : "dfsdoiuwqe"
+            "token" : "dfsdoiuwqe"
           }
     responses:
       201:
@@ -133,17 +133,39 @@ schemas:
                   "value": 100
                 }
               }
-    
-      
+
+
       406:
         description: returned when Json posted has invalid properties
         body:
           application/json:
-            example: | 
+            example: |
               {
                 "message" : "mobile is required."
               }
-      
+
+  /login:
+    displayName: login
+    post:
+      description: login use username and password, return a signed token
+      body:
+        application/json:
+          example: |
+            {
+              username : "admin1",
+              password : "adminHash"
+            }
+      responses:
+        201:
+          body:
+            application/json:
+              example: |
+                {
+                  success : true
+                  token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEFkbWluMSIsImlhdCI6MTQ3OTUwMzQ2MCwiZXhwIjoxNDc5NTA3MDYwfQ.p6JQc9ksEI2aQPD3Lw8kepCvHCqcYpM94bpUrs4zotY"
+                }
+        401:
+          description: Auth failed.
   /defaultRules:
     displayName: defaultRules
     get:
@@ -153,7 +175,7 @@ schemas:
           body:
             application/json:
               schema: see coupon schema rules section
-              example: | 
+              example: |
                 {
                   "couponRule": {
                     "type" : "perc",
@@ -163,10 +185,10 @@ schemas:
                     "type": "cash",
                     "value": 100
                   }
-                }  
+                }
     put:
       description: update default rules, must pass in signed token.
-      queryParameters:   
+      queryParameters:
         rebateType:
           required: false
           type: string
@@ -178,7 +200,7 @@ schemas:
           required: false
         couponValue:
           required: false
-        signedToken:
+        token:
           required: true
           type: string
   /{couponCode}:
@@ -203,7 +225,7 @@ schemas:
             type: boolean
             default: false
             description: only the total number of orders lined to this coupon code.
-          signedToken:
+          token:
             required: true
             type: string
       post:
@@ -255,7 +277,7 @@ schemas:
                   schema: couponOrder
         put:
           queryParameters:
-            signedToken:
+            token:
               required: true
             rebated:
               required: false
@@ -303,6 +325,20 @@ schemas:
                   {
                     "message" : "coupon code 123123 is not valid for userA"
                   }
+  /orders:
+    displayName: orders
+    description: mostly serverd as a shortcut to /coupons/{couponCode}/orders/{orderId}
+    post:
+      description: create a new coupon order
+      body:
+        application/json:
+          schema: couponOrder
+    /{orderId}:
+      displayName: orderId
+      get:
+        description: get a coupon order by orderId
+      put:
+        description: edit a coupon order, required admin signed token
   /user:
     displayName: user
     /{username}:
