@@ -28,6 +28,7 @@ var getOrderByOrderIdAndCouponCode = function (orderId, couponCode) {
 };
 exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
 
+//TODO: calculate rebate value
 var createNewOrder = function (couponOrder) {
   return new CouponOrder(couponOrder).save();
 };

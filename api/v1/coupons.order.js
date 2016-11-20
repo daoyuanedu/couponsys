@@ -4,22 +4,24 @@
 var CouponOrderProxy = require('../../proxy/couponOrder.proxy.js');
 var CouponProxy = require('../../proxy/coupon.proxy.js');
 
+var Promise = require('bluebird');
+
 var getOrdersByCouponCode = function (req, res, next) {
   var adminAuth = req.adminAuth;
 
   adminAuth = true; // TODO do we want auth?
 
-  if(adminAuth){
+  if (adminAuth) {
     var couponCode = req.params.couponCode;
     var rebated = req.query.rebated; // if undefined, show all.
 
     CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated)
       .then(function (orders) {
         res.status = 200;
-        res.send({orders : orders});
+        res.send({orders: orders});
       })
       .catch(next);
-  }else {
+  } else {
     var err = new Error('Only Admin can edit an order');
     err.status = 403;
     next(err);
@@ -33,10 +35,10 @@ var getOrderByOrderIdAndCouponCode = function (req, res, next) {
 
   CouponOrderProxy.getOrderByOrderIdAndCouponCode(orderId, couponCode)
     .then(function (order) {
-      if(typeof order !== 'undefined' && order !== null)
+      if (typeof order !== 'undefined' && order !== null)
         res.send(order);
       else {
-        var err =  new Error('Could not find order ' + orderId + ' under coupon ' + couponCode);
+        var err = new Error('Could not find order ' + orderId + ' under coupon ' + couponCode);
         err.status = 404;
         throw err;
       }
@@ -44,37 +46,50 @@ var getOrderByOrderIdAndCouponCode = function (req, res, next) {
 };
 exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
 
+
+// coupon code is valid && not belong to the user
+// coupon code has a sales code ? => attach a sales ref
+// no sales code? => create a sales code => attach a sales ref
 var createNewCouponOrder = function (req, res, next) {
   var couponCode = req.params.couponCode;
-  
-  CouponProxy.isCouponValid(couponCode)
-    .then(function (couponValid) {
-      if(couponValid) {
-        var couponOrder = req.body;
-        couponOrder.couponCode = couponCode;
+  var username = req.body.username;
+  var couponOrder = req.body;
+
+  if (!username || !couponCode) {
+    var err = new Error('Need to provide both username and couponcode');
+    err.status = 406;
+    next(err);
+  }
+  else {
+    var isCouponBelongToUser = CouponProxy.isCouponBelongToUser(couponCode, username);
+    var isCouponValid = CouponProxy.isCouponValid(couponCode);
+
+    Promise.join(isCouponBelongToUser, isCouponValid, function (belong, valid) {
+      return (!belong && valid);
+    }).then(function (ableToUse) {
+      if (ableToUse)
         return CouponOrderProxy.createNewOrder(couponOrder);
-      }
-      else{
-        var err = new Error( 'coupon code ' + couponCode + ' is not valid.');
+      else {
+        var err = new Error('coupon code ' + couponCode + ' is not valid on user ' + username);
         err.status = 403;
         throw err;
       }
-    })
-    .then(function (createdOrder) {
+    }).then(function (createdOrder) {
       res.status(201);
       res.send(createdOrder);
-    })
-    .catch(function (err) {
+    }).catch(function (err) {
       // MongoError Code
-      if(err.code && err.code === 11000) {
+      if (err.code && err.code === 11000) {
         err.status = 406;
         err.message = 'order ID already exists.';
       }
       next(err);
     });
+  }
 };
 exports.createNewCouponOrder = createNewCouponOrder;
 
+//TODO: update salesRef
 var updateCouponOrder = function (req, res, next) {
   if (req.adminAuth) {
     var couponCode = req.params.couponCode;
@@ -104,7 +119,7 @@ var updateCouponOrder = function (req, res, next) {
       res.status(200);
       res.send();
     }
-  } else{
+  } else {
     var err = new Error('Only Admin can edit an order');
     err.status = 403;
     next(err);
