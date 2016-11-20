@@ -20,7 +20,10 @@ var config = {
       type: 'CASH',
       value: 10
     }
-  }
+  },
+
+  signSecret : 'TEST_ChangeME',
+  tokenExpiresIn: '1h'
 };
 
 if (process.env.NODE_ENV === 'dev' || config.debug == true) {

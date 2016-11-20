@@ -134,12 +134,14 @@ describe('/coupons/{couponCode}/orders', function () {
   });
 
   describe('PUT /{order}', function () {
-    
+
+    var testToken = require('../../common/mockUsers').genTestToken();
+
     it('should update the details of this order', function (done) {
       new CouponOrder(userANonRebatedOrder).save().then(function () {
         var newRebateValue = 50;
         request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
-          .query({rebateValue : newRebateValue, rebated : true})
+          .query({rebateValue : newRebateValue, rebated : true, token: testToken})
           .expect(204)
           .end(function (err) {
             if(err) done(err);
@@ -157,19 +159,25 @@ describe('/coupons/{couponCode}/orders', function () {
     it('should return 404 if order does not exist', function (done) {
       var newRebateValue = 50;
       request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
-        .query({rebateValue : newRebateValue, rebated : true})
+        .query({rebateValue : newRebateValue, rebated : true, token: testToken})
         .expect(404, done);
     });
 
     it('should return 200 if nothing to update', function (done) {
       new CouponOrder(userANonRebatedOrder).save().then(function () {
         request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+          .query({ token : testToken })
           .expect(200, done);
       });
     });
 
-    it.skip('should return 403 if request is not admin auth', function (done) {
-
+    it('should return 403 if request is not admin auth', function (done) {
+      new CouponOrder(userANonRebatedOrder).save().then(function () {
+        var newRebateValue = 50;
+        request.put(path + userACoupon.couponID + '/orders/' + userANonRebatedOrder.orderID)
+          .query({rebateValue : newRebateValue, rebated : true})
+          .expect(403, done);
+      });
     });
   });
 });

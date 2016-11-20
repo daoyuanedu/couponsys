@@ -3,7 +3,6 @@
  *
  * A db proxy for Coupon model
  */
-var Promise = require('bluebird');
 var Coupon = require('../models').Coupon;
 var defaultRules = require('../config.default').defaultCouponRules;
 
@@ -12,16 +11,14 @@ exports.getAllCoupons = function () {
 };
 
 exports.getCouponCodesByUsername = function (username) {
-  //return a Promise
   return Coupon.find({ username : username }, { _id : 0, __v : 0 });
 };
 
-exports.getCouponCodesByCouponCode = function (couponID) {
-  //return a Promise
-  return Coupon.find({ couponID : couponID }, { _id : 0, __v : 0 });
+exports.getCouponByCouponCode = function (couponID) {
+  return Coupon.findOne({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 
-exports.deleteCouponCodesByCouponCode = function (couponID) {
+exports.deleteCouponByCouponCode = function (couponID) {
   return Coupon.findOneAndRemove({ couponID : couponID }, { _id : 0, __v : 0 });
 };
 
@@ -40,7 +37,19 @@ exports.createCouponWithDefaultRulesForSpecifiedUser = function (username, coupo
   return new Coupon(newCoupon).save();
 };
 
-exports.isBelongToUsers = function (couponId, username) {
+exports.createCouponWithRules = function (coupon) {
+  // Is there an elegant way?
+  if(typeof coupon.couponRule === 'undefined') coupon.couponRule = defaultRules.couponRule;
+  if(typeof coupon.couponRule.type === 'undefined' || typeof coupon.couponRule.value === 'undefined')
+    coupon.couponRule = defaultRules.couponRule;
+  if(typeof coupon.rebateRule === 'undefined') coupon.rebateRule = defaultRules.rebateRule;
+  if(typeof coupon.rebateRule.type === 'undefined' || typeof coupon.rebateRule.value === 'undefined')
+    coupon.rebateRule = defaultRules.rebateRule;
+
+  return new Coupon(coupon).save();
+};
+
+exports.isCouponBelongToUser = function (couponId, username) {
   return Coupon.find({ couponID : couponId} ).then (function (coupons){
     return coupons[0].username === username;
   }, function (err) {

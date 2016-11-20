@@ -1,0 +1,36 @@
+<!-- views/pages/coupons.ejs -->
+<!-- The coupons page for coupons will have search/list/add/delete/update UI here -->
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- User head in partials/index.ejs -->
+<head>
+    <% include ../partials/head %>
+</head>
+
+<body>
+
+<!-- User header in partials/header.ejs -->
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+<!-- Main body -->
+    <main class="container">
+        <div class="jumbotron couponTitle">
+            <h1>Operation Error</h1>
+        </div>
+          <div class="alert alert-danger alert-dismissable fade in">
+            <a href="javascript:history.go(-1)" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Warning!</strong> Could not find the result in database by your input: 
+            <strong><%= errorData %></Strong> 
+        </div>
+    </main>
+
+<!-- User footer in partials/footer.ejs -->
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ var config = require('../../config.default');
 var couponOrderData = require('../common/modelCouponOrderTestData');
 var CouponOrder = Models.CouponOrder;
 var Promise = require('bluebird');
-var couponModelproxy = require('../../proxy/CouponOrder.model');
+var couponModelproxy = require('../../proxy/couponOrder.proxy.js');
 
 describe('CouponOrder Model Proxy', function () {
 
