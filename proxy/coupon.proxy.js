@@ -23,9 +23,9 @@ exports.deleteCouponByCouponCode = function (couponID) {
 };
 
 exports.isCouponValid = function (couponId) {
-  return Coupon.find({ couponID : couponId}).then(function (coupons) {
-    if(coupons.length === 0) return false;
-    else return coupons[0].valid;
+  return Coupon.findOne({ couponID : couponId}).then(function (coupon) {
+    if(coupon) return coupon.valid;
+    else return false;
   }, function (err) {
     return err;
   });
@@ -50,8 +50,9 @@ exports.createCouponWithRules = function (coupon) {
 };
 
 exports.isCouponBelongToUser = function (couponId, username) {
-  return Coupon.find({ couponID : couponId} ).then (function (coupons){
-    return coupons[0].username === username;
+  return Coupon.findOne({ couponID : couponId} ).then (function (coupon){
+    if(coupon) return coupon.username === username;
+    else false;
   }, function (err) {
     return err;
   });
@@ -70,6 +71,7 @@ exports.updateOrderByCouponID = function (couponCode, propertiesToUpdate) {
   });
 };
 
+//TODO: boundary check
 exports.getDiscountedValue = function (couponId, orderValue) {
   return Coupon.find({ couponID : couponId} ).then (function (coupons){
     var couponObject = coupons[0];

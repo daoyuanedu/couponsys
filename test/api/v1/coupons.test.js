@@ -9,6 +9,7 @@ var Models = require('../../../models');
 var Coupon = Models.Coupon;
 var config = require('../../../config.default');
 var Promise = require('bluebird');
+var deepcopy= require('deepcopy');
 var couponData = require('../../common/modelCouponTestData');
 var apiTestData = require('../../common/APICouponTestData');
 var should = require('chai').should();
@@ -116,17 +117,9 @@ describe('/api/v1/coupons/', function () {
           new Coupon(userBWithCashRule).save()]);
 
       saveTwoCoupons.then(function () {
-        request.get(path + '13898458461' + '/discount')
+        request.get(path + userAWithPercRule.couponID + '/discount')
           .query({username: 'userA', orderValue: 1000})
-          .expect(500)
-          .expect('Content-Type', /json/)
-          .expect(function (err) {
-            if (err) done();
-            else {
-              err.should.not.equal(null);
-              done();
-            }
-          }).end();
+          .expect(403, done);
       });
     });
 
@@ -138,15 +131,7 @@ describe('/api/v1/coupons/', function () {
       saveTwoCoupons.then(function () {
         request.get(path + '13898458460' + '/discount')
           .query({username: 'userA', orderValue: 1000})
-          .expect(500)
-          .expect('Content-Type', /json/)
-          .expect(function (err) {
-            if (err) done();
-            else {
-              err.should.not.equal(null);
-              done();
-            }
-          }).end();
+          .expect(403, done);
       });
     });
 
@@ -276,6 +261,53 @@ describe('/api/v1/coupons/', function () {
           }
         });
     });
+
+    it('should create a new sales coupon if admin auth', function (done) {
+      var couponWithTokenAndType = deepcopy(apiTestData.userAWithRulesAndToken);
+      couponWithTokenAndType.token = testToken;
+      couponWithTokenAndType.couponType = 'SALES';
+      request.post(path)
+        .send(couponWithTokenAndType)
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if(err) done(err);
+          else {
+            request.get(path + couponWithTokenAndType.mobile)
+              .expect('Content-Type', /json/)
+              .expect(function (res) {
+                var coupon = res.body;
+                coupon.couponType.should.equal('SALES');
+              })
+              .end(done);
+          }
+        });
+    });
+
+    it('should create a normal coupon if no tokend passed in', function (done) {
+      request.post(path)
+        .send({
+          username: apiTestData.userAWithoutRules.username,
+          mobile: apiTestData.userAWithoutRules.mobile
+        })
+        .set('Accept', 'application/json')
+        .expect(201)
+        .end(function (err, res) {
+          if (err) done(err);
+          else {
+            request.get(path + apiTestData.userAWithoutRules.mobile)
+              .expect('Content-Type', /json/)
+              .expect(function (res) {
+                var coupon = res.body;
+                coupon.username.should.equal('userA');
+                coupon.couponType.should.equal('NORMAL');
+              })
+              .end(done);
+          }
+        });
+    });
+
+
 
   });
 

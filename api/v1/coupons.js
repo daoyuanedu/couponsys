@@ -83,7 +83,7 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
   var orderValue = req.query.orderValue;
 
   if(!username || !orderValue) {
-    var err = new Error('Need to provide both username and order');
+    var err = new Error('Need to provide both username and order value');
     err.status = 406;
     next(err);
   } else {
@@ -97,7 +97,9 @@ var getDiscountOrderValueByCouponID = function (req, res, next) {
       if (ableToUse) {
         return getDiscountedValue;
       } else {
-        throw new Error('Invalid CouponCode');
+        var err = new Error('coupon code ' + couponId + ' is not valid on user ' + username);
+        err.status = 403;
+        throw err;
       }
     }).then(function (discountedValue) {
       res.statusCode = 200;

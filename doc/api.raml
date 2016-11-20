@@ -27,9 +27,9 @@ schemas:
               },
               "final" : {
                 "type" : "number"
-              },
-              "required" : ["original", "final"]
-            }
+              }
+            },
+            "required" : ["original", "final"]
           },
           "rebated": {
             "type" : "boolean"
@@ -38,7 +38,7 @@ schemas:
             "type" : "number"
           }
         },
-        "required": ["couponCode", "orderId", "orderValue", "rebated"] 
+        "required": ["couponCode", "orderId", "orderValue", "rebated"]
       }
   - coupon: |
       {
@@ -84,20 +84,27 @@ schemas:
             "valid" : {
               "type" : "boolean",
               "defualt" : true
+            },
+            "couponType" : {
+              "type" : "string",
+              "default" : "NORMAL",
+              "enum" : ["NORMAL", "SALES"]
             }
          },
-         "required": ["couponCode", "username", "couponRule", "rebateRule"]  
+         "required": ["couponCode", "username", "couponRule", "rebateRule", "couponType"]
       }
 /coupons:
   displayName: coupons
-  get:    
+  get:
     description: list all the coupons (admin only)
     queryParameters:
       token:
         required: true
         type: string
   post:
-    description: create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
+    description: |
+     create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
+     New bussiness model utilises coupon as a sales ref, hence, each coupon code has a type to identify if its type. By default, it's normal, with token, client can create other types of coupon, for example: SALES.
     body:
       application/json:
         schema : coupon without coupon code
@@ -251,7 +258,7 @@ schemas:
                   {
                     "orderId" : "guid....",
                     "couponCode" : "test1perc10",
-                     "orderValue" : {
+                    "orderValue" : {
                       "original" : 1000,
                       "final" : 800
                     },
