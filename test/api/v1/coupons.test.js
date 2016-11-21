@@ -35,6 +35,8 @@ describe('/api/v1/coupons/', function () {
   var userAWithPercRule = couponData.userAWithPercRule;
   var userBWithCashRule = couponData.userBWithCashRule;
   var userBWithInvalidCoupon = couponData.userBWithInvalidCoupon;
+  var userAWithInvalidPercRule = couponData.userAWithInvalidPercRule;
+  var userBWithInvalidCashRule = couponData.userBWithInvalidCashRule;
 
   describe('GET', function () {
 
@@ -138,6 +140,46 @@ describe('/api/v1/coupons/', function () {
       saveTwoCoupons.then(function () {
         request.get(path + '13898458460' + '/discount')
           .query({username: 'userA', orderValue: 1000})
+          .expect(500)
+          .expect('Content-Type', /json/)
+          .expect(function (err) {
+            if (err) done();
+            else {
+              err.should.not.equal(null);
+              done();
+            }
+          }).end();
+      });
+    });
+
+    it('should not return a discounted order value for userA by invalid > 100% ruleType', function (done) {
+      var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithInvalidPercRule).save(),
+          new Coupon(userBWithInvalidCashRule).save()]);
+
+      saveTwoCoupons.then(function () {
+        request.get(path + '13898458463' + '/discount')
+          .query({username: 'userA', orderValue: 1000})
+          .expect(500)
+          .expect('Content-Type', /json/)
+          .expect(function (err) {
+            if (err) done();
+            else {
+              err.should.not.equal(null);
+              done();
+            }
+          }).end();
+      });
+    });
+
+    it('should not return a discounted order value for userB by invalid cash ruleType', function (done) {
+      var saveTwoCoupons = Promise.all(
+        [new Coupon(userAWithInvalidPercRule).save(),
+          new Coupon(userBWithInvalidCashRule).save()]);
+
+      saveTwoCoupons.then(function () {
+        request.get(path + '13898458464' + '/discount')
+          .query({username: 'userB', orderValue: 1000})
           .expect(500)
           .expect('Content-Type', /json/)
           .expect(function (err) {

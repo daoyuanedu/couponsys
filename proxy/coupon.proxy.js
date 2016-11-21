@@ -90,6 +90,13 @@ exports.getDiscountedValue = function (couponId, orderValue) {
       dicountedValue = orderValue;
     }
     dicountedValue = parseInt(dicountedValue);
-    return { 'couponID': couponObject.couponID, 'dicountedValue' : dicountedValue };
+    if (dicountedValue < 0) {
+      var err =  new Error('Coupon ' + couponId + ' is invalid.');
+      err.status = 500;       
+      throw err;
+    }
+    else {
+      return { 'couponID': couponObject.couponID, 'dicountedValue' : dicountedValue };
+    }
   });
 };
