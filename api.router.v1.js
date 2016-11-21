@@ -1,8 +1,8 @@
 /**
- * Created by ekinr on 2016/11/3.
- *
- * Routers for API paths
- */
+* Created by ekinr on 2016/11/3.
+*
+* Routers for API paths
+*/
 
 // Dependencies
 var express = require('express');
@@ -43,7 +43,7 @@ router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCoupo
 
 auth.initPassportLocalStrategy();
 router.post('/login',  passport.authenticate('local', { session : false } ),
-  auth.generateAdminToken, auth.sendToken, errorHandler.apiErrorHandler);
+auth.generateAdminToken, auth.sendToken, errorHandler.apiErrorHandler);
 
 //for test purpose
 router.get('/error/api', function (req, res, next) {
