@@ -88,3 +88,17 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+ * Create Server with SSL for the future use
+ * More details: https://nodejs.org/api/tls.html
+ */
+
+// var fs = require('fs');
+// var tls = require('tls');
+// var options = {
+//    key  : fs.readFileSync('server.key'),
+//    cert : fs.readFileSync('server.crt'),
+//    requestCert: true
+// };
+// var server = tls.createServer(options, app);
