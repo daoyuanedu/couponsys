@@ -1,8 +1,8 @@
 /**
-* Created by ekinr on 2016/11/3.
-*
-* Routers for API paths
-*/
+ * Created by ekinr on 2016/11/3.
+ *
+ * Routers for API paths
+ */
 
 // Dependencies
 var express = require('express');
