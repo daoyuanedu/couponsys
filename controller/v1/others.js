@@ -4,6 +4,13 @@ var info = function (req, res) {
 };
 exports.info = info;
 
+// Info
+var login = function (req, res) {
+ res.render('pages/login');
+};
+exports.login = login;
+
+
 
 // Index
 var index = function (req, res) {
