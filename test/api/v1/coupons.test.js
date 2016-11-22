@@ -36,7 +36,7 @@ describe('/api/v1/coupons/', function () {
   var userAWithPercRule = couponData.userAWithPercRule;
   var userBWithCashRule = couponData.userBWithCashRule;
   var userBWithInvalidCoupon = couponData.userBWithInvalidCoupon;
-  var userAWithInvalidPercRule = couponData.userAWithInvalidPercRule;
+  //var userAWithInvalidPercRule = couponData.userAWithInvalidPercRule;
   var userBWithInvalidCashRule = couponData.userBWithInvalidCashRule;
 
   describe('GET', function () {
@@ -90,7 +90,7 @@ describe('/api/v1/coupons/', function () {
           .expect(200)
           .expect('Content-Type', /json/)
           .expect(function (res) {
-            res.body.dicountedValue.should.equal(800);
+            res.body.discountedValue.should.equal(800);
           })
           .end(done);
       }, done);
@@ -107,7 +107,7 @@ describe('/api/v1/coupons/', function () {
           .expect(200)
           .expect('Content-Type', /json/)
           .expect(function (res) {
-            res.body.dicountedValue.should.equal(800);
+            res.body.discountedValue.should.equal(800);
           })
           .end(done);
       }, done);
@@ -128,37 +128,37 @@ describe('/api/v1/coupons/', function () {
     it('should not return a discounted order value for userA by invalid couponID', function (done) {
       var saveTwoCoupons = Promise.all(
         [new Coupon(userAWithPercRule).save(),
-          new Coupon(userBWithInvalidCoupon).save()]);
+          new Coupon(userACouponCash1).save()]);
 
       saveTwoCoupons.then(function () {
         request.get(path + '13898458460' + '/discount')
           .query({username: 'userA', orderValue: 1000})
           .expect(403, done);
-      });
+      }).catch(done);
     });
 
     it('should not return a discounted order value for userA by invalid > 100% ruleType', function (done) {
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithInvalidPercRule).save(),
+        [new Coupon(userACouponPerc1).save(),
           new Coupon(userBWithInvalidCashRule).save()]);
 
       saveTwoCoupons.then(function () {
         request.get(path + '13898458463' + '/discount')
           .query({username: 'userA', orderValue: 1000})
           .expect(403, done);
-      });
+      }).catch(done);
     });
 
     it('should not return a discounted order value for userB by invalid cash ruleType', function (done) {
       var saveTwoCoupons = Promise.all(
-        [new Coupon(userAWithInvalidPercRule).save(),
+        [new Coupon(userACouponPerc1).save(),
           new Coupon(userBWithInvalidCashRule).save()]);
 
       saveTwoCoupons.then(function () {
         request.get(path + '13898458464' + '/discount')
           .query({username: 'userB', orderValue: 1000})
           .expect(403, done);
-      });
+      }).catch(done);
     });
 
   });

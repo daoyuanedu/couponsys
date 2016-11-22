@@ -9,6 +9,8 @@ var Promise = require('bluebird');
 var couponData = require('../common/modelCouponTestData');
 var Coupon = Models.Coupon;
 
+var deepcopy = require('deepcopy');
+var should = require('chai').should();
 describe('Coupon Model', function () {
 
   before(function () {
@@ -109,6 +111,18 @@ describe('Coupon Model', function () {
   it('should only allow permitted rule type', function (done) {
     var invalidCoupon = userCouponWithInvalidType;
     new Coupon(invalidCoupon).save(function (err) {
+      if(err) done();
+      else {
+        err.should.not.equal(null);
+        done();
+      }
+    });
+  });
+
+  it('should not allow rule type percentage with value bigger than 100', function (done) {
+    var coupon = deepcopy(user1Coupon);
+    coupon.couponRule = {type : 'percentage', value : 101};
+    new Coupon(coupon).save(function (err) {
       if(err) done();
       else {
         err.should.not.equal(null);

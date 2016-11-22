@@ -72,7 +72,7 @@ describe('Coupon Model Proxy', function () {
       var discountOrderProxy = CouponProxy.getDiscountedValue(
         userAWithPercRule.couponID, 1000);
       discountOrderProxy.then(function (discountOrder) {
-        discountOrder.dicountedValue.should.equal(800);
+        discountOrder.discountedValue.should.equal(800);
         done();
       }, done);
     });
@@ -86,7 +86,7 @@ describe('Coupon Model Proxy', function () {
       var discountOrderProxy = CouponProxy.getDiscountedValue(
         userBWithCashRule.couponID, 1000);
       discountOrderProxy.then(function (discountOrder) {
-        discountOrder.dicountedValue.should.equal(800);
+        discountOrder.discountedValue.should.equal(800);
         done();
       }, done);
     });
