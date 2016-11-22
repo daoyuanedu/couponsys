@@ -145,5 +145,6 @@ module.exports = {
       final: 4900
     }
   }
+
 };
 

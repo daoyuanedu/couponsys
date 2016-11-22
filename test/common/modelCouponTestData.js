@@ -125,8 +125,8 @@ module.exports = {
       value: 10
     },
     rebateRule: {
-      type: 'CASH',
-      value: 100
+      type: 'PERCENTAGE',
+      value: 10
     },
     valid: true
   },
@@ -199,7 +199,69 @@ module.exports = {
       value: 100
     },
     valid: false
+  },
+
+
+  salesACoupon : {
+    username : 'salesA',
+    couponID : '13445263873',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 50
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 1000
+    },
+    couponType: 'SALES',
+    valid: true
+  },
+
+  salesBCoupon : {
+    username : 'salesB',
+    couponID : '13445263872',
+    couponRule: {
+      type: 'CASH',
+      value: 500
+    },
+    rebateRule: {
+      type: 'PERCENTAGE',
+      value: 20
+    },
+    couponType: 'SALES',
+    valid: true
+  },
+
+  userACouponWithSalesACode : {
+    couponID: '13898458460',
+    username: 'userA',
+    couponRule: {
+      type: 'CASH',
+      value: 200
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: true,
+    salesCode: '13445263873'
+  },
+
+  userBCouponWithSalesACode : {
+    couponID: '13898458462',
+    username: 'userB',
+    couponRule: {
+      type: 'CASH',
+      value: 200
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 100
+    },
+    valid: true,
+    salesCode: '13445263873'
   }
+
 };
 
 

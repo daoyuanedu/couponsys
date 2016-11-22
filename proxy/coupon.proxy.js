@@ -5,6 +5,8 @@
  */
 var Coupon = require('../models').Coupon;
 var defaultRules = require('../config.default').defaultCouponRules;
+var Promise = require('bluebird');
+var logger = require('../common/logger');
 
 exports.getAllCoupons = function () {
   return Coupon.find({}, {_id : 0, __v : 0});
@@ -23,9 +25,9 @@ exports.deleteCouponByCouponCode = function (couponID) {
 };
 
 exports.isCouponValid = function (couponId) {
-  return Coupon.find({ couponID : couponId}).then(function (coupons) {
-    if(coupons.length === 0) return false;
-    else return coupons[0].valid;
+  return Coupon.findOne({ couponID : couponId}).then(function (coupon) {
+    if(coupon) return coupon.valid;
+    else return false;
   }, function (err) {
     return err;
   });
@@ -46,12 +48,14 @@ exports.createCouponWithRules = function (coupon) {
   if(typeof coupon.rebateRule.type === 'undefined' || typeof coupon.rebateRule.value === 'undefined')
     coupon.rebateRule = defaultRules.rebateRule;
 
+
   return new Coupon(coupon).save();
 };
 
 exports.isCouponBelongToUser = function (couponId, username) {
-  return Coupon.find({ couponID : couponId} ).then (function (coupons){
-    return coupons[0].username === username;
+  return Coupon.findOne({ couponID : couponId} ).then (function (coupon){
+    if(coupon) return coupon.username === username;
+    else false;
   }, function (err) {
     return err;
   });
@@ -70,6 +74,7 @@ exports.updateOrderByCouponID = function (couponCode, propertiesToUpdate) {
   });
 };
 
+//TODO: boundary check
 exports.getDiscountedValue = function (couponId, orderValue) {
   return Coupon.find({ couponID : couponId} ).then (function (coupons){
     var couponObject = coupons[0];
@@ -98,5 +103,18 @@ exports.getDiscountedValue = function (couponId, orderValue) {
     else {
       return { 'couponID': couponObject.couponID, 'dicountedValue' : dicountedValue };
     }
+  });
+};
+
+exports.addSalesCodeToCouponsForUser = function (username, salesCode) {
+  return Coupon.find({ username : username}).then(function (coupons) {
+    return Promise.all(coupons.map(function (coupon) {
+      if(coupon.couponType !== 'SALES' && typeof coupon.salesCode === 'undefined')
+        return Coupon.findByIdAndUpdate(coupon._id, { $set : { salesCode : salesCode }});
+      else {
+        logger.info(coupon.username + ' is a sales coupon or has a sales code already therefore will not set the sales code to ' + salesCode);
+        return false;
+      }
+    }));
   });
 };

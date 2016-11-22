@@ -4,6 +4,7 @@
 
 var dbConsts = {
   couponRuleTypes: ['PERCENTAGE', 'CASH'],
+  couponTypes: ['NORMAL', 'SALES'],
   userTypes: ['ADMIN', 'SALES', 'NORMAL']
 };
 
