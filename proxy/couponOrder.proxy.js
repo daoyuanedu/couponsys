@@ -5,12 +5,10 @@
 var CouponOrder = require('../models').CouponOrder;
 
 var totalOrdersByCouponCode = function (couponCode) {
-  var queryPromise = CouponOrder.find({couponID: couponCode});
-  return queryPromise.then(function (coupons) {
-    return coupons.length;
-  }, function (err) {
-    return err;
-  });
+  return CouponOrder.find({couponID: couponCode})
+    .then(function (orders) {
+      return orders.length;
+    });
 };
 exports.totalOrdersByCouponCode = totalOrdersByCouponCode;
 

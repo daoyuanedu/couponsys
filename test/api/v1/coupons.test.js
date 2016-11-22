@@ -145,15 +145,7 @@ describe('/api/v1/coupons/', function () {
       saveTwoCoupons.then(function () {
         request.get(path + '13898458463' + '/discount')
           .query({username: 'userA', orderValue: 1000})
-          .expect(500)
-          .expect('Content-Type', /json/)
-          .expect(function (err) {
-            if (err) done();
-            else {
-              err.should.not.equal(null);
-              done();
-            }
-          }).end();
+          .expect(403, done);
       });
     });
 
@@ -165,15 +157,7 @@ describe('/api/v1/coupons/', function () {
       saveTwoCoupons.then(function () {
         request.get(path + '13898458464' + '/discount')
           .query({username: 'userB', orderValue: 1000})
-          .expect(500)
-          .expect('Content-Type', /json/)
-          .expect(function (err) {
-            if (err) done();
-            else {
-              err.should.not.equal(null);
-              done();
-            }
-          }).end();
+          .expect(403, done);
       });
     });
 
@@ -189,7 +173,7 @@ describe('/api/v1/coupons/', function () {
         })
         .set('Accept', 'application/json')
         .expect(201)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) done(err);
           else {
             request.get(path + '13898458462')
@@ -239,7 +223,7 @@ describe('/api/v1/coupons/', function () {
         .send(apiTestData.userAWithRulesNoToken)
         .set('Accept', 'application/json')
         .expect(201)
-        .end(function (err, res) {
+        .end(function (err) {
           if(err) done(err);
           else {
             request.get(path + apiTestData.userAWithRulesNoToken.mobile)
@@ -263,7 +247,7 @@ describe('/api/v1/coupons/', function () {
         .send(couponWithToken)
         .set('Accept', 'application/json')
         .expect(201)
-        .end(function (err, res) {
+        .end(function (err) {
           if(err) done(err);
           else {
             request.get(path + couponWithToken.mobile)
@@ -287,7 +271,7 @@ describe('/api/v1/coupons/', function () {
         .send(incompleteCouponWithToken)
         .set('Accept', 'application/json')
         .expect(201)
-        .end(function (err, res) {
+        .end(function (err) {
           if(err) done(err);
           else {
             request.get(path + incompleteCouponWithToken.mobile)
@@ -312,7 +296,7 @@ describe('/api/v1/coupons/', function () {
         .send(couponWithTokenAndType)
         .set('Accept', 'application/json')
         .expect(201)
-        .end(function (err, res) {
+        .end(function (err) {
           if(err) done(err);
           else {
             request.get(path + couponWithTokenAndType.mobile)
@@ -334,7 +318,7 @@ describe('/api/v1/coupons/', function () {
         })
         .set('Accept', 'application/json')
         .expect(201)
-        .end(function (err, res) {
+        .end(function (err) {
           if (err) done(err);
           else {
             request.get(path + apiTestData.userAWithoutRules.mobile)
@@ -381,7 +365,7 @@ describe('/api/v1/coupons/', function () {
         request.delete(path + 'userAperc10')
           .query({token : testToken})
           .expect(204)
-          .expect(function (res) {
+          .expect(function () {
             Coupon.count({}, function(err, count){
               count.should.equal(1);
             });
@@ -401,7 +385,7 @@ describe('/api/v1/coupons/', function () {
         request.del(path + 'wrongcode')
           .query({token : testToken})
           //.expect(403)
-          .end(function (err, res) {
+          .end(function (err) {
             if (err) done(err);
             else {
               Coupon.count({}, function (err, count) {

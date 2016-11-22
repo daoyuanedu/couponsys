@@ -77,7 +77,7 @@ describe('/coupons/{couponCode}/orders', function () {
       }).catch(done);
     });
 
-    it.skip('should return all the orders with a linked sales ref to this coupon code', function (done) {
+    it.skip('should return all the orders with a linked sales ref to this coupon code', function () {
 
     });
 
@@ -181,6 +181,7 @@ describe('/coupons/{couponCode}/orders', function () {
             Coupon.find({username: orderUsingSalesACode.username}).then(function (coupons) {
               (coupons.length).should.be.at.least(1);
               coupons.forEach(function (coupon) {
+                (coupon.username).should.equal('userA');
                 (coupon.salesCode).should.equal(salesACoupon.couponID);
               });
               done();
@@ -195,7 +196,7 @@ describe('/coupons/{couponCode}/orders', function () {
           var orderUsingSalesBCode = deepcopy(userACouponOrderPost);
           orderUsingSalesBCode.username = 'userB';
           orderUsingSalesBCode.couponID = salesBCoupon.couponID;
-          request.post(path + salesACoupon.couponID + '/orders')
+          request.post(path + orderUsingSalesBCode.couponID + '/orders')
             .send(orderUsingSalesBCode)
             .set('Accept', 'application/json')
             .expect(201)
@@ -240,7 +241,7 @@ describe('/coupons/{couponCode}/orders', function () {
         }).catch(done);
     });
 
-    it('should a salesRef for the order if the coupon code is a sales code', function (done) {
+    it('should create a salesRef with rebate value 0 (but a correct order rebate value) for the order if the coupon code is a sales code', function (done) {
       var orderUsingSalesACode = deepcopy(userACouponOrderPost);
       orderUsingSalesACode.username = 'userA';
       orderUsingSalesACode.couponID = salesACoupon.couponID;
@@ -257,6 +258,9 @@ describe('/coupons/{couponCode}/orders', function () {
                 orders.forEach(function (order) {
                   (order.salesRef.salesCode).should.equal(salesACoupon.couponID);
                   (order.salesRef.rebateValue).should.equal(0);
+                  (order.salesRef.rebated).should.equal(true);
+                  (order.rebateValue).should.equal(1000);
+                  (order.rebated).should.equal(false);
                   (order.couponID).should.equal(orderUsingSalesACode.couponID);
                 });
                 done();
@@ -265,7 +269,7 @@ describe('/coupons/{couponCode}/orders', function () {
         });
     });
 
-    it('should a salesRef for the order if the coupon has a sales code attach to it', function (done) {
+    it('should create a salesRef for the order if the coupon has a sales code attach to it', function (done) {
       new Coupon(userBCouponWithSalesACode).save()
         .then(function () {
           var userAOrderUsingUserBCoupon = deepcopy(userACouponOrderPost);

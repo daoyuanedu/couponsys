@@ -5,6 +5,8 @@
  */
 var Coupon = require('../models').Coupon;
 var defaultRules = require('../config.default').defaultCouponRules;
+var Promise = require('bluebird');
+var logger = require('../common/logger');
 
 exports.getAllCoupons = function () {
   return Coupon.find({}, {_id : 0, __v : 0});
@@ -45,6 +47,7 @@ exports.createCouponWithRules = function (coupon) {
   if(typeof coupon.rebateRule === 'undefined') coupon.rebateRule = defaultRules.rebateRule;
   if(typeof coupon.rebateRule.type === 'undefined' || typeof coupon.rebateRule.value === 'undefined')
     coupon.rebateRule = defaultRules.rebateRule;
+
 
   return new Coupon(coupon).save();
 };
@@ -100,5 +103,18 @@ exports.getDiscountedValue = function (couponId, orderValue) {
     else {
       return { 'couponID': couponObject.couponID, 'dicountedValue' : dicountedValue };
     }
+  });
+};
+
+exports.addSalesCodeToCouponsForUser = function (username, salesCode) {
+  return Coupon.find({ username : username}).then(function (coupons) {
+    return Promise.all(coupons.map(function (coupon) {
+      if(coupon.couponType !== 'SALES' && typeof coupon.salesCode === 'undefined')
+        return Coupon.findByIdAndUpdate(coupon._id, { $set : { salesCode : salesCode }});
+      else {
+        logger.info(coupon.username + ' is a sales coupon or has a sales code already therefore will not set the sales code to ' + salesCode);
+        return false;
+      }
+    }));
   });
 };
