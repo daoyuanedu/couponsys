@@ -17,7 +17,7 @@ exports.tryAuth = function (req, res, next) {
     jwt.verify(token, signSecret, function(err, decoded) {
       if (err) {
         req.adminAuth = false;
-        logger.error('failed to the authenticate token');
+        logger.error('failed to the authenticate token: ' + token);
         err.status = 403;
         next(err);
       } else {
@@ -61,18 +61,18 @@ exports.initPassportLocalStrategy = function () {
   passport.use(new LocalStrategy(
     function(username, password, done) {
       UserProxy.validateUserWithPassword(username, password)
-        .then(function (user) {
-          if(user) done(null, user);
-          else done(null, false);
-        })
-        .catch(done);
+      .then(function (user) {
+        if(user) done(null, user);
+        else done(null, false);
+      })
+      .catch(done);
     }
   ));
 
   // No session
   /*
   passport.serializeUser(function(user, cb) {
-    cb(null, user);
-  });
-  */
+  cb(null, user);
+});
+*/
 };

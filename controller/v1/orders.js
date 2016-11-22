@@ -23,7 +23,7 @@ var getOrdersByCouponCode = function (req, res, next) {
       res.status(200);
       res.render('modify/orderDetails', 
         {
-          userList: couponCode
+          OrderList: orders
         });
     } else {
       res.status(404);

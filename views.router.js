@@ -24,7 +24,8 @@ router.get('/orders/:couponCode/', Orders.getOrdersByCouponCode);
 
 // Info
 router.get('/info', Others.info);
-
+// Login
+router.get('/login', Others.login);
 
 
 module.exports = router;
