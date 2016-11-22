@@ -5,40 +5,45 @@
 
 <!-- User head in partials/index.ejs -->
 <head>
-    <% include ../partials/head %>
+  <% include ../partials/head %>
 </head>
 
 <body>
 
-<!-- User header in partials/header.ejs -->
-    <header>
-        <% include ../partials/header %>
-    </header>
+  <!-- User header in partials/header.ejs -->
+  <header>
+    <% include ../partials/header %>
+  </header>
 
-<!-- Main body -->
-    <main  class="container userTitle">
-        <div class="jumbotron">
-            <h1>Users</h1>
-            <h4>You can search all coupons for one user</h4>
+  <!-- Main body -->
+  <main  class="container userTitle">
+    <div class="jumbotron">
+      <h1>Users</h1>
+      <h4>You can search all coupons for one user</h4>
 
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="input-group">
-                          <span class="input-group-btn">
-                       <button id="userSearch" class="btn btn-warning" type="button">Search</button>
-                          </span>
-                       <input id="userSearchInput" type="text" class="form-control" placeholder="Input username...">
-                    </div>   
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="input-group">
+            <span class="input-group-btn">
+              <button id="userSearch" class="btn btn-warning" type="button">Search</button>
+            </span>
+            <input id="userSearchInput" type="text" class="form-control" placeholder="Input username...">
+          </div>
+        </div>
+      </div>
+    </div>
 
-    </main>
+    <!-- Edit Coupon in partials/couponEdit.ejs -->
+    <div>
+      <% include ../partials/couponEdit %>
+    </div>
+  </main>
 
 
-<!-- User footer in partials/footer.ejs -->
-    <footer>
-        <% include ../partials/footer %>
-    </footer>
+  <!-- User footer in partials/footer.ejs -->
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
 
 </body>
 </html>
