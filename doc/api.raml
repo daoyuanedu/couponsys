@@ -159,8 +159,8 @@ schemas:
         application/json:
           example: |
             {
-              username : "admin1",
-              password : "adminHash"
+              "username" : "admin1",
+              "password" : "adminHash"
             }
       responses:
         201:
@@ -168,8 +168,8 @@ schemas:
             application/json:
               example: |
                 {
-                  success : true
-                  token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEFkbWluMSIsImlhdCI6MTQ3OTUwMzQ2MCwiZXhwIjoxNDc5NTA3MDYwfQ.p6JQc9ksEI2aQPD3Lw8kepCvHCqcYpM94bpUrs4zotY"
+                  "success" : true,
+                  "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEFkbWluMSIsImlhdCI6MTQ3OTUwMzQ2MCwiZXhwIjoxNDc5NTA3MDYwfQ.p6JQc9ksEI2aQPD3Lw8kepCvHCqcYpM94bpUrs4zotY"
                 }
         401:
           description: Auth failed.
@@ -232,6 +232,12 @@ schemas:
             type: boolean
             default: false
             description: only the total number of orders lined to this coupon code.
+          filter:
+            required: false
+            type: string
+            default: all
+            enum: ["all", "direct", "salesRef"]
+            description: show all orders / only orders using this code / only orders with a sales ref to this code
           token:
             required: true
             type: string
@@ -361,7 +367,7 @@ schemas:
           200:
             body:
               application/json:
-                schema: coupon list
+                schema: a list of coupons
                 example: |
                   {
                     "coupons":

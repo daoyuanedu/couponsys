@@ -3,7 +3,8 @@
  */
 
 // Dependencies
-var should = require('chai').Should();
+var should = require('chai').should();
+var expect = require('chai').expect;
 var app = require('../../../app');
 var request = require('supertest')(app);
 var Models = require('../../../models');
@@ -44,7 +45,7 @@ describe('/coupons/{couponCode}/orders', function () {
   var userACouponOrderPost = require('../../common/modelCouponOrderTestData').postOrderUsingUserACoupon;
 
   var userBCouponWithSalesACode = require('../../common/modelCouponTestData').userBCouponWithSalesACode;
-  var userBCouponWithCashRule= require('../../common/modelCouponTestData').userBWithCashRule;
+  var userBCouponWithCashRule = require('../../common/modelCouponTestData').userBWithCashRule;
   var salesACoupon = require('../../common/modelCouponTestData').salesACoupon;
   var salesBCoupon = require('../../common/modelCouponTestData').salesBCoupon;
 
@@ -77,8 +78,107 @@ describe('/coupons/{couponCode}/orders', function () {
       }).catch(done);
     });
 
-    it.skip('should return all the orders with a linked sales ref to this coupon code', function () {
+    it('should return all the orders with a linked sales ref to this coupon code if filter is not set', function (done) {
+      var orderWithSalesRef = deepcopy(userANonRebatedOrder);
+      orderWithSalesRef.orderID = 'userAOrderWithSalesRef';
+      let rebateValue = 750, rebated = false, salesCode = 'IAMAFAKESALESCODE';
+      orderWithSalesRef.salesRef = {salesCode: salesCode, rebated: rebated, rebateValue: rebateValue};
 
+      var orderUsingSalesCodeDirect = deepcopy(userANonRebatedOrder);
+      orderUsingSalesCodeDirect.orderID = 'userAUSINGSALESCODE';
+      orderUsingSalesCodeDirect.couponID = salesCode;
+
+      Promise.all([new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(),
+        new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
+        .then(function () {
+          request.get(path + salesCode + '/orders')
+            .query({rebated: false})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+              res.body.orders.length.should.equal(2);
+              done();
+            });
+        }).catch(done);
+    });
+
+    it('should return all the orders with a linked sales ref to this coupon code if filter is set to all', function (done) {
+      var orderWithSalesRef = deepcopy(userANonRebatedOrder);
+      orderWithSalesRef.orderID = 'userAOrderWithSalesRef';
+      let rebateValue = 750, rebated = false, salesCode = 'IAMAFAKESALESCODE';
+      orderWithSalesRef.salesRef = {salesCode: salesCode, rebated: rebated, rebateValue: rebateValue};
+
+      var orderUsingSalesCodeDirect = deepcopy(userANonRebatedOrder);
+      orderUsingSalesCodeDirect.orderID = 'userAUSINGSALESCODE';
+      orderUsingSalesCodeDirect.couponID = salesCode;
+
+      Promise.all([new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(),
+        new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
+        .then(function () {
+          request.get(path + salesCode + '/orders')
+            .query({filter : 'all'})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+              res.body.orders.length.should.equal(2);
+              done();
+            });
+        }).catch(done);
+    });
+
+    it('should return only the direct orders if filter set to direct', function (done) {
+      var orderWithSalesRef = deepcopy(userANonRebatedOrder);
+      orderWithSalesRef.orderID = 'userAOrderWithSalesRef';
+      let rebateValue = 750, rebated = false, salesCode = 'IAMAFAKESALESCODE';
+      orderWithSalesRef.salesRef = {salesCode: salesCode, rebated: rebated, rebateValue: rebateValue};
+
+      var orderUsingSalesCodeDirect = deepcopy(userANonRebatedOrder);
+      orderUsingSalesCodeDirect.orderID = 'userAUSINGSALESCODE';
+      orderUsingSalesCodeDirect.couponID = salesCode;
+
+      Promise.all([new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(),
+        new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
+        .then(function () {
+          request.get(path + salesCode + '/orders')
+            .query({filter: 'direct'})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+              res.body.orders.length.should.equal(1);
+              (res.body.orders[0].couponID).should.equal(salesCode);
+              expect(res.body.orders[0].salesRef).to.be.undefined;
+              done();
+            });
+        }).catch(done);
+    });
+
+    it('should return only the sales ref orders if filter set to salesRef', function (done) {
+      var orderWithSalesRef = deepcopy(userANonRebatedOrder);
+      orderWithSalesRef.orderID = 'userAOrderWithSalesRef';
+      let rebateValue = 750, rebated = false, salesCode = 'IAMAFAKESALESCODE';
+      orderWithSalesRef.salesRef = {salesCode: salesCode, rebated: rebated, rebateValue: rebateValue};
+
+      var orderUsingSalesCodeDirect = deepcopy(userANonRebatedOrder);
+      orderUsingSalesCodeDirect.orderID = 'userAUSINGSALESCODE';
+      orderUsingSalesCodeDirect.couponID = salesCode;
+
+      Promise.all([new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(),
+        new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
+        .then(function () {
+          request.get(path + salesCode + '/orders')
+            .query({filter: 'salesref'})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) return done(err);
+              res.body.orders.length.should.equal(1);
+              (res.body.orders[0].salesRef).should.eql(orderWithSalesRef.salesRef);
+              done();
+            });
+        }).catch(done);
     });
 
   });
@@ -252,7 +352,7 @@ describe('/coupons/{couponCode}/orders', function () {
         .end(function (err) {
           if (err) done(err);
           else {
-            CouponOrder.find({orderID : orderUsingSalesACode.orderID, 'salesRef.salesCode': salesACoupon.couponID})
+            CouponOrder.find({orderID: orderUsingSalesACode.orderID, 'salesRef.salesCode': salesACoupon.couponID})
               .then(function (orders) {
                 (orders.length).should.be.at.least(1);
                 orders.forEach(function (order) {
@@ -282,7 +382,10 @@ describe('/coupons/{couponCode}/orders', function () {
             .end(function (err) {
               if (err) done(err);
               else {
-                CouponOrder.find({orderID : userAOrderUsingUserBCoupon.orderID, 'salesRef.salesCode': salesACoupon.couponID})
+                CouponOrder.find({
+                  orderID: userAOrderUsingUserBCoupon.orderID,
+                  'salesRef.salesCode': salesACoupon.couponID
+                })
                   .then(function (orders) {
                     (orders.length).should.be.at.least(1);
                     orders.forEach(function (order) {
