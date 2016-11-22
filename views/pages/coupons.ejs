@@ -48,7 +48,7 @@
 
         <!-- List All Coupon Code -->
         <% CouponList.forEach(function(coupon) { %>
-          <a class="list-group-item">
+          <a href="/views/coupons/<%= coupon.couponID %>"class="list-group-item">
             <h4 id="couponItem"><%= coupon.couponID %></h4>
             <h4><%= coupon.username %></h4>
             <h4><%= coupon.valid %></h4>
