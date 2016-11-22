@@ -7,20 +7,37 @@ var logger = require('../../common/logger');
 var Promise = require('bluebird');
 
 var getOrdersByCouponCode = function (req, res, next) {
-  var adminAuth = req.adminAuth;
 
+  var buildSearchPipe = function () {
+    var couponCode = req.params.couponCode;
+    var rebated = req.query.rebated; // if undefined, show all.
+    var filter = req.query.filter;
+
+    if (typeof filter === 'undefined') filter = 'all';
+    else filter = filter.toLowerCase();
+
+    if (filter === 'direct')
+      return CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated);
+    else if (filter === 'salesref')
+      return CouponOrderProxy.getOrdersBySalesCode(couponCode, rebated);
+    else return Promise.join(CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated),
+        CouponOrderProxy.getOrdersBySalesCode(couponCode, rebated), function (directOrders, salesRefOrders) {
+          if (directOrders && salesRefOrders)
+            return directOrders.concat(salesRefOrders);
+          else if (directOrders) return directOrders;
+          else if (salesRefOrders) return salesRefOrders;
+        });
+  };
+
+  var adminAuth = req.adminAuth;
   adminAuth = true; // TODO do we want auth?
 
   if (adminAuth) {
-    var couponCode = req.params.couponCode;
-    var rebated = req.query.rebated; // if undefined, show all.
 
-    CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated)
-      .then(function (orders) {
-        res.status = 200;
-        res.send({orders: orders});
-      })
-      .catch(next);
+    buildSearchPipe().then(function (orders) {
+      res.status = 200;
+      res.send({orders: orders});
+    }).catch(next);
   } else {
     var err = new Error('Only Admin can edit an order');
     err.status = 403;
@@ -49,20 +66,20 @@ exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
 
 var calcuateRebate = function (rebateRule, orderValue) {
   var rebateValue = 0;
-  if(typeof rebateRule.type === 'undefined' || typeof rebateRule.value === 'undefined') {
+  if (typeof rebateRule.type === 'undefined' || typeof rebateRule.value === 'undefined') {
     logger.error('rebate rule has undefined properties (either type or value)');
   }
-  else if(rebateRule.type === 'PERCENTAGE') rebateValue = orderValue * rebateRule.value / 100;
+  else if (rebateRule.type === 'PERCENTAGE') rebateValue = orderValue * rebateRule.value / 100;
   else if (rebateRule.type == 'CASH') rebateValue = rebateRule.value;
   else {
     logger.error('Invalid rebate rule type ' + rebateRule.type);
     rebateValue = 0;
   }
-  if(rebateValue > orderValue){
-    logger.info('rebate value is ' + rebateValue + ' bigger than the order value '  + orderValue + ' set it back to order value');
+  if (rebateValue > orderValue) {
+    logger.info('rebate value is ' + rebateValue + ' bigger than the order value ' + orderValue + ' set it back to order value');
     rebateValue = orderValue;
   }
-  return {rebated : false, rebateValue : rebateValue};
+  return {rebated: false, rebateValue: rebateValue};
 };
 
 // coupon code is valid && not belong to the user
@@ -85,7 +102,7 @@ var createNewCouponOrder = function (req, res, next) {
     Promise.join(isCouponBelongToUser, isCouponValid, function (belong, valid) {
       return (!belong && valid);
     }).then(function (ableToUse) {
-      if (ableToUse){
+      if (ableToUse) {
         return CouponProxy.getCouponByCouponCode(couponCode);
       }
       else {
@@ -100,14 +117,14 @@ var createNewCouponOrder = function (req, res, next) {
       couponOrder.rebateValue = rebate.rebateValue;
 
       var salesRef = null;
-      if(coupon.couponType === 'SALES') {
+      if (coupon.couponType === 'SALES') {
         //using sales coupon as coupon directly do not count as a sales ref
         //salesRef = calcuateRebate(coupon.rebateRule, couponOrder.orderValue.final);
-        salesRef = { rebated : true, rebateValue: 0 };
+        salesRef = {rebated: true, rebateValue: 0};
         salesRef.salesCode = coupon.couponID;
         return salesRef;
       }
-      else if(coupon.salesCode) {
+      else if (coupon.salesCode) {
         return CouponProxy.getCouponByCouponCode(coupon.salesCode)
           .then(function (salesCoupon) {
             salesRef = calcuateRebate(salesCoupon.rebateRule, couponOrder.orderValue.final);
@@ -117,7 +134,7 @@ var createNewCouponOrder = function (req, res, next) {
       } else return salesRef; //null
 
     }).then(function (salesRef) {
-      if(salesRef) {
+      if (salesRef) {
         couponOrder.salesRef = salesRef;
         return Promise.join(CouponProxy.addSalesCodeToCouponsForUser(username, salesRef.salesCode),
           CouponOrderProxy.createNewOrder(couponOrder), function (updatedCoupons, createdOrder) {

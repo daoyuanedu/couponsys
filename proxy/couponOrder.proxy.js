@@ -21,6 +21,15 @@ var getOrdersByCouponCode = function (couponCode, rebated) {
 };
 exports.getOrdersByCouponCode = getOrdersByCouponCode;
 
+var getOrdersBySalesCode = function (salesCode, rebated) {
+  if(typeof rebated !== 'undefined' )
+    return CouponOrder.find({'salesRef.rebated' : rebated, 'salesRef.salesCode': salesCode },{_id : 0, __v : 0});
+  else
+    return CouponOrder.find({'salesRef.salesCode': salesCode}, {_id : 0, __v : 0});
+};
+exports.getOrdersBySalesCode = getOrdersBySalesCode;
+
+
 var getOrderByOrderIdAndCouponCode = function (orderId, couponCode) {
   return CouponOrder.findOne({couponID : couponCode, orderID : orderId}, {_id : 0, __v : 0});
 };

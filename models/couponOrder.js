@@ -7,7 +7,7 @@ var salesRefSchema = mongoose.Schema({
   salesCode : {required : true, type : String},
   rebated : {required : true, type: Boolean, default : false},
   rebateValue : { type: Number, default : 0}
-});
+}, { _id : false });
 
 //TODO: original >= final; rebateValue < final, salesRef.rebateValue < final, final >= 0
 var couponOrderSchema = mongoose.Schema({
