@@ -12,9 +12,15 @@ $(document).ready(function(){
       {
         var token = data.token;
         document.cookie = 'x-access-token=' + token;
-        alert('Get Cookie: ' + getCookie('x-access-token'));
+        $("#logInfo").html(
+        "<h2 id='logInfo'>Welcome Amdin</h2>"
+        );
+        alert('Get Cookie: ' + getCookieByName('x-access-token'));
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
+        $("#logInfo").html(
+        "<h2 id='logInfo'>Wrong Amdin</h2>"
+        );
         alert("Not found this admin user");
       }
     });
@@ -24,35 +30,17 @@ $(document).ready(function(){
 
 // Click sign up button to sign up
 $(document).ready(function(){
-  $('#signup-action').click(function() {
+  $('#logout-action').click(function() {
     document.cookie = 'x-access-token='
-    alert('Cookie x-access-token has been removed: ' + getCookie('x-access-token'));
-    // $.ajax({
-    //        type: "GET",
-    //        url: getCouponsUrl,
-    //        beforeSend: function(xhr)
-    //        {
-    //           xhr.setRequestHeader('x-access-token', getCookie('x-access-token'));
-    //        },
-    //        success: function(data)
-    //        {
-    //        }
-    //      });
+    $("#logInfo").html(
+      "<h2 id='logInfo'>Please Log In</h2>"
+    );
+    alert('Cookie x-access-token has been removed: ' + getCookieByName('x-access-token'));
   });
 });
-// Get cookie by name
 
-function getCookie(cname) {
-  var name = cname + "=";
-  var ca = document.cookie.split(';');
-  for(var i = 0; i <ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length,c.length);
-    }
-  }
-  return "";
-}
+//  Use below in request to send token
+//        beforeSend: function(xhr)
+//        {
+//           xhr.setRequestHeader('x-access-token', getCookie('x-access-token'));
+//        },

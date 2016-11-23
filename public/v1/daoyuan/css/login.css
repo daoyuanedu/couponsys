@@ -4,6 +4,11 @@
     text-shadow: 4px 4px 4px #aaa;
 }
 
+.loginTitle h2 {
+    font-family: 'Open Sans', sans-serif;
+    text-shadow: 1px 1px 1px #aaa;
+}
+
 .loginForm input[type=text], input[type=password] {
     width: 100%;
     padding: 1% 2%;
