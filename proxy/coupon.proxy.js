@@ -28,8 +28,6 @@ exports.isCouponValid = function (couponId) {
   return Coupon.findOne({ couponID : couponId}).then(function (coupon) {
     if(coupon) return coupon.valid;
     else return false;
-  }, function (err) {
-    return err;
   });
 };
 
@@ -55,9 +53,7 @@ exports.createCouponWithRules = function (coupon) {
 exports.isCouponBelongToUser = function (couponId, username) {
   return Coupon.findOne({ couponID : couponId} ).then (function (coupon){
     if(coupon) return coupon.username === username;
-    else false;
-  }, function (err) {
-    return err;
+    else return false;
   });
 };
 
@@ -74,34 +70,33 @@ exports.updateOrderByCouponID = function (couponCode, propertiesToUpdate) {
   });
 };
 
-//TODO: boundary check
 exports.getDiscountedValue = function (couponId, orderValue) {
   return Coupon.find({ couponID : couponId} ).then (function (coupons){
     var couponObject = coupons[0];
     var ruleType = couponObject.couponRule.type;
     var ruleValue = couponObject.couponRule.value;
-    var dicountedValue = 0 ;
+    var discountedValue = 0 ;
  
     if (ruleType === 'PERCENTAGE')
     {
-      dicountedValue = orderValue * (100 - ruleValue) / 100;
+      discountedValue = orderValue * (100 - ruleValue) / 100;
     }
     else if (ruleType === 'CASH') 
     {
-      dicountedValue = orderValue - ruleValue;
+      discountedValue = orderValue - ruleValue;
     }
     else
     {
-      dicountedValue = orderValue;
+      discountedValue = orderValue;
     }
-    dicountedValue = parseInt(dicountedValue);
-    if (dicountedValue < 0) {
+    discountedValue = parseInt(discountedValue);
+    if (discountedValue < 0) {
       var err =  new Error('Coupon ' + couponId + ' is invalid.');
       err.status = 500;       
       throw err;
     }
     else {
-      return { 'couponID': couponObject.couponID, 'dicountedValue' : dicountedValue };
+      return { 'couponID': couponObject.couponID, 'discountedValue' : discountedValue };
     }
   });
 };

@@ -51,7 +51,7 @@ describe('CouponOrder Model Proxy', function () {
   it('getOrdersBySalesCode should get orders by its sales code and other filters', function (done) {
 
     var orderWithSalesRef = deepcopy(couponOrderNormal);
-    orderWithSalesRef.salesRef = {salesCode: 'IAMASALESCODE', rebated: false, rebateValue: 1000};
+    orderWithSalesRef.salesRef = {salesCode: 'IAMASALESCODE', rebated: false, rebateValue: 800};
 
     new CouponOrder(orderWithSalesRef).save()
       .then(function () {
@@ -66,7 +66,7 @@ describe('CouponOrder Model Proxy', function () {
             return;
           })
           .then(function () {
-            return CouponOrderProxy.getOrdersBySalesCode(orderWithSalesRef.salesRef.salesCode, true)
+            return CouponOrderProxy.getOrdersBySalesCode(orderWithSalesRef.salesRef.salesCode, true);
           })
           .then(function (orders) {
             orders.length.should.equal(0);
@@ -78,7 +78,7 @@ describe('CouponOrder Model Proxy', function () {
   it('getOrdersBySalesCode should only return the orders with the sales code ref', function (done) {
     var orderWithSalesRef = deepcopy(couponOrderNormal);
     orderWithSalesRef.orderID = 'SOMETHINGDIFFERENT';
-    orderWithSalesRef.salesRef = {salesCode: 'IAMASALESCODE', rebated: false, rebateValue: 1000};
+    orderWithSalesRef.salesRef = {salesCode: 'IAMASALESCODE', rebated: false, rebateValue: 800};
 
     var threeSaves = Promise.all([new CouponOrder(couponOrderNormal).save(), new CouponOrder(couponOrderWithSameCouponID).save()], new CouponOrder(orderWithSalesRef).save());
     threeSaves.then(function () {
@@ -93,7 +93,7 @@ describe('CouponOrder Model Proxy', function () {
           return;
         })
         .then(function () {
-          return CouponOrderProxy.getOrdersBySalesCode(couponOrderNormal.couponID)
+          return CouponOrderProxy.getOrdersBySalesCode(couponOrderNormal.couponID);
         })
         .then(function (orders) {
           orders.length.should.equal(0);
