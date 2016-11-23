@@ -3,7 +3,7 @@ var config = require('./config.default');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var logger = require('./common/logger');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
@@ -29,15 +29,9 @@ app.use('/views/',  viewRouter);
 var logDirectory = path.join(__dirname, 'logs');
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 
-// create a rotating write stream
-var accessLogStream = FileStreamRotator.getStream({
-  date_format: 'YYYYMMDD',
-  filename: path.join(logDirectory, 'access-%DATE%.log'),
-  frequency: 'daily',
-  verbose: false
-});
-app.use(logger('combined', { stream : accessLogStream}));
-if(config.debug) app.use(logger('dev'));
+var morgan = require('morgan');
+app.use(morgan('combined', { stream : logger.stream}));
+if(config.debug) app.use(morgan('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
