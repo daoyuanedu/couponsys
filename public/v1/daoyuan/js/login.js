@@ -3,10 +3,10 @@
 // Click login button to get token if the user is admin
 $(document).ready(function(){
   if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') ==='') {
-
     // Need More function for this;
-    alert("Please Log In");
-  } else {
+    // alert("Please Log In");
+  }
+  else {
     $("#login-action").hide();
     $("#logInfo").html(
       "<h2 id='logInfo'>Welcome Admin</h2>"
@@ -26,14 +26,14 @@ $(document).ready(function(){
         }
         console.log(document.cookie);
         $("#logInfo").html(
-        "<h2 id='logInfo'>Welcome Admin</h2>"
+          "<h2 id='logInfo'>Welcome Admin</h2>"
         );
         $("#login-action").hide();
         //location.replace(document.referrer);
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         $("#logInfo").html(
-        "<h2 id='logInfo'>Wrong Amdin</h2>"
+          "<h2 id='logInfo'>Wrong Amdin</h2>"
         );
         alert("Not found this admin user");
         console.log(document.cookie);
