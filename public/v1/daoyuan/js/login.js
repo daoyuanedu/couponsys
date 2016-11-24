@@ -28,6 +28,9 @@ $(document).ready(function(){
         $("#logInfo").html(
           "<h2 id='logInfo'>Welcome Admin</h2>"
         );
+        $('#loginHeader').html(
+          "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Welcome Admin </a>"
+        );
         $("#login-action").hide();
         //location.replace(document.referrer);
       },
@@ -50,6 +53,11 @@ $(document).ready(function(){
     $("#logInfo").html(
       "<h2 id='logInfo'>Please Log In</h2>"
     );
+
+    $('#loginHeader').html(
+      "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Log In / Out </a>"
+    );
+    
     $("#login-action").show();
     console.log(document.cookie);
   });

@@ -19,7 +19,7 @@
   <main class="container">
     <div class="jumbotron couponTitle">
       <h1>Coupons</h1>
-      <h4>You can find all coupons in below list !</h4>
+      <h4>Please login to find all coupons and use search function!</h4>
 
       <div class="row">
         <div class="col-lg-8">
@@ -40,33 +40,11 @@
       <% include ../partials/couponEdit %>
     </div>
 
-    <div class="couponList">
-      <ul class="list-group">
-        <li class="list-group-item list-group-item-info">
-          <h4> CouponCode </h4>
-          <h4> Username </h4>
-          <h4> Valid </h4>
-          <h4> Coupon Rule </h4>
-          <h4> Rebate Rule </h4>
-
-        </li>
-
-        <!-- List All Coupon Code -->
-        <% CouponList.forEach(function(coupon) { %>
-          <li class="list-group-item">
-            <h4 id="couponItem"><%= coupon.couponID %></h4>
-            <h4><%= coupon.username %></h4>
-            <h4><%= coupon.valid %></h4>
-            <h4><%= coupon.couponRule.type %> <%= coupon.couponRule.value %></h4>
-            <h4><%= coupon.rebateRule.type %> <%= coupon.rebateRule.value %></h4>
-            <a href="/views/coupons/<%= coupon.couponID %>">
-            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a>
-          </li>
-        <% }); %>
-
-      </ul>
-
+    <!-- Show CouponList in partials/couponList.ejs -->
+    <div>
+      <% include ../partials/couponList %>
     </div>
+    
   </main>
 
     <!-- User footer in partials/footer.ejs -->

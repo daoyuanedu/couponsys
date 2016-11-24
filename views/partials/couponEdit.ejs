@@ -135,6 +135,7 @@
         <% } %>
 
         <!-- Update Coupon -->
+      <% if (typeof CouponList === 'undefined' || CouponList === null) { %>
 
         <div class="panel panel-warning">
           <div class="panel-heading">
@@ -162,7 +163,13 @@
                     <div class="form-group">
                       <label class="control-label col-sm-2">Username:</label>
                       <div class="col-sm-10">
+
+                      <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                      <input type="text" class="form-control" id="update-username" value="<%= coupon.username %>">
+                      <% } else { %>
                         <input type="text" class="form-control" id="update-username" placeholder="Input Update/Default Username" required>
+                      <% } %>
+
                       </div>
                     </div>
 
@@ -170,6 +177,9 @@
                       <label class="control-label col-sm-2">Valid: </label>
                       <div class="col-sm-10">
                         <select class="form-control" id="update-valid" required>
+                          <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                          <option><%= coupon.valid %></option>
+                          <% } %>
                           <option>true</option>
                           <option>false</option>
                         </select>
@@ -178,9 +188,12 @@
                     <br>
 
                     <div class="form-group">
-                      <label class="control-label col-sm-2">CouponRuleType:</label>
+                      <label class="control-label col-sm-2">Coupon Rule Type:</label>
                       <div class="col-sm-10">
                         <select class="form-control" id="update-coupon-rule-type" required>
+                          <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                          <option><%= coupon.couponRule.type %></option>
+                          <% } %>
                           <option>CASH</option>
                           <option>PERCENTAGE</option>
                         </select>
@@ -190,14 +203,22 @@
                     <div class="form-group">
                       <label class="control-label col-sm-2">Coupon Rule Value:</label>
                       <div class="col-sm-10">
+                      <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                      <input type="text" class="form-control" id="update-coupon-rule-value" value="<%= coupon.couponRule.value %>">
+                      <% } else { %>
                         <input type="text" class="form-control" id="update-coupon-rule-value" placeholder="Input Update/Default Coupon Rule value" required>
+                      <% } %>
+
                       </div>
                     </div>
                     <br>
                     <div class="form-group">
-                      <label class="control-label col-sm-2">CouponRuleType:</label>
+                      <label class="control-label col-sm-2">Rebate Rule Type:</label>
                       <div class="col-sm-10">
                         <select class="form-control" id="update-rebate-rule-type" required>
+                          <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                          <option><%= coupon.rebateRule.type %></option>
+                          <% } %>
                           <option>CASH</option>
                           <option>PERCENTAGE</option>
                         </select>
@@ -207,7 +228,12 @@
                     <div class="form-group">
                       <label class="control-label col-sm-2">Rebate Rule Value:</label>
                       <div class="col-sm-10">
+                      <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                      <input type="text" class="form-control" id="update-rebate-rule-value" value="<%= coupon.rebateRule.value %>">
+                      <% } else { %>
                         <input type="text" class="form-control" id="update-rebate-rule-value" placeholder="Input Update/Defaulte Rebate Rule Value" required?
+                       <% } %>
+
                       </div>
                     </div>
 
@@ -232,3 +258,4 @@
 
           </div>
         </div>
+                        <% } %>
