@@ -31,39 +31,38 @@
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="orderList">
-      <ul class="list-group">
-        <li class="list-group-item list-group-item-info">
-          <h4> CouponID </h4>
-          <h4> Rebated </h4>
-          <h4> Rebate Value </h4>
-          <h4> Order Value </h4>
-          <h4> OrderID </h4>
+      <div class="orderList">
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-info">
+            <h4> CouponID </h4>
+            <h4> Rebated </h4>
+            <h4> Rebate Value </h4>
+            <h4> Order Value </h4>
+            <h4> OrderID </h4>
 
 
-        </li>
+          </li>
 
-        <!-- List All Orders -->
-        <% OrderList.forEach(function(order) { %>
-          <a class="list-group-item">
-            <h4><%= order.couponID %></h4>
-            <h4><%= order.rebated %></h4>
-            <h4><%= order.rebateValue %></h4>
-            <h4><%= order.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= order.orderValue.final %></h4>
-            <h4><%= order.orderID %></h4>
-          </a>
-          <% }); %>
-        </ul>
+          <!-- List All Orders -->
+          <% OrderList.forEach(function(order) { %>
+            <a class="list-group-item">
+              <h4><%= order.couponID %></h4>
+              <h4><%= order.rebated %></h4>
+              <h4><%= order.rebateValue %></h4>
+              <h4><%= order.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= order.orderValue.final %></h4>
+              <h4><%= order.orderID %></h4>
+            </a>
+            <% }); %>
+          </ul>
 
-      </div>
-    </main>
+        </div>
+      </main>
 
-    <!-- User footer in partials/footer.ejs -->
-    <footer>
-      <% include ../partials/footer %>
-    </footer>
+      <!-- User footer in partials/footer.ejs -->
+      <footer>
+        <% include ../partials/footer %>
+      </footer>
 
-  </body>
-  </html>
+    </body>
+    </html>

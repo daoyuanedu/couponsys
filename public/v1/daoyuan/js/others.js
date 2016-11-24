@@ -26,18 +26,6 @@ $(document).ready(function(){
 $(document).ready(function(){
   $('#signup-action').click(function() {
     document.cookie = 'x-access-token='
-    alert('Cookie x-access-token has been removed: ' + getCookie('x-access-token'));
-    // $.ajax({
-    //        type: "GET",
-    //        url: getCouponsUrl,
-    //        beforeSend: function(xhr)
-    //        {
-    //           xhr.setRequestHeader('x-access-token', getCookie('x-access-token'));
-    //        },
-    //        success: function(data)
-    //        {
-    //        }
-    //      });
   });
 });
 // Get cookie by name

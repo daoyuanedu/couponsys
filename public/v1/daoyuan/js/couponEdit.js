@@ -1,7 +1,6 @@
 // ------------- Function JS -----------------
 
 // Click Button to delete Coupon
-
 $(document).ready(function(){
   $('#deleteCouponForm').submit(function( event ) {
     var couponID = $("#delete-couponCode").val();
@@ -16,7 +15,7 @@ $(document).ready(function(){
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
       success: function(data, textStatus, xhr)
-      { 
+      {
         alert("Have delete coupen: " + couponID);
         location.reload();
       },
@@ -47,12 +46,12 @@ $(document).ready(function(){
     };
 
     var data = {
-     username: $('#update-username').val(),
-     couponRule: couponRule,
-     rebateRule: rebateRule,
-     valid: $('#update-valid').val()
+      username: $('#update-username').val(),
+      couponRule: couponRule,
+      rebateRule: rebateRule,
+      valid: $('#update-valid').val()
     };
-    
+
     console.log(data);
     $.ajax({
       type: "PUT",
@@ -64,7 +63,7 @@ $(document).ready(function(){
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
       success: function(data, textStatus, xhr)
-      { 
+      {
         alert("Have updated coupen: " + couponID);
         location.reload();
       },
@@ -94,13 +93,13 @@ $(document).ready(function(){
     };
 
     var data = {
-     mobile: mobile,
-     username: $('#add-username').val(),
-     couponRule: couponRule,
-     rebateRule: rebateRule,
-     valid: $('#add-valid').val()
+      mobile: mobile,
+      username: $('#add-username').val(),
+      couponRule: couponRule,
+      rebateRule: rebateRule,
+      valid: $('#add-valid').val()
     };
-    
+
     console.log(data);
     $.ajax({
       type: "POST",
@@ -112,7 +111,7 @@ $(document).ready(function(){
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
       success: function(data, textStatus, xhr)
-      { 
+      {
         alert("Have create coupen for mobile: " + mobile);
         location.reload();
       },
