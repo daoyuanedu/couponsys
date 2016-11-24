@@ -55,7 +55,6 @@ $(document).ready(function(){
      rebateRule: rebateRule,
      valid: $('#update-valid').val()
     };
-    
     console.log(data);
     $.ajax({
       type: "PUT",
@@ -67,7 +66,8 @@ $(document).ready(function(){
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
       success: function(data, textStatus, xhr)
-      { 
+      {
+        debugger;
         alert("Have updated coupen: " + couponID);
         console.log(xhr.status + getCookieByName('x-access-token'));
         location.reload();
