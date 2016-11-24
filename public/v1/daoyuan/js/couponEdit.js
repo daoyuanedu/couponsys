@@ -1,7 +1,6 @@
 // ------------- Function JS -----------------
 
 // Click Button to delete Coupon
-
 $(document).ready(function(){
   $('#deleteCouponForm').submit(function( event ) {
     var couponID = $("#delete-couponCode").val();
@@ -16,24 +15,21 @@ $(document).ready(function(){
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
       success: function(data, textStatus, xhr)
-      { 
+      {
         alert("Have delete coupen: " + couponID);
-        console.log(xhr.status + getCookieByName('x-access-token'));
         location.reload();
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
-          alert("Please Login");
-          //location.replace('/views/login/');
+          $('#deleteCouponForm').append(showLoginAlert());
         }
-        console.log(XMLHttpRequest.status);
       }
     });
     event.preventDefault();
   });
 });
 
-// Click Button to delete Coupon
+// Click Button to Update Coupon
 
 $(document).ready(function(){
   $('#updateCouponForm').submit(function( event ) {
@@ -50,12 +46,12 @@ $(document).ready(function(){
     };
 
     var data = {
-     username: $('#update-username').val(),
-     couponRule: couponRule,
-     rebateRule: rebateRule,
-     valid: $('#update-valid').val()
+      username: $('#update-username').val(),
+      couponRule: couponRule,
+      rebateRule: rebateRule,
+      valid: $('#update-valid').val()
     };
-    
+
     console.log(data);
     $.ajax({
       type: "PUT",
@@ -67,17 +63,64 @@ $(document).ready(function(){
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
       success: function(data, textStatus, xhr)
-      { 
+      {
         alert("Have updated coupen: " + couponID);
-        console.log(xhr.status + getCookieByName('x-access-token'));
         location.reload();
       },
       error: function(XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
-          alert("Please Login");
-          //location.replace('/views/login/');
+          $('#updateCouponForm').append(showLoginAlert());
         }
-        console.log(XMLHttpRequest.status);
+      }
+    });
+    event.preventDefault();
+  });
+});
+
+// Click Button to Add Coupon
+$(document).ready(function(){
+  $('#addCouponForm').submit(function( event ) {
+    var postUrl = "../../api/v1/coupons/";
+
+    var mobile = parseInt($("#add-couponCode").val());
+    var couponRule = {
+      type: $('#add-coupon-rule-type').val(),
+      value: parseInt($('#add-coupon-rule-value').val())
+    };
+    var rebateRule = {
+      type: $('#add-rebate-rule-type').val(),
+      value: parseInt($('#add-rebate-rule-value').val())
+    };
+
+    var data = {
+      mobile: mobile,
+      username: $('#add-username').val(),
+      couponRule: couponRule,
+      rebateRule: rebateRule,
+      valid: $('#add-valid').val()
+    };
+
+    console.log(data);
+    $.ajax({
+      type: "POST",
+      url: postUrl,
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      beforeSend: function(xhr)
+      {
+        xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
+      },
+      success: function(data, textStatus, xhr)
+      {
+        alert("Have create coupen for mobile: " + mobile);
+        location.reload();
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown) {
+        if(XMLHttpRequest.status === 403) {
+          $('#addCouponForm').append(showLoginAlert());
+        } else if(XMLHttpRequest.status === 406) {
+          $('#addCouponForm').append(showWarningMessage(JSON.parse(XMLHttpRequest.responseText).message));
+        }
       }
     });
     event.preventDefault();

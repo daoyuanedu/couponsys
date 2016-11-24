@@ -31,17 +31,22 @@ var saveToUITest = function () {
   couponOrder.remove({});
   user.remove({});
 
-  new coupon(couponData.userACouponPerc1).save();
-  new coupon(couponData.userACouponCash1).save();
-  new coupon(couponData.user1Coupon).save();
-  new coupon(couponData.userAWithPercRule).save();
-  new coupon(couponData.userBWithCashRule).save();
-  new coupon(couponData.userBWithInvalidCoupon).save();
+
+  new coupon(couponData.userBCouponWithSalesACode).save();
+  new coupon(couponData.userACouponWithSalesACode).save();
+  new coupon(couponData.salesBCoupon).save();
+  new coupon(couponData.salesACoupon).save();
+
 
   new couponOrder(couponOrderData.orderUsingUserACouponCash1Rebated).save();
   new couponOrder(couponOrderData.orderUsingUserACouponCash1NotRebated).save();
   new couponOrder(couponOrderData.couponOrderNormal).save();
   new couponOrder(couponOrderData.couponOrderWithSameCouponID).save();
+
+  new couponOrder(couponOrderData.orderUsingUserACouponCash1NotRebated).save();
+  new couponOrder(couponOrderData.orderUsingUserACouponCash1Rebated).save();
+  new couponOrder(couponOrderData.postOrderUsingUserACoupon).save();
+
 
   new user(userData.testAdmin1).save();
 };
