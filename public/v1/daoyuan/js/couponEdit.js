@@ -10,6 +10,7 @@ $(document).ready(function(){
       type: "Delete",
       url: deleteUrl,
       data: $('#deleteCouponForm').serialize(),
+      contentType: "application/json",
       beforeSend: function(xhr)
       {
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
@@ -41,11 +42,11 @@ $(document).ready(function(){
 
     var couponRule = {
       type: $('#update-coupon-rule-type').val(),
-      value: $('#update-coupon-rule-value').val()
+      value: parseInt($('#update-coupon-rule-value').val())
     };
     var rebateRule = {
       type: $('#update-rebate-rule-type').val(),
-      value: $('#update-rebate-rule-value').val()
+      value: parseInt($('#update-rebate-rule-value').val())
     };
 
     var data = {
@@ -59,7 +60,8 @@ $(document).ready(function(){
     $.ajax({
       type: "PUT",
       url: putUrl,
-      data: data,
+      data: JSON.stringify(data),
+      contentType: "application/json",
       beforeSend: function(xhr)
       {
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
