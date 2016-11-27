@@ -227,6 +227,7 @@ schemas:
             required: true
             default: false
             type: boolean
+            description: leave out for all orders
           showTotalNum:
             required: false
             type: boolean
@@ -241,6 +242,16 @@ schemas:
           token:
             required: true
             type: string
+          since:
+              required: false
+              type: string
+              description: list orders since this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+              example: 2016-11-27
+          until:
+              required: false
+              type: string
+              description: list orders up to this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+              example: 2015-03-25T12:00:00
       post:
         description: link an order with this coupon, and return the discounted order for verification
         body:
@@ -346,6 +357,27 @@ schemas:
       body:
         application/json:
           schema: couponOrder
+    get:
+      description: get all the orders with filters applied.
+      queryParameters:
+        token:
+          required: true
+          type: string
+          description: token for admin auth.
+        rebated:
+          required: false
+          type: boolean
+        since:
+            required: false
+            type: string
+            description: list orders since this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+            example: 2016-11-27
+        until:
+            required: false
+            type: string
+            description: list orders up to this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+            example: 2015-03-25T12:00:00
+
     /{orderId}:
       displayName: orderId
       get:
