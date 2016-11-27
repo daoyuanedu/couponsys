@@ -102,4 +102,40 @@ describe('CouponOrder Model Proxy', function () {
     });
   });
 
+  it('getOrders should return accept a valid since and until date filter', function (done) {
+    var t1 = new Date();
+    var t2;
+    new CouponOrder(couponOrderNormal).save()
+      .then(function () {
+        t2 = new Date();
+        return new CouponOrder(couponOrderWithSameCouponID).save();
+      })
+      .then(function () {
+        return CouponOrderProxy.getOrders(null, new Date());
+      })
+      .then(function (orders) {
+        (orders.length).should.equal(0);
+        return CouponOrderProxy.getOrders(null, t1);
+      })
+      .then(function (orders) {
+        (orders.length).should.equal(2);
+        //orders[0].orderID.should.eql(couponOrderNormal.orderID);
+        return CouponOrderProxy.getOrders(null, null, t1);
+      })
+      .then(function (orders) {
+        (orders.length).should.equal(0);
+        return CouponOrderProxy.getOrders(null, t1, t2);
+      })
+      .then(function (orders) {
+        (orders.length).should.equal(1);
+        orders[0].orderID.should.eql(couponOrderNormal.orderID);
+        return CouponOrderProxy.getOrders(null, t2, new Date());
+      })
+      .then(function (orders) {
+        (orders.length).should.equal(1);
+        orders[0].orderID.should.eql(couponOrderWithSameCouponID.orderID);
+        done();
+      });
+  });
+
 });

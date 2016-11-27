@@ -14,9 +14,9 @@ mongoose.connect(config.db, {
 });
 
 // models
-require('./coupon');
-require('./couponOrder');
-require('./user');
+require('./coupon.model');
+require('./couponOrder.model');
+require('./user.model');
 
 exports.Coupon = mongoose.model('Coupon');
 exports.CouponOrder = mongoose.model('CouponOrder');

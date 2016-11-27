@@ -16,6 +16,17 @@ var deepcopy = require('deepcopy');
 
 // API path 
 var path = ('/api/v1/coupons/');
+var testToken = require('../../common/mockUsers').genTestToken();
+// Test Sample Data
+var userACoupon = require('../../common/modelCouponTestData').userACouponCash1;
+var userARebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated;
+var userANonRebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated;
+var userACouponOrderPost = require('../../common/modelCouponOrderTestData').postOrderUsingUserACoupon;
+
+var userBCouponWithSalesACode = require('../../common/modelCouponTestData').userBCouponWithSalesACode;
+var userBCouponWithCashRule = require('../../common/modelCouponTestData').userBWithCashRule;
+var salesACoupon = require('../../common/modelCouponTestData').salesACoupon;
+var salesBCoupon = require('../../common/modelCouponTestData').salesBCoupon;
 
 describe('/coupons/{couponCode}/orders', function () {
 
@@ -38,22 +49,12 @@ describe('/coupons/{couponCode}/orders', function () {
       }).catch(done);
   });
 
-  // Test Sample Data
-  var userACoupon = require('../../common/modelCouponTestData').userACouponCash1;
-  var userARebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1Rebated;
-  var userANonRebatedOrder = require('../../common/modelCouponOrderTestData').orderUsingUserACouponCash1NotRebated;
-  var userACouponOrderPost = require('../../common/modelCouponOrderTestData').postOrderUsingUserACoupon;
-
-  var userBCouponWithSalesACode = require('../../common/modelCouponTestData').userBCouponWithSalesACode;
-  var userBCouponWithCashRule = require('../../common/modelCouponTestData').userBWithCashRule;
-  var salesACoupon = require('../../common/modelCouponTestData').salesACoupon;
-  var salesBCoupon = require('../../common/modelCouponTestData').salesBCoupon;
-
   describe('GET', function () {
 
     it('should return all the orders used this particular coupon code', function (done) {
       Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
         request.get(path + userACoupon.couponID + '/orders')
+          .query({token : testToken})
           .expect('Content-Type', /json/)
           .expect(200)
           .end(function (err, res) {
@@ -67,7 +68,7 @@ describe('/coupons/{couponCode}/orders', function () {
     it('should only return non-rebated orders if rebated is set to false in the query param', function (done) {
       Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
         request.get(path + userACoupon.couponID + '/orders')
-          .query({rebated: false})
+          .query({rebated: false, token : testToken})
           .expect('Content-Type', /json/)
           .expect(200)
           .end(function (err, res) {
@@ -92,7 +93,7 @@ describe('/coupons/{couponCode}/orders', function () {
         new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
         .then(function () {
           request.get(path + salesCode + '/orders')
-            .query({rebated: false})
+            .query({rebated: false, token : testToken})
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
@@ -117,7 +118,7 @@ describe('/coupons/{couponCode}/orders', function () {
         new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
         .then(function () {
           request.get(path + salesCode + '/orders')
-            .query({filter : 'all'})
+            .query({filter : 'all', token : testToken})
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
@@ -142,7 +143,7 @@ describe('/coupons/{couponCode}/orders', function () {
         new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
         .then(function () {
           request.get(path + salesCode + '/orders')
-            .query({filter: 'direct'})
+            .query({filter: 'direct', token : testToken})
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
@@ -169,7 +170,7 @@ describe('/coupons/{couponCode}/orders', function () {
         new CouponOrder(orderWithSalesRef).save()], new CouponOrder(orderUsingSalesCodeDirect).save())
         .then(function () {
           request.get(path + salesCode + '/orders')
-            .query({filter: 'salesref'})
+            .query({filter: 'salesref', token : testToken})
             .expect('Content-Type', /json/)
             .expect(200)
             .end(function (err, res) {
@@ -429,8 +430,6 @@ describe('/coupons/{couponCode}/orders', function () {
 
   describe('PUT /{order}', function () {
 
-    var testToken = require('../../common/mockUsers').genTestToken();
-
     it('should update the details of this order', function (done) {
       new CouponOrder(userANonRebatedOrder).save().then(function () {
         var newRebateValue = 50;
@@ -474,4 +473,140 @@ describe('/coupons/{couponCode}/orders', function () {
       });
     });
   });
+
+});
+
+describe('/coupons/orders', function () {
+
+  before(function (done) {
+    config.debug.should.equal(true);
+    config.db.should.equal('mongodb://127.0.0.1/daoyuanedu_dev');
+    done();
+  });
+
+  beforeEach(function (done) {
+    Coupon.remove({})
+      .then(function () {
+        return Promise.all([new Coupon(userACoupon).save(),
+          new Coupon(salesACoupon).save(),
+          new Coupon(salesBCoupon).save(),
+          CouponOrder.remove({})]);
+      })
+      .then(function () {
+        done();
+      }).catch(done);
+  });
+
+  describe('GET', function () {
+
+    it('should not get any orders if not admin authenticated', function (done) {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
+        request.get(path +'orders')
+          .expect(403, done);
+      }).catch(done);
+    });
+
+    it('should get all the orders if admin authenticated and no filters applied', function (done) {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
+      }).catch(done);
+      request.get(path +'orders')
+        .query({token : testToken})
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .expect(function (res) {
+          (res.body.orders.length).should.equal(2);
+        }).end(done);
+    });
+
+    it('should respect the rebated query param', function (done) {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
+        request.get(path +'orders')
+          .query({token : testToken, rebated : false})
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .expect(function (res) {
+            (res.body.orders.length).should.equal(1);
+            (res.body.orders[0].orderID).should.equal(userANonRebatedOrder.orderID);
+          }).end(done);
+      }).catch(done);
+    });
+
+    it('should respect the since and until query params', function (done) {
+      var oldDate = '2016-11-27';
+      var now = new Date();
+      var tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      new CouponOrder(userARebatedOrder).save()
+        .then(function () {
+          return new CouponOrder(userANonRebatedOrder).save();
+        })
+        .then(function () {
+          request.get(path + 'orders')
+            .query({token: testToken, since: oldDate})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) done(err);
+              else {
+                (res.body.orders.length).should.equal(2);
+                return;
+              }
+            });
+        })
+        .then(function () {
+          request.get(path + 'orders')
+            .query({token: testToken, since: oldDate , until: now.toISOString().substring(0, 10)})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) done(err);
+              else {
+                (res.body.orders.length).should.equal(0);
+                return;
+              }
+            });
+        })
+        .then(function () {
+          request.get(path + 'orders')
+            .query({token: testToken, since: oldDate , until: tomorrow.toISOString().substring(0, 10)})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) done(err);
+              else {
+                (res.body.orders.length).should.equal(2);
+                return;
+              }
+            });
+        })
+        .then(function () {
+          request.get(path + 'orders')
+            .query({token: testToken, since: tomorrow.toISOString().substring(0, 10)})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end(function (err, res) {
+              if (err) done(err);
+              else {
+                (res.body.orders.length).should.equal(0);
+                done();
+              }
+            });
+        })
+        .catch(done);
+    });
+  });
+
+  describe('GET /{orderId}', function() {
+    it('should get order by its order Id', function (done) {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
+        request.get(path +'orders/' + userARebatedOrder.orderID)
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .expect(function (res) {
+            (res.body.orderID).should.equal(userARebatedOrder.orderID);
+          }).end(done);
+      }).catch(done);
+    });
+  });
+
 });

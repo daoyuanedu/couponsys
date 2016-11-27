@@ -13,27 +13,53 @@ var totalOrdersByCouponCode = function (couponCode) {
 exports.totalOrdersByCouponCode = totalOrdersByCouponCode;
 
 
-var getOrdersByCouponCode = function (couponCode, rebated) {
-  if(typeof rebated !== 'undefined' )
-    return CouponOrder.find({couponID : couponCode, rebated : rebated},{_id : 0, __v : 0});
-  else
-    return CouponOrder.find({couponID: couponCode}, {_id : 0, __v : 0});
+var buildOrderQueries = function (couponCode, salesCode, rebated, since, until) {
+  var queries = {};
+
+  if(typeof couponCode !== 'undefined' && couponCode !== null)
+    queries.couponID = couponCode;
+
+  if(typeof salesCode !== 'undefined' && salesCode !== null){
+    queries['salesRef.salesCode'] = salesCode;
+  }
+
+  if(typeof rebated !== 'undefined' && rebated !== null){
+    if(typeof queries['salesRef.salesCode']  !== 'undefined')
+      queries['salesRef.rebated'] = rebated;
+    else queries.rebated = rebated;
+  }
+  if(since instanceof Date) {
+    if(typeof queries.createdAt === 'undefined')
+      queries.createdAt = {};
+    queries.createdAt.$gte = since;
+  }
+
+  if(until instanceof Date){
+    if(typeof queries.createdAt === 'undefined')
+      queries.createdAt = {};
+    queries.createdAt.$lt = until;
+  }
+  return queries;
+};
+
+
+var getOrdersByCouponCode = function (couponCode, rebated, since, until) {
+  return CouponOrder.find(buildOrderQueries(couponCode, null, rebated, since, until), {_id : 0, __v : 0});
 };
 exports.getOrdersByCouponCode = getOrdersByCouponCode;
 
-var getOrdersBySalesCode = function (salesCode, rebated) {
-  if(typeof rebated !== 'undefined' )
-    return CouponOrder.find({'salesRef.rebated' : rebated, 'salesRef.salesCode': salesCode },{_id : 0, __v : 0});
-  else
-    return CouponOrder.find({'salesRef.salesCode': salesCode}, {_id : 0, __v : 0});
+var getOrdersBySalesCode = function (salesCode, rebated, since, until) {
+  return CouponOrder.find(buildOrderQueries(null, salesCode, rebated, since, until), {_id : 0, __v : 0});
 };
 exports.getOrdersBySalesCode = getOrdersBySalesCode;
 
 
-var getOrderByOrderIdAndCouponCode = function (orderId, couponCode) {
-  return CouponOrder.findOne({couponID : couponCode, orderID : orderId}, {_id : 0, __v : 0});
+var getOrderByOrderId = function (orderId, couponCode) {
+  var queries = {orderID : orderId};
+  if(couponCode) queries.couponID = couponCode;
+  return CouponOrder.findOne(queries, {_id : 0, __v : 0});
 };
-exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
+exports.getOrderByOrderId = getOrderByOrderId;
 
 var createNewOrder = function (couponOrder) {
   return new CouponOrder(couponOrder).save();
@@ -56,7 +82,7 @@ var updateOrderByOrderIdAndCouponCode = function (orderId, couponCode, propertie
 exports.updateOrderByOrderIdAndCouponCode = updateOrderByOrderIdAndCouponCode;
 
 
-var getAllOrders = function () {
-  return CouponOrder.find({}, {_id : 0, __v : 0});
+var getOrders = function (rebated, since, until) {
+  return CouponOrder.find(buildOrderQueries(null, null, rebated, since, until), {_id : 0, __v : 0});
 };
-exports.getAllOrders = getAllOrders;
+exports.getOrders = getOrders;

@@ -10,18 +10,18 @@ var getOrdersByCouponCode = function (req, res, next) {
 
   var buildSearchPipe = function () {
     var couponCode = req.params.couponCode;
-    var rebated = req.query.rebated; // if undefined, show all.
     var filter = req.query.filter;
 
     if (typeof filter === 'undefined') filter = 'all';
     else filter = filter.toLowerCase();
 
     if (filter === 'direct')
-      return CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated);
+      return CouponOrderProxy.getOrdersByCouponCode(couponCode, req.orderRebated, req.orderSince, req.orderUntil);
     else if (filter === 'salesref')
-      return CouponOrderProxy.getOrdersBySalesCode(couponCode, rebated);
-    else return Promise.join(CouponOrderProxy.getOrdersByCouponCode(couponCode, rebated),
-        CouponOrderProxy.getOrdersBySalesCode(couponCode, rebated), function (directOrders, salesRefOrders) {
+      return CouponOrderProxy.getOrdersBySalesCode(couponCode, req.orderRebated, req.orderSince, req.orderUntil);
+    else return Promise.join(CouponOrderProxy.getOrdersByCouponCode(couponCode, req.orderRebated, req.orderSince, req.orderUntil),
+        CouponOrderProxy.getOrdersBySalesCode(couponCode, req.orderRebated, req.orderSince, req.orderUntil),
+        function (directOrders, salesRefOrders) {
           if (directOrders && salesRefOrders)
             return directOrders.concat(salesRefOrders);
           else if (directOrders) return directOrders;
@@ -30,12 +30,9 @@ var getOrdersByCouponCode = function (req, res, next) {
   };
 
   var adminAuth = req.adminAuth;
-  adminAuth = true; // TODO do we want auth?
-
   if (adminAuth) {
-
     buildSearchPipe().then(function (orders) {
-      res.status = 200;
+      res.status(200);
       res.send({orders: orders});
     }).catch(next);
   } else {
@@ -50,7 +47,7 @@ var getOrderByOrderIdAndCouponCode = function (req, res, next) {
   var couponCode = req.params.couponCode;
   var orderId = req.params.orderId;
 
-  CouponOrderProxy.getOrderByOrderIdAndCouponCode(orderId, couponCode)
+  CouponOrderProxy.getOrderByOrderId(orderId, couponCode)
     .then(function (order) {
       if (typeof order !== 'undefined' && order !== null)
         res.send(order);
@@ -61,10 +58,25 @@ var getOrderByOrderIdAndCouponCode = function (req, res, next) {
       }
     }).catch(next);
 };
-exports.getOrderByOrderIdAndCouponCode = getOrderByOrderIdAndCouponCode;
+exports.getOrderByOrderId = getOrderByOrderIdAndCouponCode;
 
+var getOrderByOrderId = function (req, res, next) {
+  var orderId = req.params.orderId;
 
-var calcuateRebate = function (rebateRule, orderValue) {
+  CouponOrderProxy.getOrderByOrderId(orderId)
+    .then(function (order) {
+      if (typeof order !== 'undefined' && order !== null)
+        res.send(order);
+      else {
+        var err = new Error('Could not find order ' + orderId);
+        err.status = 404;
+        throw err;
+      }
+    }).catch(next);
+};
+exports.getOrderByOrderId = getOrderByOrderId;
+
+var calculateRebate = function (rebateRule, orderValue) {
   var rebateValue = 0;
   if (typeof rebateRule.type === 'undefined' || typeof rebateRule.value === 'undefined') {
     logger.error('rebate rule has undefined properties (either type or value)');
@@ -112,7 +124,7 @@ var createNewCouponOrder = function (req, res, next) {
       }
     }).then(function (coupon) {
 
-      var rebate = calcuateRebate(coupon.rebateRule, couponOrder.orderValue.final);
+      var rebate = calculateRebate(coupon.rebateRule, couponOrder.orderValue.final);
       couponOrder.rebated = rebate.rebated;
       couponOrder.rebateValue = rebate.rebateValue;
 
@@ -127,7 +139,7 @@ var createNewCouponOrder = function (req, res, next) {
       else if (coupon.salesCode) {
         return CouponProxy.getCouponByCouponCode(coupon.salesCode)
           .then(function (salesCoupon) {
-            salesRef = calcuateRebate(salesCoupon.rebateRule, couponOrder.orderValue.final);
+            salesRef = calculateRebate(salesCoupon.rebateRule, couponOrder.orderValue.final);
             salesRef.salesCode = coupon.salesCode;
             return salesRef;
           });
@@ -194,3 +206,18 @@ var updateCouponOrder = function (req, res, next) {
   }
 };
 exports.updateCouponOrder = updateCouponOrder;
+
+var getOrders = function (req, res, next) {
+  if(req.adminAuth){
+    CouponOrderProxy.getOrders(req.orderRebated, req.orderSince, req.orderUntil)
+      .then(function (orders) {
+        res.status(200);
+        res.send({orders : orders});
+      }).catch(next);
+  } else {
+    var err = new Error('Only Admin can list all orders');
+    err.status = 403;
+    next(err);
+  }
+};
+exports.getOrders = getOrders;
