@@ -4,10 +4,7 @@ var CouponProxy = require('../../proxy/coupon.proxy');
 var getCouponsList = function (req, res) {
   CouponProxy.getAllCoupons().then(function (coupons) {
     res.status(200);
-    res.render('pages/coupons',
-      {
-        CouponList: coupons
-      });
+    res.render('pages/coupons');
   });
 };
 exports.getCouponsList = getCouponsList;
@@ -19,15 +16,15 @@ var getCouponByCouponCode = function (req, res, next) {
     if (coupon !== null) {
       res.status(200);
       res.render('modify/couponDetails',
-        {
-          coupon: coupon
-        });
+      {
+        coupon: coupon
+      });
     } else {
       res.status(404);
       res.render('partials/noFoundError',
-        {
-          errorData: couponID
-        });
+      {
+        errorData: couponID
+      });
     }
   }).catch(next);
 };

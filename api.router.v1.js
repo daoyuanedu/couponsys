@@ -12,6 +12,7 @@ var coupon = require('./api/v1/coupons');
 var couponOrder = require('./api/v1/coupons.order');
 var auth = require('./middlewares/auth');
 var couponCodeGenerator = require('./middlewares/couponCodeGenerator');
+var orderQueryParser = require('./middlewares/orderQueryParser');
 var errorHandler = require('./middlewares/errorHandler');
 
 var passport = require('passport');
@@ -27,6 +28,10 @@ router.get('/info', info);
 router.get('/user/:username', user.getCouponCodesByUser, errorHandler.apiErrorHandler);
 router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser, errorHandler.apiErrorHandler);
 
+//Coupons/orders
+router.get('/orders', auth.tryAuth, orderQueryParser.parseOrderFilters, couponOrder.getOrders, errorHandler.apiErrorHandler);
+router.get('/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderId, errorHandler.apiErrorHandler);
+
 // Coupons api
 router.get('/', auth.tryAuth, coupon.getCouponsList, errorHandler.apiErrorHandler);
 router.post('/', auth.tryAuth, couponCodeGenerator.useMobileAsCode, coupon.createCouponForUser, errorHandler.apiErrorHandler);
@@ -36,14 +41,15 @@ router.put('/:couponID', auth.tryAuth, coupon.updateCoupon, errorHandler.apiErro
 router.get('/:couponID/discount', coupon.getDiscountOrderValueByCouponID, errorHandler.apiErrorHandler);
 
 // Coupons/Order api
-router.get('/:couponCode/orders', auth.tryAuth, couponOrder.getOrdersByCouponCode, errorHandler.apiErrorHandler);
+router.get('/:couponCode/orders', auth.tryAuth, orderQueryParser.parseOrderFilters, couponOrder.getOrdersByCouponCode, errorHandler.apiErrorHandler);
 router.post('/:couponCode/orders', couponOrder.createNewCouponOrder, errorHandler.apiErrorHandler);
-router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderIdAndCouponCode, errorHandler.apiErrorHandler);
+router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderId, errorHandler.apiErrorHandler);
 router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCouponOrder, errorHandler.apiErrorHandler);
+
 
 auth.initPassportLocalStrategy();
 router.post('/login',  passport.authenticate('local', { session : false } ),
-  auth.generateAdminToken, auth.sendToken, errorHandler.apiErrorHandler);
+auth.generateAdminToken, auth.sendToken, errorHandler.apiErrorHandler);
 
 //for test purpose
 router.get('/error/api', function (req, res, next) {

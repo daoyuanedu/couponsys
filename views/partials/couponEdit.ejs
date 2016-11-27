@@ -1,0 +1,303 @@
+<!-- views/partials/couponEdit.ejs -->
+<div class="panel-group couponEdit" id="accordion-editCoupon">
+
+  <!-- Delete Coupon -->
+
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion-editCoupon" href="#collapse-delete">Delete Coupon</a>
+      </h4>
+    </div>
+    <div id="collapse-delete" class="panel-collapse collapse">
+      <div class="panel-body">
+        <form class="form-horizontal" id="deleteCouponForm">
+          <div class="form-group">
+
+            <label class="control-label col-sm-2">CouponCode:</label>
+            <div class="col-sm-10">
+
+              <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                <input type="text" class="form-control" id="delete-couponCode" required value="<%= coupon.couponID %>">
+                <% } else { %>
+                  <input type="text" class="form-control" id="delete-couponCode" placeholder="Input CouponCode" required>
+                  <% } %>
+
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <div class="checkbox">
+                    <label><input type="checkbox" required> Click to confirm <strong>DELETE</strong></label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-danger" id="btn-delete-coupon">Delete Coupon</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add New Coupon -->
+
+      <% if (typeof coupon === 'undefined' || coupon === null) { %>
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion-editCoupon" href="#collapse-add">Add New Coupon</a>
+            </h4>
+          </div>
+          <div id="collapse-add" class="panel-collapse collapse" >
+            <div class="panel-body">
+
+              <form class="form-horizontal" id="addCouponForm">
+                <div class="form-group">
+                  <label class="control-label col-sm-2">CouponCode:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="add-couponCode" placeholder="Input Mobile Number" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Username:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="add-username" placeholder="Input Username">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Valid: </label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="add-valid" required>
+                      <option>true</option>
+                      <option>false</option>
+                    </select>
+                  </div>
+                </div>
+                <br>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">CouponType: </label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="add-couponType" required>
+                      <option>NORMAL</option>
+                      <option>SALES</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">SalesCode:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="add-salesCode" placeholder="Input Sales Code...Ignore this if the type is SALES">
+                  </div>
+                </div>
+                <br>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">CouponRuleType:</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="add-coupon-rule-type" required>
+                      <option>CASH</option>
+                      <option>PERCENTAGE</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Coupon Rule Value:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="add-coupon-rule-value" placeholder="Input Coupon Rule value" required>
+                  </div>
+                </div>
+                <br>
+                <div class="form-group">
+                  <label class="control-label col-sm-2">CouponRuleType:</label>
+                  <div class="col-sm-10">
+                    <select class="form-control" id="add-rebate-rule-type" required>
+                      <option>CASH</option>
+                      <option>PERCENTAGE</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label col-sm-2">Rebate Rule Value:</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="add-rebate-rule-value" placeholder="Input Rebate Rule Value" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <div class="checkbox">
+                      <label><input type="checkbox" required> Click to confirm <strong>Add</strong></label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-success" id="btn-add-coupon">Create Coupon</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+        <!-- Update Coupon -->
+        <div class="panel panel-warning">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a data-toggle="collapse" data-parent="#accordion-editCoupon" href="#collapse-update">Update Coupon</a>
+            </h4>
+          </div>
+          <div id="collapse-update" class="panel-collapse collapse">
+            <div class="panel-body">
+
+              <form class="form-horizontal" id="updateCouponForm">
+                <div class="form-group">
+                  <label class="control-label col-sm-2">CouponCode:</label>
+                  <div class="col-sm-10">
+
+                    <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                      <input type="text" class="form-control" id="update-couponCode" value="<%= coupon.couponID %>" readonly>
+                      <% } else { %>
+                        <input type="text" class="form-control" id="update-couponCode" placeholder="Input Existence CouponCode" required>
+                        <% } %>
+
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label col-sm-2">Username:</label>
+                      <div class="col-sm-10">
+
+                        <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                          <input type="text" class="form-control" id="update-username" value="<%= coupon.username %>">
+                          <% } else { %>
+                            <input type="text" class="form-control" id="update-username" placeholder="Input Update/Default Username" required>
+                            <% } %>
+
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="control-label col-sm-2">Valid: </label>
+                          <div class="col-sm-10">
+                            <select class="form-control" id="update-valid" required>
+                              <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                <option><%= coupon.valid %></option>
+                                <% } %>
+                                <option>true</option>
+                                <option>false</option>
+                              </select>
+                            </div>
+                          </div>
+                          <br>
+
+                          <div class="form-group">
+                            <label class="control-label col-sm-2">CouponType: </label>
+                            <div class="col-sm-10">
+                              <select class="form-control" id="update-couponType" required>
+                                <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                  <option><%= coupon.couponType %></option>
+                                  <% } %>
+                                  <option>NORMAL</option>
+                                  <option>SALES</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
+                              <label class="control-label col-sm-2">SalesCode:</label>
+                              <div class="col-sm-10">
+
+                                <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                  <input type="text" class="form-control" id="update-salesCode" value="<%= coupon.salesCode %>" placeholder="Input Sales Code...Ignore this if the type is SALES">
+                                  <% } else { %>
+                                    <input type="text" class="form-control" id="update-salesCode" placeholder="Input Sales Code...Ignore this if the type is normal">
+                                    <% } %>
+
+                                  </div>
+                                </div>
+                                <br>
+
+                                <div class="form-group">
+                                  <label class="control-label col-sm-2">Coupon Rule Type:</label>
+                                  <div class="col-sm-10">
+                                    <select class="form-control" id="update-coupon-rule-type" required>
+                                      <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                        <option><%= coupon.couponRule.type %></option>
+                                        <% } %>
+                                        <option>CASH</option>
+                                        <option>PERCENTAGE</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label class="control-label col-sm-2">Coupon Rule Value:</label>
+                                    <div class="col-sm-10">
+                                      <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                        <input type="text" class="form-control" id="update-coupon-rule-value" value="<%= coupon.couponRule.value %>">
+                                        <% } else { %>
+                                          <input type="text" class="form-control" id="update-coupon-rule-value" placeholder="Input Update/Default Coupon Rule value" required>
+                                          <% } %>
+
+                                        </div>
+                                      </div>
+                                      <br>
+                                      <div class="form-group">
+                                        <label class="control-label col-sm-2">Rebate Rule Type:</label>
+                                        <div class="col-sm-10">
+                                          <select class="form-control" id="update-rebate-rule-type" required>
+                                            <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                              <option><%= coupon.rebateRule.type %></option>
+                                              <% } %>
+                                              <option>CASH</option>
+                                              <option>PERCENTAGE</option>
+                                            </select>
+                                          </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label class="control-label col-sm-2">Rebate Rule Value:</label>
+                                          <div class="col-sm-10">
+                                            <% if (typeof coupon !== 'undefined' && coupon !== null) { %>
+                                              <input type="text" class="form-control" id="update-rebate-rule-value" value="<%= coupon.rebateRule.value %>">
+                                              <% } else { %>
+                                                <input type="text" class="form-control" id="update-rebate-rule-value" placeholder="Input Update/Defaulte Rebate Rule Value" required?
+                                                <% } %>
+
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <div class="col-sm-offset-2 col-sm-10">
+                                                <div class="checkbox">
+                                                  <label><input type="checkbox" required> Click to confirm <strong>UPDATE</strong></label>
+                                                </div>
+                                              </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                              <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="submit" class="btn btn-warning" id="btn-update-coupon">Update Coupon</button>
+                                              </div>
+                                            </div>
+                                          </form>
+
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                  </div>
+                                </div>

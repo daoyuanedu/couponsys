@@ -2,27 +2,26 @@
 
 // Click Search button to search special CouponCode
 $(document).ready(function(){
-    $("#couponSearch").click(function(){
-    	var couponCode = $("#couponSearchInput").val();
-    	var currentUrl = window.location.href;
-    	var targetUrl = currentUrl + '/' + couponCode;
+  $("#couponSearch").click(function(){
+    var couponCode = $("#couponSearchInput").val();
+    var currentUrl = window.location.href;
+    var targetUrl = currentUrl + '/' + couponCode;
 
-    	if (couponCode === '' ) alert("Please Input CouponCode");
-    	else window.location.href = targetUrl;
-    });
+    if (couponCode === '' ) {
+      $('.couponTitle').append(showWarningMessage("Please Input CouponCode"));
+    } else {
+      window.location.href = targetUrl;
+    }
+  });
 });
 
-
-// TODO Click eidt button to edit special CouponCode
+// Modify couponList get or hide basid on the cookie
 $(document).ready(function(){
-    $(".couponItemButton").click(function(){
-    	// var couponCode = $("#couponItem").val();
-    	// alert(couponCode + "--");
-    	// var currentUrl = window.location.href;
-    	// var targetUrl = currentUrl + '/' + couponCode;
-    	// if (couponCode === '' ) alert("Please Input CouponCode");
-    	// else window.location.href = targetUrl;
-    });
+  if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') ==='') {
+    $('#couponList').hide();
+  } else {
+    getCouponList();
+  }
 });
 
 // ------------- UI JS -----------------

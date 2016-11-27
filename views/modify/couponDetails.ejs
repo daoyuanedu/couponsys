@@ -5,52 +5,67 @@
 
 <!-- User head in partials/index.ejs -->
 <head>
-    <% include ../partials/head %>
+  <% include ../partials/head %>
 </head>
 
 <body>
 
-<!-- User header in partials/header.ejs -->
-    <header>
-        <% include ../partials/header %>
-    </header>
+  <!-- User header in partials/header.ejs -->
+  <header>
+    <% include ../partials/header %>
+  </header>
 
-<!-- Main body -->
-    <main class="container">
-        <div class="jumbotron couponTitle">
-            <h1>Coupons</h1>
-            <h4>Have found below Coupon !</h4>
-        </div>
+  <!-- Main body -->
+  <main class="container">
+    <div class="jumbotron couponTitle">
+      <h1>Coupons</h1>
+      <h4>Have found below Coupon !</h4>
+    </div>
 
-        <div class="couponList">
-            <ul class="list-group">
-                <li class="list-group-item list-group-item-info">
-                   <h4> CouponCode </h4>
-                   <h4> Username </h4>
-                   <h4> Valid </h4>
-                   <h4> Coupon Rule </h4>
-                   <h4> Rebate Rule </h4>
+    <div class="couponList">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-info">
+          <h4> CouponCode </h4>
+          <h4> Valid </h4>
+          <h4> couponType </h4>
+          <h4> salesCode </h4>
+          <br>
+          <h5> Username </h5>
+          <h5> Coupon Rule </h5>
+          <h5> Rebate Rule </h5>
+          <h5> Create Time </h5>
 
-                </li>
+        </li>
 
-<!-- List All Coupon Code -->        
-                   <a class="list-group-item">
-                        <h4><%= coupon.couponID %></h4>
-                        <h4><%= coupon.username %></h4>
-                        <h4><%= coupon.valid %></h4>
-                        <h4><%= coupon.couponRule.type %> <%= coupon.couponRule.value %></h4>
-                        <h4><%= coupon.rebateRule.type %> <%= coupon.rebateRule.value %></h4>
-                   </a>
-            </ul>
+        <!-- List All Coupon Code -->
 
-        </div>
+        <li class='list-group-item'>
 
-    </main>
+          <a class='coupon-li-link-coupon' href='/views/coupons/<%= coupon.couponID %>'><h4><%= coupon.couponID %></h4></a>
 
-<!-- User footer in partials/footer.ejs -->
-    <footer>
-        <% include ../partials/footer %>
-    </footer>
+          <h4><%= coupon.valid %></h4>
+          <h4><%= coupon.couponType %></h4>
+
+          <a class='coupon-li-link-coupon' href='/views/coupons/<%= coupon.salesCode %>'><h4><%= coupon.salesCode %></h4></a>
+          <h5><%= coupon.username %></h5>
+          <h5><%= coupon.couponRule.type %>: <%= coupon.couponRule.value %></h5>
+          <h5><%= coupon.rebateRule.type %>: <%= coupon.rebateRule.value %></h5>
+          <h5><%= coupon.createdAt %></h5>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Edit Coupon in partials/couponEdit.ejs -->
+    <div>
+      <% include ../partials/couponEdit %>
+    </div>
+
+  </main>
+
+  <!-- User footer in partials/footer.ejs -->
+  <footer>
+    <% include ../partials/footer %>
+  </footer>
 
 </body>
 </html>

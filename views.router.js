@@ -19,12 +19,13 @@ router.get('/coupons/:couponID', Coupons.getCouponByCouponCode);
 router.get('/users', Users.userPage);
 router.get('/users/:username', Users.getCouponCodesByUser);
 // orders
-router.get('/orders', Orders.getAllOrders);
+router.get('/orders', Orders.getOrders);
 router.get('/orders/:couponCode/', Orders.getOrdersByCouponCode);
 
 // Info
 router.get('/info', Others.info);
-
+// Login
+router.get('/login', Others.login);
 
 
 module.exports = router;

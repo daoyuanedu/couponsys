@@ -27,9 +27,9 @@ schemas:
               },
               "final" : {
                 "type" : "number"
-              },
-              "required" : ["original", "final"]
-            }
+              }
+            },
+            "required" : ["original", "final"]
           },
           "rebated": {
             "type" : "boolean"
@@ -38,7 +38,7 @@ schemas:
             "type" : "number"
           }
         },
-        "required": ["couponCode", "orderId", "orderValue", "rebated"] 
+        "required": ["couponCode", "orderId", "orderValue", "rebated"]
       }
   - coupon: |
       {
@@ -84,20 +84,27 @@ schemas:
             "valid" : {
               "type" : "boolean",
               "defualt" : true
+            },
+            "couponType" : {
+              "type" : "string",
+              "default" : "NORMAL",
+              "enum" : ["NORMAL", "SALES"]
             }
          },
-         "required": ["couponCode", "username", "couponRule", "rebateRule"]  
+         "required": ["couponCode", "username", "couponRule", "rebateRule", "couponType"]
       }
 /coupons:
   displayName: coupons
-  get:    
+  get:
     description: list all the coupons (admin only)
     queryParameters:
       token:
         required: true
         type: string
   post:
-    description: create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
+    description: |
+     create a new coupon. signedToken is used for admin to create coupon with rules. Post request without signedKey will create coupon with default rule regardless of the rules passed in, ie. ignoring couponRule and rebateRule.
+     New bussiness model utilises coupon as a sales ref, hence, each coupon code has a type to identify if its type. By default, it's normal, with token, client can create other types of coupon, for example: SALES.
     body:
       application/json:
         schema : coupon without coupon code
@@ -152,8 +159,8 @@ schemas:
         application/json:
           example: |
             {
-              username : "admin1",
-              password : "adminHash"
+              "username" : "admin1",
+              "password" : "adminHash"
             }
       responses:
         201:
@@ -161,8 +168,8 @@ schemas:
             application/json:
               example: |
                 {
-                  success : true
-                  token : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEFkbWluMSIsImlhdCI6MTQ3OTUwMzQ2MCwiZXhwIjoxNDc5NTA3MDYwfQ.p6JQc9ksEI2aQPD3Lw8kepCvHCqcYpM94bpUrs4zotY"
+                  "success" : true,
+                  "token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEFkbWluMSIsImlhdCI6MTQ3OTUwMzQ2MCwiZXhwIjoxNDc5NTA3MDYwfQ.p6JQc9ksEI2aQPD3Lw8kepCvHCqcYpM94bpUrs4zotY"
                 }
         401:
           description: Auth failed.
@@ -220,14 +227,31 @@ schemas:
             required: true
             default: false
             type: boolean
+            description: leave out for all orders
           showTotalNum:
             required: false
             type: boolean
             default: false
             description: only the total number of orders lined to this coupon code.
+          filter:
+            required: false
+            type: string
+            default: all
+            enum: ["all", "direct", "salesRef"]
+            description: show all orders / only orders using this code / only orders with a sales ref to this code
           token:
             required: true
             type: string
+          since:
+              required: false
+              type: string
+              description: list orders since this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+              example: 2016-11-27
+          until:
+              required: false
+              type: string
+              description: list orders up to this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+              example: 2015-03-25T12:00:00
       post:
         description: link an order with this coupon, and return the discounted order for verification
         body:
@@ -251,7 +275,7 @@ schemas:
                   {
                     "orderId" : "guid....",
                     "couponCode" : "test1perc10",
-                     "orderValue" : {
+                    "orderValue" : {
                       "original" : 1000,
                       "final" : 800
                     },
@@ -333,6 +357,27 @@ schemas:
       body:
         application/json:
           schema: couponOrder
+    get:
+      description: get all the orders with filters applied.
+      queryParameters:
+        token:
+          required: true
+          type: string
+          description: token for admin auth.
+        rebated:
+          required: false
+          type: boolean
+        since:
+            required: false
+            type: string
+            description: list orders since this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+            example: 2016-11-27
+        until:
+            required: false
+            type: string
+            description: list orders up to this date, string required in a format where a Date object can be created from (http://www.w3schools.com/js/js_date_formats.asp).
+            example: 2015-03-25T12:00:00
+
     /{orderId}:
       displayName: orderId
       get:
@@ -354,7 +399,7 @@ schemas:
           200:
             body:
               application/json:
-                schema: coupon list
+                schema: a list of coupons
                 example: |
                   {
                     "coupons":

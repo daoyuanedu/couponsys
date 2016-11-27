@@ -28,3 +28,9 @@ footer a:hover {
   color: #777;
   text-decoration: none;
 }
+
+.couponEdit h4{
+  padding-left: 5%;
+  font-weight: bold;
+  font-family: 'Open Sans', sans-serif;
+}

@@ -1,5 +1,5 @@
-<!-- views/pages/index.ejs -->
-<!-- The first/index page for coupons system  -->
+<!-- views/pages/info.ejs -->
+<!-- The info coupons page for coupons will have some details about developers or system introduction UI here -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,10 +17,13 @@
 
   <!-- Main body -->
   <main class="container">
-    <div class="jumbotron">
-      <h1>Daoyuan Coupons Services</h1>
-      <p>Welcome to the couponse system</p>
-      <p>Some introduction and guide can be shown in this page</p>
+    <div class="jumbotron loginTitle">
+      <h1>Log In / Out</h1>
+      <h2 id="logInfo">Please Log In</h2>
+      <!-- User Login Page in partials/login.ejs -->
+      <div class="loginForm">
+        <% include ../partials/login %>
+      </div>
     </div>
   </main>
 
