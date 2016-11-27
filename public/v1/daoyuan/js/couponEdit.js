@@ -30,7 +30,6 @@ $(document).ready(function(){
 });
 
 // Click Button to Update Coupon
-
 $(document).ready(function(){
   $('#updateCouponForm').submit(function( event ) {
     var couponID = $("#update-couponCode").val();
@@ -49,7 +48,9 @@ $(document).ready(function(){
       username: $('#update-username').val(),
       couponRule: couponRule,
       rebateRule: rebateRule,
-      valid: $('#update-valid').val()
+      valid: $('#update-valid').val(),
+      couponType: $('#update-couponType').val(),
+      salesCode: $('#update-salesCode').val()
     };
 
     console.log(data);
@@ -97,7 +98,9 @@ $(document).ready(function(){
       username: $('#add-username').val(),
       couponRule: couponRule,
       rebateRule: rebateRule,
-      valid: $('#add-valid').val()
+      valid: $('#add-valid').val(),
+      couponType: $('#add-couponType').val(),
+      salesCode: $('#add-salesCode').val()
     };
 
     console.log(data);

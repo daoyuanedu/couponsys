@@ -128,6 +128,9 @@ var updateCoupon = function (req, res, next) {
       if (typeof req.body.rebateRule.value !== 'undefined') propertiesToUpdate.rebateRule.value = req.body.rebateRule.value;
     }
     if (typeof req.body.valid !== 'undefined') propertiesToUpdate.valid = req.body.valid;
+    if (typeof req.body.couponType !== 'undefined') propertiesToUpdate.couponType = req.body.couponType;
+    if (typeof req.body.salesCode !== 'undefined') propertiesToUpdate.salesCode = req.body.salesCode;
+
     CouponProxy.updateOrderByCouponID(couponCode, propertiesToUpdate)
       .then(function (coupon) {
         res.status(204);
