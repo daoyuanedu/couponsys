@@ -9,7 +9,6 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 
 var fs = require('fs');
-var FileStreamRotator = require('file-stream-rotator');
 var errorHandler = require('./middlewares/errorHandler');
 
 // Express Framewrok
