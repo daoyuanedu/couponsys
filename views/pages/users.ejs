@@ -16,8 +16,8 @@
   </header>
 
   <!-- Main body -->
-  <main  class="container userTitle">
-    <div class="jumbotron">
+  <main  class="container">
+    <div class="jumbotron userTitle">
       <h1>Users</h1>
       <h4>You can search all coupons for one user</h4>
 
@@ -25,7 +25,9 @@
         <div class="col-lg-8">
           <div class="input-group">
             <span class="input-group-btn">
-              <button id="userSearch" class="btn btn-warning" type="button">Search</button>
+              <button id="userSearch" class="btn btn-warning" type="button">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+              Search</button>
             </span>
             <input id="userSearchInput" type="text" class="form-control" placeholder="Input username...">
           </div>
@@ -33,7 +35,11 @@
       </div>
     </div>
 
-    <!-- Edit Coupon in partials/couponEdit.ejs -->
+    <!-- Show CouponList in partials/couponList.ejs -->
+    <div>
+      <% include ../partials/couponList %>
+    </div>
+
   </main>
 
 

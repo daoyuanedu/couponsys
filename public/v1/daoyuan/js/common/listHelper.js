@@ -1,6 +1,5 @@
 // Will send GET request to get coupons
-var getCouponList = function() {
-  var getUrl = "../../api/v1/coupons/";
+var getCouponList = function(getUrl) {
   $.ajax({
     type: "GET",
     url: getUrl,
@@ -24,8 +23,6 @@ var getCouponList = function() {
 
 // Generate Coupon List by response' data
 var generateCouponList = function(CouponList) {
-  console.log(CouponList);
-
   var listBody = "";
   CouponList.forEach(function(coupon) {
     listBody +=

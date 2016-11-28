@@ -17,7 +17,6 @@ router.get('/coupons/:couponID', Coupons.getCouponByCouponCode);
 
 // users
 router.get('/users', Users.userPage);
-router.get('/users/:username', Users.getCouponCodesByUser);
 // orders
 router.get('/orders', Orders.getOrders);
 router.get('/orders/:couponCode/', Orders.getOrdersByCouponCode);

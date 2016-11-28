@@ -20,7 +20,11 @@ $(document).ready(function(){
   if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') ==='') {
     $('#couponList').hide();
   } else {
-    getCouponList();
+    var currentUrl = window.location.pathname;
+    if(currentUrl === '/views/coupons') {
+      var getUrl = "../../api/v1/coupons/";
+      getCouponList(getUrl);
+    }
   }
 });
 

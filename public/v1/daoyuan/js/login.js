@@ -2,9 +2,11 @@
 
 // Click login button to get token if the user is admin
 $(document).ready(function(){
-  if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') ==='') {
+  if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') === '' 
+    || typeof getCookieByName('x-access-token') === 'undefined') {
     // Need More function for this;
     // alert("Please Log In");
+    $("#login-action").show();
   }
   else {
     $("#login-action").hide();
@@ -12,6 +14,7 @@ $(document).ready(function(){
       "<h2 id='logInfo'>Welcome Admin</h2>"
     );
   }
+  
   $('#login-action').submit(function( event ) {
     var loginUrl = "../../api/v1/coupons/login";
     $.ajax({
@@ -21,7 +24,7 @@ $(document).ready(function(){
       success: function(data)
       {
         var token = data.token;
-        if(getCookieByName('x-access-token') != token) {
+        if(getCookieByName('x-access-token') !== token) {
           document.cookie = 'x-access-token=' + token;
         }
         console.log(document.cookie);
@@ -46,11 +49,11 @@ $(document).ready(function(){
   });
 });
 
-// Click sign up button to sign up
+// Click sign out button to log out
 $(document).ready(function(){
   $('#logout-action').click(function() {
     deleteOneCookie("x-access-token");
-    deleteAllCookies()
+    deleteAllCookies();
     $("#logInfo").html(
       "<h2 id='logInfo'>Please Log In</h2>"
     );
