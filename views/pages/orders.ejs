@@ -21,16 +21,11 @@
       <h1>Orders</h1>
       <h4>You can find all orders in below list !</h4>
 
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="input-group btn-group">
-            <input id="orderSearchInput" type="text" class="form-control" placeholder="Input CouponCode to search orders...">
-            <span class="input-group-btn">
-              <button id="orderSearch" class="btn btn-success" type="button">Search</button>
-            </span>
-          </div>
-        </div>
+      <!-- User orderSearch in partials/orderSearch.ejs -->
+      <div>
+        <% include ../partials/orderSearch %>
       </div>
+    </div>
 
       <div class="orderList">
         <ul class="list-group">
@@ -40,24 +35,12 @@
             <h4> Rebate Value </h4>
             <h4> Order Value </h4>
             <h4> OrderID </h4>
-
-
           </li>
+        </ul>
 
-          <!-- List All Orders -->
-          <% OrderList.forEach(function(order) { %>
-            <a class="list-group-item">
-              <h4><%= order.couponID %></h4>
-              <h4><%= order.rebated %></h4>
-              <h4><%= order.rebateValue %></h4>
-              <h4><%= order.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= order.orderValue.final %></h4>
-              <h4><%= order.orderID %></h4>
-            </a>
-            <% }); %>
-          </ul>
-
-        </div>
-      </main>
+      </div>
+    
+  </main>
 
       <!-- User footer in partials/footer.ejs -->
       <footer>

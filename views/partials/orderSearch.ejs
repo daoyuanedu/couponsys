@@ -1,0 +1,49 @@
+<div class="row">
+<form class="form-inline">
+
+  <div class="input-group form-group">
+    <input id="filter-couponCode" type="text" class="form-control" placeholder="CouponCode or empty">
+  </div>
+
+  <div class="form-group">
+        <select class="form-control" id="filter-coupenType" required>
+          <option>all</option>
+          <option>direct</option>
+          <option>salesref</option>
+        </select>
+  </div>
+
+  <div class="form-group">
+        <select class="form-control" id="filter-rebate" required>
+          <option>all</option>
+          <option>rebated</option>
+          <option>false</option>
+        </select>
+  </div>
+
+  <div class="form-group">
+    <div class='input-group date' id='filer-since'>
+     <input type='text' class="form-control" placeholder="since"/>
+      <span class="input-group-addon">
+      <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class='input-group date' id='filer-until'>
+      <input type='text' class="form-control" placeholder="until" />
+        <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+      <span class="input-group-btn">
+      <button id="filer-searchBtn" class="btn btn-success" type="button">Search</button>
+      </span>
+  </div>
+
+</form>
+</div>
