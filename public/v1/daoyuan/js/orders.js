@@ -1,12 +1,10 @@
 // ------------- Function JS -----------------
 
 // Click Search button to search orders
-
-// Click Button to search Orders
 $(document).ready(function(){
   $('#searchOrderForm').submit(function( event ) {
     var couponCode = parseInt($("#filter-couponCode").val());
-    var orderURL = hasCouponCodeAsURL(couponCode);
+    var orderURL = hasCouponCodeURL(couponCode);
 
     var couponType = hasTypeOption($("#filter-coupenType").val());
     var rebated = rebatedOption($("#filter-rebate").val());
@@ -46,6 +44,37 @@ $(document).ready(function(){
   });
 });
 
+var hasCouponCodeURL = function (couponCode) {
+  if (hasInput(couponCode)) {
+    return "../../api/v1/coupons/"+ couponCode + "/orders";
+  } else {
+    return "../../api/v1/coupons/orders";
+  }
+}
+
+var hasTypeOption = function (InputType) {
+  if(InputType === 'all') {
+    return 'all';
+  } else if(InputType === 'direct') {
+    return 'direct';
+  } else if(InputType === 'salesref') {
+    return 'salesref';
+  } else {
+    return null;
+  }
+}
+
+var rebatedOption = function (InputRebate) {
+  if(InputRebate === 'all') {
+    return 'all';
+  } else if(InputRebate === 'rebated') {
+    return true;
+  } else if(InputRebate === 'need rebated') {
+    return false;
+  } else {
+    return null;
+  }
+}
 // ------------- UI JS -----------------
 
 // Order Search Calendar UI
