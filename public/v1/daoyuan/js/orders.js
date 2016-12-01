@@ -9,9 +9,12 @@
 $(document).ready(function(){
 
     $(function () {
-        $('#filer-since').datetimepicker();
+        $('#filer-since').datetimepicker({
+                format: 'YYYY/MM/DD',
+            });
         $('#filer-until').datetimepicker({
-            useCurrent: false 
+            useCurrent: false ,
+            format: 'YYYY/MM/DD'
         });
         $("#filer-since").on("dp.change", function (e) {
             $('#filer-until').data("DateTimePicker").minDate(e.date);
