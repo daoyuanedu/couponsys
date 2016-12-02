@@ -3,8 +3,8 @@
   text-shadow: 4px 4px 4px #aaa;
 }
 
-.couponList h4, h5{
-  width: 20%;
+.couponList h4, .couponList h5{
+  width: 22.5%;
   font-family: "Lucida Console", Courier, monospace;
   display: inline-block;
   padding-left: 5%;
@@ -13,3 +13,4 @@
 .couponList h4{
   font-weight: bold;
 }
+

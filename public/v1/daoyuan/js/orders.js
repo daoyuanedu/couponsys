@@ -2,8 +2,8 @@
 
 // Click Search button to search orders
 $(document).ready(function(){
-  $('#searchOrderForm').submit(function( event ) {
-    var couponCode = parseInt($("#filter-couponCode").val());
+  $('#searchOrderForm').submit(function (event) {
+    var couponCode = $("#filter-couponCode").val();
     var orderURL = hasCouponCodeAsURL(couponCode);
 
     var couponType = hasTypeOption($("#filter-coupenType").val());
@@ -12,26 +12,27 @@ $(document).ready(function(){
     var until = hasInput($("#filter-until").val());
 
     var data = {
+      filter: couponType,
       rebated: rebated,
       since: since,
       until: until
     };
 
-    console.log(data);
     $.ajax({
       type: "GET",
       url: orderURL,
-      data: JSON.stringify(data),
+      data: serialize(data),
       contentType: "application/json",
       beforeSend: function(xhr)
       {
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
-      success: function(data, textStatus, xhr)
+      success: function (data, textStatus, xhr)
       {
-        console.log(data)
+        console.log(data);
+        $('#orderList').show();
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
           $('#searchOrderForm').append(showLoginAlert());
         } else if(XMLHttpRequest.status === 406) {
@@ -46,7 +47,7 @@ $(document).ready(function(){
 // ------------- UI JS -----------------
 
 // Order Search Calendar UI
-$(document).ready(function(){
+$(document).ready(function (){
   $(function () {
     $('#filter-since').datetimepicker({
       format: 'YYYY-MM-DD',

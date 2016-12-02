@@ -1,8 +1,8 @@
 // ------------- Function JS -----------------
 
 // Click Search button to search special CouponCode
-$(document).ready(function(){
-  $("#userSearch").click(function(){
+$(document).ready(function (){
+  $("#userSearch").click(function (){
     var username = $("#userSearchInput").val();
     //var currentUrl = window.location.pathname;
     //var targetUrl = currentUrl + '/' + username;
@@ -18,16 +18,16 @@ $(document).ready(function(){
 
 
 // Will send GET request to get coupons
-var getCouponListByUsername = function(getUrl) {
+var getCouponListByUsername = function (getUrl) {
   $.ajax({
     type: "GET",
     url: getUrl,
     contentType: "application/json",
-    beforeSend: function(xhr)
+    beforeSend: function (xhr)
     {
       xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
     },
-    success: function(data, textStatus, xhr)
+    success: function (data, textStatus, xhr)
     {
       if (data.coupons.length !== 0) {
         $('#couponList-title').nextAll('.list-group-item').remove();
@@ -36,7 +36,7 @@ var getCouponListByUsername = function(getUrl) {
         $('.userTitle').append(showWarningMessage("No Coupons Found for this user"));
       }
     },
-    error: function(XMLHttpRequest, textStatus, errorThrown) {
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
       if (XMLHttpRequest.status === 403) {
         $('.userTitle').append(showLoginAlert());
       }
