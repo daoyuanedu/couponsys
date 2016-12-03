@@ -2,6 +2,7 @@
 
 // Click Search button to search orders
 $(document).ready(function(){
+
   $('#searchOrderForm').submit(function (event) {
     var couponCode = $("#filter-couponCode").val();
     var orderURL = hasCouponCodeAsURL(couponCode);
@@ -29,7 +30,7 @@ $(document).ready(function(){
       },
       success: function (data, textStatus, xhr)
       {
-        console.log(data);
+        generateOrderList(data);
         $('#orderList').show();
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {

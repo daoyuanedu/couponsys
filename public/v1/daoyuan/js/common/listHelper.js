@@ -54,11 +54,13 @@ var generateCouponList = function (couponList) {
 // GET coupons/:CouponCode/orders/
 var generateOrderList = function (orderList) {
   var listBody = "";
+  $('.orderList-element').remove();
+
   orderList.orders.forEach(function (order) {
     if(order.rebated === false) {
-      listBody += "<li class='list-group-item list-group-item-warning'>";
+      listBody += "<li class='list-group-item list-group-item-warning orderList-element'>";
     } else {
-      listBody += "<li class='list-group-item'>";
+      listBody += "<li class='list-group-item orderList-element'>";
     }
 
     listBody +=
@@ -70,15 +72,15 @@ var generateOrderList = function (orderList) {
 
     listBody +=
     "<h5 class='order-li-orderValue'>" + order.orderValue.original + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> " + order.orderValue.final + "</h5>" +
-    "<h5 class='order-li-link-orderID'>" + order.orderID + "</h5>" +
+    "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5>" + order.orderID + "</h5></a>" +
     "<h5 class='order-li-updateTime'>" + order.updatedAt.substring(0, 10) + "</h5></li>"
     ;
 
     if (hasInput(order.salesRef)) {
       if (order.salesRef.rebated  === false){
-        listBody += "<li class='list-group-item list-group-item-danger'>";
+        listBody += "<li class='list-group-item list-group-item-danger orderList-element'>";
       } else {
-        listBody += "<li class='list-group-item'>";
+        listBody += "<li class='list-group-item orderList-element'>";
       }
       listBody +=
       "<a class='order-li-saleref-salesCode' href='/views/coupons/" + order.salesRef.salesCode + "'><h4>" + "<span class='glyphicon glyphicon-import'></span>  " + order.salesRef.salesCode + "</h4></a>" +

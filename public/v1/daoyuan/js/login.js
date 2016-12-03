@@ -1,6 +1,5 @@
 // ------------- Function JS -----------------
 
-// Click login button to get token if the user is admin
 $(document).ready(function (){
   if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') === ''
   || typeof getCookieByName('x-access-token') === 'undefined') {
@@ -14,6 +13,9 @@ $(document).ready(function (){
       "<h2 id='logInfo'>Welcome Admin</h2>"
     );
   }
+
+
+  // Click login button to get token if the user is admin
 
   $('#login-action').submit(function (event) {
     var loginUrl = "../../api/v1/coupons/login";
