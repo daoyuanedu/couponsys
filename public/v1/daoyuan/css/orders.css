@@ -11,5 +11,9 @@
 }
 
 .orderList button {
-	margin-bottom: 2%;
+   margin-bottom: 2%;
+}
+
+.forRebate h4, .forRebate h5{
+   text-decoration: underline;
 }

@@ -41,9 +41,9 @@ $(function () {
                 .addClass('state-icon ' + settings[$widget.data('state')].icon);
 
             if (isChecked) {
-                $widget.addClass('forRebate list-group-item-info');
+                $widget.addClass('forRebate');
             } else {
-                $widget.removeClass('forRebate list-group-item-info');
+                $widget.removeClass('forRebate');
             }
         }
 

@@ -83,9 +83,10 @@ var generateOrderList = function (orderList) {
         listBody += "<li class='list-group-item orderList-element'>";
       }
       listBody +=
-      "<a class='order-li-saleref-salesCode' href='/views/coupons/" + order.salesRef.salesCode + "'><h4>" + "<span class='glyphicon glyphicon-import'></span>  " + order.salesRef.salesCode + "</h4></a>" +
-      "<h4 class='order-li-saleref-rebated'>" + order.salesRef.rebated + "</h4>" +
-      "<h4 class='order-li-saleref-rebateValue'>" + order.salesRef.rebateValue + "</h4></li>"
+      "<a class='order-li-saleref-salesCode order-li-coupon' href='/views/coupons/" + order.salesRef.salesCode + "'><h4>" + "<span class='glyphicon glyphicon-import'></span>  " + order.salesRef.salesCode + "</h4></a>" +
+      "<h4 class='order-li-saleref-rebated order-li-rebated' style='width:15%'>" + order.salesRef.rebated + "</h4>" +
+      "<h4 class='order-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + "</h4>" +
+      "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a></li>"
       ;
     }
   });
