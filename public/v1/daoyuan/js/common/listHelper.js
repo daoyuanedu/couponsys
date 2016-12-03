@@ -64,7 +64,7 @@ var generateOrderList = function (orderList) {
     }
 
     listBody +=
-    "<a class='order-li-link-coupon' href='/views/coupons/" + order.couponID +"'><h4>"+ order.couponID + "</h4></a>" +
+    "<a class='order-li-link-coupon' href='/views/coupons/" + order.couponID +"'><h4 class='order-li-coupon'>"+ order.couponID + "</h4></a>" +
     "<h4 class='order-li-rebated'>" + order.rebated + "</h4>" +
     "<h4 class='order-li-rebateValue'>" + order.rebateValue + "</h4>" +
     "<br>"
@@ -72,7 +72,7 @@ var generateOrderList = function (orderList) {
 
     listBody +=
     "<h5 class='order-li-orderValue'>" + order.orderValue.original + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> " + order.orderValue.final + "</h5>" +
-    "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5>" + order.orderID + "</h5></a>" +
+    "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a>" +
     "<h5 class='order-li-updateTime'>" + order.updatedAt.substring(0, 10) + "</h5></li>"
     ;
 

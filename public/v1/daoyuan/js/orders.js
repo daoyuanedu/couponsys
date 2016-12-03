@@ -32,6 +32,7 @@ $(document).ready(function(){
       {
         generateOrderList(data);
         $('#orderList').show();
+        addCheckBox();
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
