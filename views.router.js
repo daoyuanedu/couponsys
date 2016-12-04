@@ -5,7 +5,6 @@ var Coupons = require('./controller/v1/coupons');
 var Users = require('./controller/v1/users');
 var Orders = require('./controller/v1/orders');
 
-
 // Router
 var router = express.Router();
 
@@ -14,12 +13,11 @@ router.get('/', Others.index);
 // coupons
 router.get('/coupons', Coupons.getCouponsList);
 router.get('/coupons/:couponID', Coupons.getCouponByCouponCode);
-
 // users
 router.get('/users', Users.userPage);
 // orders
 router.get('/orders', Orders.getOrders);
-router.get('/orders/:couponCode/', Orders.getOrdersByCouponCode);
+router.get('/orders/:orderID', Orders.getOrdersByOrderID);
 
 // Info
 router.get('/info', Others.info);

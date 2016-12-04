@@ -144,7 +144,27 @@ module.exports = {
       original: 5000,
       final: 4900
     }
+  },
+
+  orderWithSaleRef : {
+    orderID: 'userAOrderWithSalesRef',
+    couponID: 'userAcash10',
+    orderName: 'testUserA',
+    orderValue: { original: 1000, final: 900 },
+    rebated: false,
+    rebateValue: 100,
+    salesRef:
+    { salesCode: 'IAMAFAKESALESCODE',
+    rebated: false,
+    rebateValue: 750 }
+  },
+
+  orderSaledBySalesDirectly : {
+    orderID: 'userAUSINGSALESCODE',
+    couponID: 'IAMAFAKESALESCODE',
+    orderName: 'testUserA',
+    orderValue: { original: 1000, final: 900 },
+    rebated: false,
+    rebateValue: 100
   }
-
 };
-

@@ -1,5 +1,5 @@
 // check the element that will be displayed
-var validAttr = function(attribute) {
+var validAttr = function (attribute) {
 	if (typeof attribute === 'undefined' || attribute === '' || attribute === null) {
 		return "empty / null";
 	}
@@ -8,7 +8,7 @@ var validAttr = function(attribute) {
 
 // TODO: need to validate the user input
 
-var hasInput = function(input) {
+var hasInput = function (input) {
 	if (typeof input === 'undefined' || input === '' || input === null) {
 		return null;
 	}
@@ -45,4 +45,13 @@ var rebatedOption = function (InputRebate) {
   } else {
     return null;
   }
+}
+
+var  serialize = function (obj) {
+	var str = [];
+	for(var p in obj)
+	if (obj.hasOwnProperty(p)) {
+		str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+	}
+	return str.join("&");
 }

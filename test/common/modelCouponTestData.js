@@ -16,6 +16,20 @@ module.exports = {
     valid: true
   },
 
+  invalidCoupon: {
+    couponID: '13898458001',
+    username: 'userInvalid',
+    couponRule: {
+      type: 'PERCENTAGE',
+      value: 20
+    },
+    rebateRule: {
+      type: 'CASH',
+      value: 200
+    },
+    valid: false
+  },
+
   user1CouponWithSameCouponID: {
     couponID: 'user1perc10',
     username: 'user1',
@@ -79,7 +93,7 @@ module.exports = {
     couponID: 'user1perc10',
     username: 'user1',
     couponRule: {
-      type: 'INVALIDEE',
+      type: 'INVALID',
       value: 10
     },
     rebateRule: {
@@ -157,7 +171,7 @@ module.exports = {
       value: 100
     },
     valid: true
-  },  
+  },
 
   userBWithCashRule: {
     couponID: '13898458462',
@@ -185,7 +199,7 @@ module.exports = {
       value: 100
     },
     valid: true
-  },  
+  },
 
   userBWithInvalidCoupon: {
     couponID: '13898458460',
@@ -261,7 +275,4 @@ module.exports = {
     valid: true,
     salesCode: '13445263873'
   }
-
 };
-
-

@@ -24,9 +24,11 @@ var buildOrderQueries = function (couponCode, salesCode, rebated, since, until) 
   }
 
   if(typeof rebated !== 'undefined' && rebated !== null){
-    if(typeof queries['salesRef.salesCode']  !== 'undefined')
-      queries['salesRef.rebated'] = rebated;
-    else queries.rebated = rebated;
+    if (rebated !== 'all' ) {
+      if(typeof queries['salesRef.salesCode']  !== 'undefined')
+        queries['salesRef.rebated'] = rebated;
+      else queries.rebated = rebated;
+    }
   }
   if(since instanceof Date) {
     if(typeof queries.createdAt === 'undefined')
