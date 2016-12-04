@@ -138,4 +138,29 @@ describe('CouponOrder Model Proxy', function () {
       });
   });
 
+  it('updateSalesRef should update a sales ref by order id and sales code', function (done) {
+    var orderWithSalesRef = deepcopy(couponOrderNormal);
+    orderWithSalesRef.orderID = 'SOMETHINGDIFFERENT';
+    orderWithSalesRef.salesRef = {salesCode: 'IAMASALESCODE', rebated: false, rebateValue: 800};
+
+    var threeSaves = Promise.all([new CouponOrder(couponOrderNormal).save(), new CouponOrder(couponOrderWithSameCouponID).save()], new CouponOrder(orderWithSalesRef).save());
+    threeSaves.then(function () {
+      CouponOrderProxy.updateOrderSalesRefByOrderId(orderWithSalesRef.orderID, orderWithSalesRef.salesRef.salesCode,
+        {'salesRef.rebateValue': 1001})
+        .then(function (order) {
+          (order.salesRef.salesCode).should.equal(orderWithSalesRef.salesRef.salesCode);
+          return;
+        })
+        .then(function () {
+          return CouponOrderProxy.getOrderByOrderId(orderWithSalesRef.orderID);
+        })
+        .then(function (order) {
+          (order.salesRef.rebateValue).should.equal(1001);
+          (order.salesRef.rebated).should.equal(false);
+          done();
+        })
+        .catch(done);
+    });
+  });
+
 });
