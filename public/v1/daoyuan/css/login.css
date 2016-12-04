@@ -9,7 +9,7 @@
   text-shadow: 1px 1px 1px #aaa;
 }
 
-.loginForm input[type=text], input[type=password] {
+.loginForm input[type=text], .loginForm input[type=password] {
   width: 100%;
   padding: 1% 2%;
   margin: 1% 0;

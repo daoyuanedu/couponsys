@@ -472,6 +472,47 @@ describe('/coupons/{couponCode}/orders', function () {
           .expect(403, done);
       });
     });
+
+    it('should try to update the sales ref', function (done) {
+      var orderWithSalesRef = deepcopy(userANonRebatedOrder);
+      orderWithSalesRef.orderID = 'userAOrderWithSalesRef';
+      let rebateValue = 750, rebated = false, salesCode = 'IAMAFAKESALESCODE';
+      orderWithSalesRef.salesRef = {salesCode: salesCode, rebated: rebated, rebateValue: rebateValue};
+
+      new CouponOrder(orderWithSalesRef).save().then(function () {
+        var newRebateValue = 50;
+        request.put(path + orderWithSalesRef.salesRef.salesCode + '/orders/' + orderWithSalesRef.orderID)
+          .query({rebateValue: newRebateValue, token: testToken})
+          .expect(204)
+          .end(function (err) {
+            if (err) done(err);
+            else {
+              CouponOrder.findOne({orderID: orderWithSalesRef.orderID}).then(function (order) {
+                (order.salesRef.rebateValue).should.equal(newRebateValue);
+                (order.salesRef.rebated).should.equal(rebated);
+                done();
+              });
+            }
+          });
+      });
+
+    });
+
+    it('should return 200 if nothing to update for sales ref', function (done) {
+      var orderWithSalesRef = deepcopy(userANonRebatedOrder);
+      orderWithSalesRef.orderID = 'userAOrderWithSalesRef';
+      let rebateValue = 750, rebated = false, salesCode = 'IAMAFAKESALESCODE';
+      orderWithSalesRef.salesRef = {salesCode: salesCode, rebated: rebated, rebateValue: rebateValue};
+
+      new CouponOrder(orderWithSalesRef).save().then(function () {
+        var newRebateValue = 50;
+        request.put(path + orderWithSalesRef.salesRef.salesCode + '/orders/' + orderWithSalesRef.orderID)
+          .query({rebateValue1: newRebateValue, token: testToken})
+          .expect(200, done);
+      });
+
+    });
+
   });
 
 });

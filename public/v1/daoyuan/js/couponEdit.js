@@ -1,8 +1,8 @@
 // ------------- Function JS -----------------
 
 // Click Button to delete Coupon
-$(document).ready(function(){
-  $('#deleteCouponForm').submit(function( event ) {
+$(document).ready(function (){
+  $('#deleteCouponForm').submit(function (event) {
     var couponID = $("#delete-couponCode").val();
     var deleteUrl = "../../api/v1/coupons/" + couponID;
     $.ajax({
@@ -10,16 +10,16 @@ $(document).ready(function(){
       url: deleteUrl,
       data: $('#deleteCouponForm').serialize(),
       contentType: "application/json",
-      beforeSend: function(xhr)
+      beforeSend: function (xhr)
       {
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
-      success: function(data, textStatus, xhr)
+      success: function (data, textStatus, xhr)
       {
         alert("Have delete coupen: " + couponID);
         location.reload();
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
           $('#deleteCouponForm').append(showLoginAlert());
         }
@@ -30,8 +30,8 @@ $(document).ready(function(){
 });
 
 // Click Button to Update Coupon
-$(document).ready(function(){
-  $('#updateCouponForm').submit(function( event ) {
+$(document).ready(function (){
+  $('#updateCouponForm').submit(function ( event ) {
     var couponID = $("#update-couponCode").val();
     var putUrl = "../../api/v1/coupons/" + couponID;
 
@@ -59,16 +59,16 @@ $(document).ready(function(){
       url: putUrl,
       data: JSON.stringify(data),
       contentType: "application/json",
-      beforeSend: function(xhr)
+      beforeSend: function (xhr)
       {
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
-      success: function(data, textStatus, xhr)
+      success: function (data, textStatus, xhr)
       {
         alert("Have updated coupen: " + couponID);
         location.reload();
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
           $('#updateCouponForm').append(showLoginAlert());
         }
@@ -79,8 +79,8 @@ $(document).ready(function(){
 });
 
 // Click Button to Add Coupon
-$(document).ready(function(){
-  $('#addCouponForm').submit(function( event ) {
+$(document).ready(function (){
+  $('#addCouponForm').submit(function ( event ) {
     var postUrl = "../../api/v1/coupons/";
 
     var mobile = parseInt($("#add-couponCode").val());
@@ -109,16 +109,16 @@ $(document).ready(function(){
       url: postUrl,
       data: JSON.stringify(data),
       contentType: "application/json",
-      beforeSend: function(xhr)
+      beforeSend: function (xhr)
       {
         xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
       },
-      success: function(data, textStatus, xhr)
+      success: function (data, textStatus, xhr)
       {
         alert("Have create coupen for mobile: " + mobile);
         location.reload();
       },
-      error: function(XMLHttpRequest, textStatus, errorThrown) {
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
         if(XMLHttpRequest.status === 403) {
           $('#addCouponForm').append(showLoginAlert());
         } else if(XMLHttpRequest.status === 406) {

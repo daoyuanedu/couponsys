@@ -1,5 +1,5 @@
 // Get token cookie by name
-var getCookieByName = function(cname) {
+var getCookieByName = function (cname) {
   var name = cname + "=";
   var ca = document.cookie.split(';');
   for(var i = 0; i <ca.length; i++) {
@@ -15,12 +15,12 @@ var getCookieByName = function(cname) {
 }
 
 // Delete one token cookie
-function deleteOneCookie(cname) {
+function deleteOneCookie (cname) {
   document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
 }
 
 // Delete all token cookie
-function deleteAllCookies() {
+function deleteAllCookies () {
   var cookies = document.cookie.split(";");
 
   for (var i = 0; i < cookies.length; i++) {

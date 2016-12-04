@@ -1,5 +1,5 @@
 // Give alert and link to login
-var showLoginAlert = function() {
+var showLoginAlert = function () {
   var body = "<div class='alert alert-danger alert-dismissable fade in'>" + 
   "<a ref='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" +
   "<strong>Failed to the authenticate user!</strong> Please click " +
@@ -9,7 +9,7 @@ var showLoginAlert = function() {
 };
 
 // Give warning error input message
-var showWarningMessage = function(error) {
+var showWarningMessage = function (error) {
   var body = "<div class='alert alert-warning alert-dismissable fade in'>" + 
   "<a ref='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" +
   "<strong>Invalid Input!</strong> Error message: " + error +

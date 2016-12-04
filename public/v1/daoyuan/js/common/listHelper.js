@@ -1,20 +1,19 @@
 // Will send GET request to get coupons
-var getCouponList = function() {
-  var getUrl = "../../api/v1/coupons/";
+var getCouponList = function (getUrl) {
   $.ajax({
     type: "GET",
     url: getUrl,
     contentType: "application/json",
-    beforeSend: function(xhr)
+    beforeSend: function (xhr)
     {
       xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
     },
-    success: function(data, textStatus, xhr)
+    success: function (data, textStatus, xhr)
     {
       generateCouponList(data);
       $('#couponList').show();
     },
-    error: function(XMLHttpRequest, textStatus, errorThrown) {
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
       if(XMLHttpRequest.status === 403) {
         $('.couponTitle').append(showLoginAlert());
       }
@@ -22,17 +21,23 @@ var getCouponList = function() {
   });
 };
 
-// Generate Coupon List by response' data
-var generateCouponList = function(CouponList) {
-  console.log(CouponList);
-
+// Generate Coupon List by response data
+// GET /coupons/
+var generateCouponList = function (couponList) {
   var listBody = "";
-  CouponList.forEach(function(coupon) {
+  couponList.forEach(function (coupon) {
+
+    if (coupon.valid === false){
+      listBody += "<li class='list-group-item list-group-item-danger'>";
+    } else if (coupon.couponType === 'SALES') {
+      listBody += "<li class='list-group-item list-group-item-info'>";
+    } else{
+      listBody += "<li class='list-group-item'>";
+    }
     listBody +=
-    "<li class='list-group-item'>" +
     "<a class='coupon-li-link-coupon' href='/views/coupons/" + coupon.couponID +"'><h4>"+ coupon.couponID + "</h4></a>" +
-    "<h4 class='coupon-li-link-valid'>" + coupon.valid + "</h4>" +
-    "<h4 class='coupon-li-link-valid'>" + coupon.couponType + "</h5>" +
+    "<h4 class='coupon-li-valid'>" + coupon.valid + "</h4>" +
+    "<h4 class='coupon-li-valid'>" + coupon.couponType + "</h4>" +
     "<a class='coupon-li-link-coupon'' href='/views/coupons/" + validAttr(coupon.salesCode) +"'><h4>"+ validAttr(coupon.salesCode) + "</h4></a>" +
     "<br>" +
     "<h5>" + validAttr(coupon.username) + "</h5>" +
@@ -43,3 +48,56 @@ var generateCouponList = function(CouponList) {
   });
   $('#couponList-title').after(listBody);
 };
+
+// Generate Coupon List by response data
+// GET coupons/orders/
+// GET coupons/:CouponCode/orders/
+var generateOrderList = function (orderList) {
+  var listBody = "";
+  $('.orderList-element').remove();
+
+  orderList.orders.forEach(function (order) {
+    if(order.rebated === false) {
+      listBody += "<li class='list-group-item list-group-item-warning orderList-element'>";
+    } else {
+      listBody += "<li class='list-group-item orderList-element'>";
+    }
+
+    listBody +=
+    "<a class='order-li-link-coupon' href='/views/coupons/" + order.couponID +"'><h4 class='order-li-coupon'>"+ order.couponID + "</h4></a>" +
+    "<h4 class='order-li-rebated'>" + order.rebated + "</h4>"
+    ;
+
+    if (order.rebated == true) {
+      listBody += "<h4 class='order-li-rebateValue'>" + order.rebateValue + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> 0</h4>";
+    } else {
+      listBody += "<h4 class='order-li-rebateValue'>" + order.rebateValue + "</h4>";
+    }
+
+    listBody +=
+    "<br>" +
+    "<h5 class='order-li-orderValue'>" + order.orderValue.original + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> " + order.orderValue.final + "</h5>" +
+    "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a>" +
+    "<h5 class='order-li-updateTime'>" + order.updatedAt.substring(0, 10) + "</h5></li>"
+    ;
+
+    if (hasInput(order.salesRef)) {
+      if (order.salesRef.rebated  === false){
+        listBody += "<li class='list-group-item list-group-item-danger orderList-element'>";
+      } else {
+        listBody += "<li class='list-group-item orderList-element'>";
+      }
+      listBody +=
+      "<a class='order-li-saleref-salesCode order-li-coupon' href='/views/coupons/" + order.salesRef.salesCode + "'><h4>" + "<span class='glyphicon glyphicon-import'></span>" + order.salesRef.salesCode + "</h4></a>" +
+      "<h4 class='order-li-saleref-rebated order-li-rebated' style='width:15%'>" + order.salesRef.rebated + "</h4>";
+
+      if (order.salesRef.rebated == true) {
+        listBody += "<h4 class='oorder-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> 0</h4>";
+      } else {
+        listBody += "<h4 class='order-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + "</h4>";
+      }
+        listBody += "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a></li>";
+    }
+  });
+  $('#orderList-title').after(listBody);
+}

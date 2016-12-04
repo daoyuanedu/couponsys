@@ -24,9 +24,11 @@ var buildOrderQueries = function (couponCode, salesCode, rebated, since, until) 
   }
 
   if(typeof rebated !== 'undefined' && rebated !== null){
-    if(typeof queries['salesRef.salesCode']  !== 'undefined')
-      queries['salesRef.rebated'] = rebated;
-    else queries.rebated = rebated;
+    if (rebated !== 'all' ) {
+      if(typeof queries['salesRef.salesCode']  !== 'undefined')
+        queries['salesRef.rebated'] = rebated;
+      else queries.rebated = rebated;
+    }
   }
   if(since instanceof Date) {
     if(typeof queries.createdAt === 'undefined')
@@ -80,6 +82,21 @@ var updateOrderByOrderIdAndCouponCode = function (orderId, couponCode, propertie
     });
 };
 exports.updateOrderByOrderIdAndCouponCode = updateOrderByOrderIdAndCouponCode;
+
+var updateOrderSalesRefByOrderId = function (orderId, salesCode, propertiesToUpdate) {
+  return CouponOrder.findOne({ 'salesRef.salesCode' : salesCode, orderID : orderId})
+    .then(function (order) {
+      if(typeof order !== 'undefined' && order !== null){
+        return CouponOrder.findByIdAndUpdate(order._id,  { $set : propertiesToUpdate });
+      }
+      else {
+        var err =  new Error('Order ' + orderId + ' does not exist.');
+        err.status = 404;
+        throw err;
+      }
+    });
+};
+exports.updateOrderSalesRefByOrderId = updateOrderSalesRefByOrderId;
 
 
 var getOrders = function (rebated, since, until) {

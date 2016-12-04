@@ -169,7 +169,6 @@ var createNewCouponOrder = function (req, res, next) {
 };
 exports.createNewCouponOrder = createNewCouponOrder;
 
-//TODO: update salesRef
 var updateCouponOrder = function (req, res, next) {
   if (req.adminAuth) {
     var couponCode = req.params.couponCode;
@@ -193,7 +192,14 @@ var updateCouponOrder = function (req, res, next) {
         .then(function () {
           res.status(204);
           res.send();
-        }).catch(next);
+        })
+        .catch(function (err) {
+          if(err.status === 404){
+            req.propertiesToUpdate = propertiesToUpdate;
+            next();
+          }
+          else next(err);
+        });
     }
     else {
       res.status(200);
@@ -206,6 +212,41 @@ var updateCouponOrder = function (req, res, next) {
   }
 };
 exports.updateCouponOrder = updateCouponOrder;
+
+var updateOrderSalesRef = function (req, res, next) {
+  if (req.adminAuth) {
+    var salesCode = req.params.couponCode;
+    var orderId = req.params.orderId;
+
+    var propertiesToUpdate = req.propertiesToUpdate;
+    var saleRefPropertiesToUpdate = {};
+
+    if(propertiesToUpdate){
+      if (typeof propertiesToUpdate.rebated  !== 'undefined') {
+        saleRefPropertiesToUpdate['salesRef.rebated'] = propertiesToUpdate.rebated;
+      }
+      if (typeof propertiesToUpdate.rebateValue !== 'undefined') {
+        saleRefPropertiesToUpdate['salesRef.rebateValue'] = propertiesToUpdate.rebateValue;
+      }
+      CouponOrderProxy.updateOrderSalesRefByOrderId(orderId, salesCode, saleRefPropertiesToUpdate)
+        .then(function () {
+          res.status(204);
+          res.send();
+        })
+        .catch(next);
+    }
+    else{
+      res.status(200);
+      res.send();
+    }
+  } else {
+    var err = new Error('Only Admin can edit an order');
+    err.status = 403;
+    next(err);
+  }
+};
+exports.updateOrderSalesRef = updateOrderSalesRef;
+
 
 var getOrders = function (req, res, next) {
   if(req.adminAuth){

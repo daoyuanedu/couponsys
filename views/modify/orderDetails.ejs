@@ -24,29 +24,44 @@
 
     <div class="orderList">
       <ul class="list-group">
-        <li class="list-group-item list-group-item-info">
+        <li class="list-group-item list-group-item-success" id="orderList-title">
           <h4> CouponID </h4>
           <h4> Rebated </h4>
           <h4> Rebate Value </h4>
-          <h4> Order Value </h4>
-          <h4> OrderID </h4>
+
+          <br>
+          <h5> Order Value </h5>
+          <h5> OrderID </h5>
+          <h5> UpdateAt</h5>
+
+          <br>
+          <h4><span class='glyphicon glyphicon-import'></span> SalesCode </h4>
+          <h4> Rebated </h4>
+          <h4> RebateValue </h4>
         </li>
 
+
         <!-- List All Orders -->
-        <% OrderList.forEach(function(order) { %>
-          <a class="list-group-item">
-            <h4><%= order.couponID %></h4>
-            <h4><%= order.rebated %></h4>
-            <h4><%= order.rebateValue %></h4>
-            <h4><%= order.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= order.orderValue.final %></h4>
-            <h4><%= order.orderID %></h4>
-          </a>
-          <% }); %>
+        <li class="list-group-item">
+          <a href="/views/coupons/<%=  OrderList.couponID %>"'><h4><%= OrderList.couponID %></h4></a>
+          <h4><%= OrderList.rebated %></h4>
+          <h4><%= OrderList.rebateValue %></h4>
+          <br>
+          <h5><%= OrderList.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= OrderList.orderValue.final %></h5>
+          <h5><%= OrderList.orderID %></h5>
+          <h5><%= OrderList.updatedAt %></h5>
+          <br>
+          <% if (OrderList.salesRef) { %>
+            <a href="/views/coupons/<%=  OrderList.salesRef.salesCode  %>"'><h4><span class='glyphicon glyphicon-import'></span> <%= OrderList.salesRef.salesCode  %></h4></a>
+            <h4><%= OrderList.salesRef.rebated %></h4>
+            <h4><%= OrderList.salesRef.rebateValue %></h4>
+            <% } %>
+          </li>
         </ul>
 
       </div>
-    </main>
 
+    </main>
     <!-- User footer in partials/footer.ejs -->
     <footer>
       <% include ../partials/footer %>

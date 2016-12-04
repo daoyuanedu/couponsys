@@ -1,7 +1,7 @@
 // ------------- Function JS -----------------
 
 // Click Search button to search special CouponCode
-$(document).ready(function(){
+$(document).ready(function (){
   $("#couponSearch").click(function(){
     var couponCode = $("#couponSearchInput").val();
     var currentUrl = window.location.href;
@@ -16,11 +16,16 @@ $(document).ready(function(){
 });
 
 // Modify couponList get or hide basid on the cookie
-$(document).ready(function(){
+$(document).ready(function (){
   if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') ==='') {
     $('#couponList').hide();
+    $('#orderList').hide();
   } else {
-    getCouponList();
+    var currentUrl = window.location.pathname;
+    if(currentUrl === '/views/coupons') {
+      var getUrl = "../../api/v1/coupons/";
+      getCouponList(getUrl);
+    }
   }
 });
 
