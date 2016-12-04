@@ -1,5 +1,4 @@
 var addCheckBox = function() {
-
   $(function () {
     $('.list-group.checked-list-box .orderList-element').each(function () {
 
@@ -16,7 +15,8 @@ var addCheckBox = function() {
       };
 
       $widget.css('cursor', 'pointer')
-      $widget.append($checkbox);
+
+      $widget.append($checkbox);      
 
       // Event Handlers
       $widget.on('click', function () {
@@ -49,7 +49,6 @@ var addCheckBox = function() {
 
       // Initialization
       function init() {
-
         if ($widget.data('checked') == true) {
           $checkbox.prop('checked', !$checkbox.is(':checked'));
         }
@@ -61,22 +60,68 @@ var addCheckBox = function() {
     });
 
     $('#get-checked-data').on('click', function(event) {
-      event.preventDefault();
       var rebateItems = [], counter = 0;
       $("#orderList-ul li.forRebate").each(function(idx, li) {
         rebateItems[counter] = creatUpdateOrder(li);
         counter++;
       });
-      console.log (rebateItems);
+
+      multiUpdateOrder(rebateItems);
     });
+
+    function creatUpdateOrder(li) {
+      var order = {};
+      order.couponCode = $(li).find(".order-li-coupon").text();
+      order.orderID = $(li).find(".order-li-link-orderID").text();
+      order.rebated = $(li).find(".order-li-rebated").text();
+      order.rebateValue = $(li).find(".order-li-rebateValue").text();
+      return order;
+    }
   });
 }
 
-var creatUpdateOrder = function(li) {
-  var order = {};
-  order.couponCode = $(li).find(".order-li-coupon").text();
-  order.orderID = $(li).find(".order-li-link-orderID").text();
-  order.rebated = $(li).find(".order-li-rebated").text();
-  order.rebateValue = $(li).find(".order-li-rebateValue").text();
-  return order;
+var multiUpdateOrder = function (multiItems) {
+  for (item in multiItems) {
+    multiItems[item] = modifyOrderItem(multiItems[item]);
+    orderValueUpdate(multiItems[item])
+  }
+}
+
+var orderValueUpdate = function(item) {
+  var putUrl = "../../api/v1/coupons/" + item.couponCode + '/orders/' + item.orderID;
+
+  var data = {
+    rebated : item.rebated,
+    rebateValue : item.rebateValue
+  }
+  var data  = serialize(data);
+
+  $.ajax({
+    type: "PUT",
+    url: putUrl + "?" + data ,
+    beforeSend: function (xhr)
+    {
+      xhr.setRequestHeader('x-access-token', getCookieByName('x-access-token'));
+    },
+    success: function (data, textStatus, xhr)
+    { 
+      $('#btn-filter-search').click();
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {
+    },
+    complete: function() {
+    //...
+    } 
+  });
+}
+
+var modifyOrderItem = function (item) {
+  var rebated = item.rebated;
+  if (item.rebated === 'false') {
+    item.rebated = "true";
+  } else {
+    item.rebated = "false"
+    item.rebateValue = item.rebateValue.split(" ")[0];
+  }
+  return item;
 }
