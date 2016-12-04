@@ -44,7 +44,7 @@ router.get('/:couponID/discount', coupon.getDiscountOrderValueByCouponID, errorH
 router.get('/:couponCode/orders', auth.tryAuth, orderQueryParser.parseOrderFilters, couponOrder.getOrdersByCouponCode, errorHandler.apiErrorHandler);
 router.post('/:couponCode/orders', couponOrder.createNewCouponOrder, errorHandler.apiErrorHandler);
 router.get('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.getOrderByOrderId, errorHandler.apiErrorHandler);
-router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCouponOrder, errorHandler.apiErrorHandler);
+router.put('/:couponCode/orders/:orderId', auth.tryAuth, couponOrder.updateCouponOrder, couponOrder.updateOrderSalesRef, errorHandler.apiErrorHandler);
 
 
 auth.initPassportLocalStrategy();

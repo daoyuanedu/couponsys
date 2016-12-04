@@ -81,6 +81,21 @@ var updateOrderByOrderIdAndCouponCode = function (orderId, couponCode, propertie
 };
 exports.updateOrderByOrderIdAndCouponCode = updateOrderByOrderIdAndCouponCode;
 
+var updateOrderSalesRefByOrderId = function (orderId, salesCode, propertiesToUpdate) {
+  return CouponOrder.findOne({ 'salesRef.salesCode' : salesCode, orderID : orderId})
+    .then(function (order) {
+      if(typeof order !== 'undefined' && order !== null){
+        return CouponOrder.findByIdAndUpdate(order._id,  { $set : propertiesToUpdate });
+      }
+      else {
+        var err =  new Error('Order ' + orderId + ' does not exist.');
+        err.status = 404;
+        throw err;
+      }
+    });
+};
+exports.updateOrderSalesRefByOrderId = updateOrderSalesRefByOrderId;
+
 
 var getOrders = function (rebated, since, until) {
   return CouponOrder.find(buildOrderQueries(null, null, rebated, since, until), {_id : 0, __v : 0});
