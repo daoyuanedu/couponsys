@@ -2,7 +2,10 @@
 
 // Click Search button to search orders
 $(document).ready(function(){
+  searchOrderList();
+});
 
+var searchOrderList = function() {
   $('#searchOrderForm').submit(function (event) {
     var couponCode = $("#filter-couponCode").val();
     var orderURL = hasCouponCodeAsURL(couponCode);
@@ -45,7 +48,7 @@ $(document).ready(function(){
 
     event.preventDefault();
   });
-});
+}
 // ------------- UI JS -----------------
 
 // Order Search Calendar UI

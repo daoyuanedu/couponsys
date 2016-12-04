@@ -65,12 +65,17 @@ var generateOrderList = function (orderList) {
 
     listBody +=
     "<a class='order-li-link-coupon' href='/views/coupons/" + order.couponID +"'><h4 class='order-li-coupon'>"+ order.couponID + "</h4></a>" +
-    "<h4 class='order-li-rebated'>" + order.rebated + "</h4>" +
-    "<h4 class='order-li-rebateValue'>" + order.rebateValue + "</h4>" +
-    "<br>"
+    "<h4 class='order-li-rebated'>" + order.rebated + "</h4>"
     ;
 
+    if (order.rebated == true) {
+      listBody += "<h4 class='order-li-rebateValue'>" + order.rebateValue + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> 0</h4>";
+    } else {
+      listBody += "<h4 class='order-li-rebateValue'>" + order.rebateValue + "</h4>";
+    }
+
     listBody +=
+    "<br>" +
     "<h5 class='order-li-orderValue'>" + order.orderValue.original + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> " + order.orderValue.final + "</h5>" +
     "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a>" +
     "<h5 class='order-li-updateTime'>" + order.updatedAt.substring(0, 10) + "</h5></li>"
@@ -83,11 +88,15 @@ var generateOrderList = function (orderList) {
         listBody += "<li class='list-group-item orderList-element'>";
       }
       listBody +=
-      "<a class='order-li-saleref-salesCode order-li-coupon' href='/views/coupons/" + order.salesRef.salesCode + "'><h4>" + "<span class='glyphicon glyphicon-import'></span>  " + order.salesRef.salesCode + "</h4></a>" +
-      "<h4 class='order-li-saleref-rebated order-li-rebated' style='width:15%'>" + order.salesRef.rebated + "</h4>" +
-      "<h4 class='order-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + "</h4>" +
-      "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a></li>"
-      ;
+      "<a class='order-li-saleref-salesCode order-li-coupon' href='/views/coupons/" + order.salesRef.salesCode + "'><h4>" + "<span class='glyphicon glyphicon-import'></span>" + order.salesRef.salesCode + "</h4></a>" +
+      "<h4 class='order-li-saleref-rebated order-li-rebated' style='width:15%'>" + order.salesRef.rebated + "</h4>";
+
+      if (order.salesRef.rebated == true) {
+        listBody += "<h4 class='oorder-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + " <span class='glyphicon glyphicon glyphicon-arrow-right'></span> 0</h4>";
+      } else {
+        listBody += "<h4 class='order-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + "</h4>";
+      }
+        listBody += "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a></li>";
     }
   });
   $('#orderList-title').after(listBody);

@@ -47,9 +47,9 @@
           <h4><%= OrderList.rebated %></h4>
           <h4><%= OrderList.rebateValue %></h4>
           <br>
-          <h4><%= OrderList.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= OrderList.orderValue.final %></h4>
-          <h4><%= OrderList.orderID %></h4>
-          <h4><%= OrderList.updatedAt %></h4>
+          <h5><%= OrderList.orderValue.original %> <span class="glyphicon glyphicon glyphicon-arrow-right"></span> <%= OrderList.orderValue.final %></h5>
+          <h5><%= OrderList.orderID %></h5>
+          <h5><%= OrderList.updatedAt %></h5>
           <br>
           <% if (OrderList.salesRef) { %>
             <a href="/views/coupons/<%=  OrderList.salesRef.salesCode  %>"'><h4><span class='glyphicon glyphicon-import'></span> <%= OrderList.salesRef.salesCode  %></h4></a>
