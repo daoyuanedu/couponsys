@@ -1,0 +1,58 @@
+<!-- views/pages/coupons.ejs -->
+<!-- The coupons page for coupons will have search/list/add/delete/update UI here -->
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- User head in partials/head.ejs -->
+<head>
+  <% include ../../partials/common/head %>
+  <% include ../../partials/coupon/head %>
+</head>
+
+<body>
+
+  <!-- User header in partials/common/header.ejs -->
+  <header>
+    <% include ../../partials/common/header %>
+  </header>
+
+  <!-- Main body -->
+  <main class="container">
+    <div class="jumbotron couponTitle">
+      <h1>Coupons</h1>
+      <h4>Please login to find all coupons and use search function!</h4>
+
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="input-group btn-group">
+            <input id="couponSearchInput" type="text" class="form-control" placeholder="Input CouponCode..." onkeyup="myFunction()">
+            <span class="input-group-btn">
+              <button id="couponSearch" class="btn btn-info" type="button">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Edit Coupon in partials/coupon/couponEdit.ejs -->
+    <div>
+      <% include ../../partials/coupon/couponEdit %>
+    </div>
+
+    <!-- Show CouponList in partials/coupon/couponList.ejs -->
+    <div>
+      <% include ../../partials/coupon/couponList %>
+    </div>
+
+  </main>
+
+  <!-- User footer in partials/common/footer.ejs -->
+  <footer>
+    <% include ../../partials/common/footer %>
+  </footer>
+
+</body>
+</html>
