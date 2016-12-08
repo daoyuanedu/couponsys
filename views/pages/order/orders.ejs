@@ -1,0 +1,43 @@
+<!-- views/pages/orders.ejs -->
+<!-- The orders page for coupons will have search/list/add/delete/update UI here -->
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- User head in partials/head.ejs -->
+<head>
+  <% include ../../partials/common/head %>
+  <% include ../../partials/order/head %>
+</head>
+
+<body>
+
+  <!-- User header in partials/common/header.ejs -->
+  <header>
+    <% include ../../partials/common/header %>
+  </header>
+
+  <!-- Main body -->
+  <main  class="container">
+    <div class="jumbotron orderTitle">
+      <h1>Orders</h1>
+      <h4>You can find all orders in below list !</h4>
+
+      <!-- User orderSearch in partials/order/orderSearch.ejs -->
+      <div>
+        <% include ../../partials/order/orderSearch %>
+      </div>
+    </div>
+
+    <!-- Show OrderList in partials/order/orderList.ejs -->
+    <div>
+      <% include ../../partials/order/orderList %>
+    </div>
+  </main>
+
+  <!-- User footer in partials/common/footer.ejs -->
+  <footer>
+    <% include ../../partials/common/footer %>
+  </footer>
+
+</body>
+</html>

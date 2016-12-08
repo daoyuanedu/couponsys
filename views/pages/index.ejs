@@ -3,16 +3,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- User head in partials/index.ejs -->
+<!-- User head in partials/head.ejs -->
 <head>
-  <% include ../partials/head %>
+  <% include ../partials/common/head %>
 </head>
+
 
 <body>
 
-  <!-- User header in partials/header.ejs -->
+ <!-- User header in partials/common/header.ejs -->
   <header>
-    <% include ../partials/header %>
+    <% include ../partials/common/header %>
   </header>
 
   <!-- Main body -->
@@ -24,10 +25,9 @@
     </div>
   </main>
 
-  <!-- User footer in partials/footer.ejs -->
+  <!-- User footer in partials/common/footer.ejs -->
   <footer>
-    <% include ../partials/footer %>
+    <% include ../partials/common/footer %>
   </footer>
-
 </body>
 </html>
