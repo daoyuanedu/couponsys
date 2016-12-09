@@ -572,6 +572,19 @@ describe('/coupons/orders', function () {
       }).catch(done);
     });
 
+    it('should respect the rebated query param', function (done) {
+      Promise.join(new CouponOrder(userARebatedOrder).save(), new CouponOrder(userANonRebatedOrder).save(), function () {
+        request.get(path +'orders')
+          .query({token : testToken, rebated : false})
+          .expect('Content-Type', /json/)
+          .expect(200)
+          .expect(function (res) {
+            (res.body.orders.length).should.equal(1);
+            (res.body.orders[0].orderID).should.equal(userANonRebatedOrder.orderID);
+          }).end(done);
+      }).catch(done);
+    });
+
     it('should respect the since and until query params', function (done) {
       var oldDate = '2016-11-27';
       var now = new Date();
