@@ -4,7 +4,7 @@ var CouponProxy = require('../../proxy/coupon.proxy');
 var getCouponsList = function (req, res) {
   CouponProxy.getAllCoupons().then(function (coupons) {
     res.status(200);
-    res.render('pages/coupons');
+    res.render('pages/coupon/coupons');
   });
 };
 exports.getCouponsList = getCouponsList;
@@ -15,7 +15,7 @@ var getCouponByCouponCode = function (req, res, next) {
   CouponProxy.getCouponByCouponCode(couponID).then(function (coupon) {
     if (coupon !== null) {
       res.status(200);
-      res.render('modify/couponDetails',
+      res.render('pages/coupon/couponDetails',
       {
         coupon: coupon
       });

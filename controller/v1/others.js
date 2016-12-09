@@ -6,7 +6,7 @@ exports.info = info;
 
 // Info
 var login = function (req, res) {
-  res.render('pages/login');
+  res.render('pages/login/login');
 };
 exports.login = login;
 

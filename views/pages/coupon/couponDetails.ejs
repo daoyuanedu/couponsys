@@ -3,16 +3,18 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- User head in partials/index.ejs -->
+<!-- User head in partials/head.ejs -->
 <head>
-  <% include ../partials/head %>
+  <% include ../../partials/common/head %>
+  <% include ../../partials/coupon/head %>
 </head>
+
 
 <body>
 
   <!-- User header in partials/header.ejs -->
   <header>
-    <% include ../partials/header %>
+    <% include ../../partials/common/header %>
   </header>
 
   <!-- Main body -->
@@ -57,14 +59,14 @@
 
     <!-- Edit Coupon in partials/couponEdit.ejs -->
     <div>
-      <% include ../partials/couponEdit %>
+      <% include ../../partials/coupon/couponEdit %>
     </div>
 
   </main>
 
   <!-- User footer in partials/footer.ejs -->
   <footer>
-    <% include ../partials/footer %>
+    <% include ../../partials/common/footer %>
   </footer>
 
 </body>
