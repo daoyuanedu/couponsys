@@ -3,16 +3,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- User head in partials/index.ejs -->
+<!-- User head in partials/head.ejs -->
 <head>
-  <% include ../partials/head %>
+  <% include ../../partials/common/head %>
+  <% include ../../partials/login/head %>
 </head>
 
 <body>
 
-  <!-- User header in partials/header.ejs -->
+  <!-- User header in partials/common/header.ejs -->
   <header>
-    <% include ../partials/header %>
+    <% include ../../partials/common/header %>
   </header>
 
   <!-- Main body -->
@@ -20,16 +21,16 @@
     <div class="jumbotron loginTitle">
       <h1>Log In / Out</h1>
       <h2 id="logInfo">Please Log In</h2>
-      <!-- User Login Page in partials/login.ejs -->
+      <!-- User Login Page in partials/login/login.ejs -->
       <div class="loginForm">
-        <% include ../partials/login %>
+        <% include ../../partials/login/login %>
       </div>
     </div>
   </main>
 
-  <!-- User footer in partials/footer.ejs -->
+  <!-- User footer in partials/common/footer.ejs -->
   <footer>
-    <% include ../partials/footer %>
+    <% include ../../partials/common/footer %>
   </footer>
 
 </body>

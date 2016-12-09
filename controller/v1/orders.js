@@ -3,7 +3,7 @@ var couponOrderProxy = require('../../proxy/couponOrder.proxy');
 // List Orders Page
 var getAllOrders = function (req, res) {
   couponOrderProxy.getOrders().then(function (orders) {
-    res.render('pages/orders');
+    res.render('pages/order/orders');
   });
 };
 exports.getOrders = getAllOrders;
@@ -17,7 +17,7 @@ var getOrdersByOrderID = function (req, res, next) {
   .then(function (order) {
     if (order) {
       res.status(200);
-      res.render('modify/orderDetails',
+      res.render('pages/order/orderDetails',
       {
         OrderList: order
       });
