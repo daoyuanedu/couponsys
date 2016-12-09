@@ -8,7 +8,7 @@ exports.apiErrorHandler = function (err, req, res, next) {
   res.status(err.status || 500);
   res.send({
     message: err.message,
-    stack: err.stack
+    //stack: err.stack
   });
 };
 
@@ -19,7 +19,7 @@ exports.standardErrorHandler = function (err, req, res, next) {
     res.render('error', {
       message: err.message,
       error: err,
-      stack: err.stack
+      //stack: err.stack
     });
   }
   else {
