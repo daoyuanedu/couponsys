@@ -34,6 +34,7 @@ var searchOrderList = function() {
       success: function (data, textStatus, xhr)
       {
         generateOrderList(data);
+        generateOrderSummary(data)
         $('#orderList').show();
         addCheckBox();
       },
@@ -48,6 +49,45 @@ var searchOrderList = function() {
 
     event.preventDefault();
   });
+}
+
+var generateOrderSummary = function(orderList) {
+  var orderNumber = 0; 
+  var totalOrderCount = 0;
+  var totalDiscountOrderCount = 0;
+
+  var dirRebateOrderNumber = 0;
+  var dirRebateOrderCount = 0;
+  var dirNoRebateOrderNumber = 0;
+  var dirNoRebateOrderCount = 0;
+  var dirRebateCount = 0;
+
+  orderList.orders.forEach(function (order) {
+     orderNumber ++;
+     totalOrderCount += order.orderValue.original;
+     totalDiscountOrderCount += order.orderValue.final;
+     dirRebateCount += order.orderValue.original - order.orderValue.final;
+
+     if (order.rebated == true) {
+      dirRebateOrderNumber ++;
+      dirRebateOrderCount += order.rebateValue; 
+     } 
+
+     if (order.rebated == false) {
+      dirNoRebateOrderNumber ++;
+      dirNoRebateOrderCount += order.rebateValue;
+     }
+  });
+
+  console.log(orderNumber + " Order:" 
+    + totalOrderCount + " " 
+    + totalDiscountOrderCount + " " 
+    + dirRebateCount + " Rebate:" 
+    + dirRebateOrderNumber + " " 
+    + dirRebateOrderCount + " "
+    + dirNoRebateOrderNumber + " NoRebate:"
+    + dirNoRebateOrderCount + " "
+  );
 }
 // ------------- UI JS -----------------
 
