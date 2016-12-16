@@ -1,9 +1,19 @@
 var debug = require('../config.default').debug;
 var logger = require('../common/logger');
 
+var mongoose = require('mongoose');
+
+var dumpMongooseValidationErr = function (err) {
+  if(err instanceof mongoose.Error.ValidationError){
+    for (var field in err.errors) {
+      logger.error(err.errors[field].message);
+    }
+  }
+};
 
 // api error send json response
 exports.apiErrorHandler = function (err, req, res, next) {
+  dumpMongooseValidationErr(err);
   logger.error(err);
   res.status(err.status || 500);
   res.send({
@@ -13,6 +23,7 @@ exports.apiErrorHandler = function (err, req, res, next) {
 };
 
 exports.standardErrorHandler = function (err, req, res, next) {
+  dumpMongooseValidationErr(err);
   logger.error(err);
   if (debug) {
     res.status(err.status || 500);
