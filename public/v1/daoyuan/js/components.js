@@ -6,11 +6,14 @@ $(document).ready(function(){
     // Need More function for this;
     // alert("Please Log In");
     $("#login-action").show();
+    $("#orderDetails").hide();
     $('#loginHeader').html(
 			"<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Log In / Out </a>"
 		);
+
   } else {
     $("#login-action").hide();
+    $("#orderDetails").show();
     $("#logInfo").html(
       "<h2 id='logInfo'>Welcome Admin</h2>"
     );
