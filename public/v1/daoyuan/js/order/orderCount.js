@@ -1,9 +1,21 @@
-// ------------- Function JS -----------------
+$(function(){
+	$('#slide-submenu').on('click',function() {			        
+        $(this).closest('.list-group').fadeOut('slide',function(){
+        	$('.mini-submenu').fadeIn();	
+        });
+        $('#order-list-details').removeClass('col-md-9').addClass('col-md-12');
+        $('#order-count-details').removeClass('col-md-3').addClass('col-md-2');
 
-// Click Search button to search orders
-$(document).ready(function(){
-  searchOrderList();
-});
+        
+      });
+
+	$('.mini-submenu').on('click',function(){		
+        $(this).next('.list-group').toggle('slide');
+        $('.mini-submenu').hide();
+        $('#order-list-details').removeClass('col-md-12').addClass('col-md-9');
+        $('#order-count-details').removeClass('col-md-2').addClass('col-md-3');
+	})
+})
 
 var searchOrderList = function() {
   $('#searchOrderForm').submit(function (event) {
@@ -122,23 +134,3 @@ var generateOrderSummary = function(orderList) {
   $('#sum-saleNoRebateOrderNumber').text(saleNoRebateOrderNumber);
   $('#sum-saleNoRebateOrderCount').text(saleNoRebateOrderCount);
 }
-// ------------- UI JS -----------------
-
-// Order Search Calendar UI
-$(document).ready(function (){
-  $(function () {
-    $('#filter-since').datetimepicker({
-      format: 'YYYY-MM-DD',
-    });
-    $('#filter-until').datetimepicker({
-      useCurrent: false ,
-      format: 'YYYY-MM-DD'
-    });
-    $("#filter-since").on("dp.change", function (e) {
-      $('#filter-until').data("DateTimePicker").minDate(e.date);
-    });
-    $("#filter-until").on("dp.change", function (e) {
-      $('#filter-since').data("DateTimePicker").maxDate(e.date);
-    });
-  });
-});

@@ -96,7 +96,7 @@ var generateOrderList = function (orderList) {
       } else {
         listBody += "<h4 class='order-li-saleref-rebateValue order-li-rebateValue' style='width:15%'>" + order.salesRef.rebateValue + "</h4>";
       }
-        listBody += "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a></li>";
+      listBody += "<a class='order-li-link-orderID' href='/views/orders/" + order.orderID + "'><h5 class='order-li-orderID'>" + order.orderID + "</h5></a></li>";
     }
   });
   $('#orderList-title').after(listBody);
