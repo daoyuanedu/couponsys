@@ -8,18 +8,13 @@
   + npm install
   + npm install forever -g
 * Run service
-  + node ./bin/www
+  + node ./bin/www <br> 
   or
   + forever start ./bin/www
 
-```
-Better with nodemon:
-Install: npm install -g nodemon
-Run: nodemon .bin/www
-```
 ---
 
-###  API
+###  API doc
 ---
 
 see doc/api.html

@@ -34,6 +34,7 @@ var searchOrderList = function() {
       success: function (data, textStatus, xhr)
       {
         generateOrderList(data);
+        generateOrderSummary(data)
         $('#orderList').show();
         addCheckBox();
       },
@@ -49,6 +50,8 @@ var searchOrderList = function() {
     event.preventDefault();
   });
 }
+
+
 // ------------- UI JS -----------------
 
 // Order Search Calendar UI

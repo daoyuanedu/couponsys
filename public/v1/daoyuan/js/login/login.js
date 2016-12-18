@@ -1,20 +1,6 @@
 // ------------- Function JS -----------------
 
 $(document).ready(function (){
-  if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') === ''
-  || typeof getCookieByName('x-access-token') === 'undefined') {
-    // Need More function for this;
-    // alert("Please Log In");
-    $("#login-action").show();
-  }
-  else {
-    $("#login-action").hide();
-    $("#logInfo").html(
-      "<h2 id='logInfo'>Welcome Admin</h2>"
-    );
-  }
-
-
   // Click login button to get token if the user is admin
 
   $('#login-action').submit(function (event) {
@@ -37,7 +23,7 @@ $(document).ready(function (){
           "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Welcome Admin </a>"
         );
         $("#login-action").hide();
-        location.replace(document.referrer);
+        //location.replace(document.referrer);
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
         $("#logInfo").html(

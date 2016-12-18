@@ -101,10 +101,12 @@ var createNewCouponOrder = function (req, res, next) {
   var couponCode = req.params.couponCode;
   var username = req.body.username;
   var couponOrder = req.body;
+  couponOrder.couponID = couponCode;
 
   if (!username || !couponCode) {
-    var err = new Error('Need to provide both username and couponcode');
+    var err = new Error('Need to provide both username ( ' + username + ') ' + ' and coupon code (' + couponCode + ')');
     err.status = 406;
+    err.reqBody = req.body;
     next(err);
   }
   else {
@@ -158,6 +160,7 @@ var createNewCouponOrder = function (req, res, next) {
       res.status(201);
       res.send(createdOrder);
     }).catch(function (err) {
+      err.reqBody = req.body;
       // MongoError Code
       if (err.code && err.code === 11000) {
         err.status = 406;

@@ -91,7 +91,7 @@ exports.getDiscountedValue = function (couponId, orderValue) {
     }
     discountedValue = parseInt(discountedValue);
     if (discountedValue < 0) {
-      var err =  new Error('Coupon ' + couponId + ' is invalid.');
+      var err =  new Error('DiscountedValue is less then 0, Please check orderValue or coupon code.');
       err.status = 500;       
       throw err;
     }
