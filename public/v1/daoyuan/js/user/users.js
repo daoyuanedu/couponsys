@@ -10,7 +10,7 @@ $(document).ready(function (){
     if (username === '' )  {
       $('.userTitle').append(showWarningMessage("Please Input Username"));
     } else {
-      var getUrl = "../../api/v1/coupons/user/" + username;
+      var getUrl = "../../api/v1/coupons/users/" + username;
       getCouponListByUsername(getUrl);
     }
   });
