@@ -154,9 +154,11 @@ module.exports = {
     rebated: false,
     rebateValue: 100,
     salesRef:
-    { salesCode: 'IAMAFAKESALESCODE',
-    rebated: false,
-    rebateValue: 750 }
+    {
+      salesCode: 'IAMAFAKESALESCODE',
+      rebated: false,
+      rebateValue: 750
+    }
   },
 
   orderSaledBySalesDirectly : {
