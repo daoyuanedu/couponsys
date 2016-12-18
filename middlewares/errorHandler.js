@@ -5,15 +5,25 @@ var mongoose = require('mongoose');
 
 var dumpMongooseValidationErr = function (err) {
   if(err instanceof mongoose.Error.ValidationError){
+    err.status = 400;
+    err.message = 'Invalid Request';
     for (var field in err.errors) {
       logger.error(err.errors[field].message);
+      err.message += '\r\n' + err.errors[field].message;
     }
+  }
+};
+
+var dumpRequest = function (err) {
+  if (typeof err.reqBody !== 'undefined') {
+    logger.error(err.reqBody);
   }
 };
 
 // api error send json response
 exports.apiErrorHandler = function (err, req, res, next) {
   dumpMongooseValidationErr(err);
+  dumpRequest(err);
   logger.error(err);
   res.status(err.status || 500);
   res.send({
