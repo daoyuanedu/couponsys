@@ -16,9 +16,9 @@ var couponOrderData = require('../../common/modelCouponOrderTestData');
 var should = require('chai').Should();
 
 // API path 
-var path = '/api/v1/coupons/user/';
+var path = '/api/v1/coupons/users/';
 
-describe('/api/v1/coupons/user/{username}', function() {
+describe('/api/v1/coupons/users/{username}', function() {
 
   before(function () {
     config.debug.should.equal(true);

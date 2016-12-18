@@ -25,8 +25,8 @@ var router = express.Router();
 router.get('/info', info);
 
 // User api
-router.get('/user/:username', user.getCouponCodesByUser, errorHandler.apiErrorHandler);
-router.post('/user/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser, errorHandler.apiErrorHandler);
+router.get('/users/:username', user.getCouponCodesByUser, errorHandler.apiErrorHandler);
+router.post('/users/:username', auth.tryAuth, couponCodeGenerator.useMobileAsCode, user.createCouponForUser, errorHandler.apiErrorHandler);
 
 //Coupons/orders
 router.get('/orders', auth.tryAuth, orderQueryParser.parseOrderFilters, couponOrder.getOrders, errorHandler.apiErrorHandler);
