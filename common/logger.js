@@ -1,4 +1,4 @@
-var config = require('../config.default');
+var path = require('path');
 
 var env = process.env.NODE_ENV || 'dev';
 
@@ -6,7 +6,7 @@ var winston = require('winston');
 require('winston-daily-rotate-file');
 
 var rotateFileTransport = new winston.transports.DailyRotateFile({
-  filename: 'logs/log',
+  filename: path.join(__dirname, '..', 'logs', 'log'),
   datePattern: 'yyyy-MM-dd.',
   prepend: true,
   level: env === 'dev' ? 'debug' : 'info',
