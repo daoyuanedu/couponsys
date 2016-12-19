@@ -2,23 +2,28 @@
 $(document).ready(function(){
 	if (getCookieByName('x-access-token') === null || getCookieByName('x-access-token') === ''
   	|| typeof getCookieByName('x-access-token') === 'undefined')
-  	 {
-    // Need More function for this;
-    // alert("Please Log In");
+  {
+    hasloggedoutAndNeedLogin(); 
+  } else {
+    hasLoggedinAndNeedLogout();
+  }
+});
+
+var hasloggedoutAndNeedLogin = function() {
     $("#login-action").show();
     $("#orderDetails").hide();
     $('#loginHeader').html(
-			"<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Log In / Out </a>"
-		);
+      "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Log In / Out </a>"
+    );
+}
 
-  } else {
+var hasLoggedinAndNeedLogout = function () {
     $("#login-action").hide();
     $("#orderDetails").show();
     $("#logInfo").html(
       "<h2 id='logInfo'>Welcome Admin</h2>"
     );
     $('#loginHeader').html(
-			"<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Welcome Admin </a>"
-		);
-  }
-});
+      "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Welcome Admin </a>"
+    );
+}
