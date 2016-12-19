@@ -39,10 +39,12 @@ var searchOrderList = function() {
         addCheckBox();
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
+        var resText = JSON.parse(XMLHttpRequest.responseText).message;
+
         if(XMLHttpRequest.status === 403) {
           $('#searchOrderForm').append(showLoginAlert());
         } else if(XMLHttpRequest.status === 406) {
-          $('#searchOrderForm').append(showWarningMessage(JSON.parse(XMLHttpRequest.responseText).message));
+          $('#searchOrderForm').append(showWarningMessage(resText));
         }
       }
     });

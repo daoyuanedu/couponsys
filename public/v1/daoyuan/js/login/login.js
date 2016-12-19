@@ -23,7 +23,7 @@ $(document).ready(function (){
           "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Welcome Admin </a>"
         );
         $("#login-action").hide();
-        //location.replace(document.referrer);
+        location.replace(document.referrer);
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
         $("#logInfo").html(

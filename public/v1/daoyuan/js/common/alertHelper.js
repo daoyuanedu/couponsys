@@ -3,7 +3,7 @@ var showLoginAlert = function () {
   var body = "<div class='alert alert-danger alert-dismissable fade in'>" + 
   "<a ref='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>" +
   "<strong>Failed to the authenticate user!</strong> Please click " +
-  "<a href='/views/login/' class='alert-link'><i>link to Log In...</i></a>" +
+  "<a href='/views/login' class='alert-link'><i>link to Log In...</i></a>" +
   "</div>"
   return body;
 };
