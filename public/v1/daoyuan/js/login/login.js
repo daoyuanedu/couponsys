@@ -16,13 +16,7 @@ $(document).ready(function (){
           document.cookie = 'x-access-token=' + token;
         }
         console.log(document.cookie);
-        $("#logInfo").html(
-          "<h2 id='logInfo'>Welcome Admin</h2>"
-        );
-        $('#loginHeader').html(
-          "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Welcome Admin </a>"
-        );
-        $("#login-action").hide();
+        hasLoggedinAndNeedLogout();
         location.replace(document.referrer);
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -42,14 +36,6 @@ $(document).ready(function (){
   $('#logout-action').click(function () {
     deleteOneCookie("x-access-token");
     deleteAllCookies();
-    $("#logInfo").html(
-      "<h2 id='logInfo'>Please Log In</h2>"
-    );
-
-    $('#loginHeader').html(
-      "<a href='/views/login'><span class='glyphicon glyphicon-user'></span> Log In / Out </a>"
-    );
-
-    $("#login-action").show();
+    hasloggedoutAndNeedLogin();
   });
 });
